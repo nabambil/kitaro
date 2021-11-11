@@ -1,0 +1,77 @@
+name: kitaro
+description: A new Flutter project.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  auto_route: ^2.4.0
+  cupertino_icons: ^1.0.2
+  flutter:
+    sdk: flutter
+  provider: ^5.0.0
+
+dev_dependencies:
+  auto_route_generator: ^2.4.0
+  build_runner: ^2.0.6
+  carousel_slider: ^4.0.0
+  cross_file: ^0.3.1+5
+  flutter_image_compress: ^1.1.0
+  flutter_lints: ^1.0.0
+  flutter_test:
+    sdk: flutter
+  google_maps_flutter: ^2.1.0
+  image_cropper: ^1.4.1
+  image_picker: ^0.8.4+2
+  modal_bottom_sheet: ^2.0.0
+  uuid: ^3.0.4
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/gifs/
+    - assets/icons/
+    - assets/logos/
+
+  fonts:
+    - family: Lato
+      fonts:
+        - asset: fonts/Lato-Black.ttf
+          style: normal
+          weight: 900
+        - asset: fonts/Lato-BlackItalic.ttf
+          style: italic
+          weight: 900
+        - asset: fonts/Lato-Bold.ttf
+          style: normal
+          weight: 700
+        - asset: fonts/Lato-BoldItalic.ttf
+          style: italic
+          weight: 700
+        - asset: fonts/Lato-Regular.ttf
+          style: normal
+          weight: 400
+        - asset: fonts/Lato-Italic.ttf
+          style: italic
+          weight: 400
+        - asset: fonts/Lato-Light.ttf
+          style: normal
+          weight: 300
+        - asset: fonts/Lato-LightItalic.ttf
+          style: italic
+          weight: 300
+        - asset: fonts/Lato-Thin.ttf
+          style: normal
+          weight: 100
+        - asset: fonts/Lato-ThinItalic.ttf
+          style: italic
+          weight: 100
+
+    - family: norwester
+      fonts:
+        - asset: fonts/norwester.ttf
+
+flutter_gen:
+  output: lib/constants
