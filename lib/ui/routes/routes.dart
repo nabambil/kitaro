@@ -6,8 +6,11 @@ export 'routes.gr.dart';
 @MaterialAutoRouter(
   routes: [
     AutoRoute(
-      page: LoginPage,
+      page: SplashPage,
       initial: true,
+    ),
+    AutoRoute(
+      page: LoginPage,
     ),
     AutoRoute(
       page: AddItemListPage,

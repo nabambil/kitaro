@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "260321087125",
+    "project_id": "kitaro-4ffe4",
+    "storage_bucket": "kitaro-4ffe4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260321087125:android:6386c304bbe7f01389959c",
+        "android_client_info": {
+          "package_name": "com.example.kitaro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "260321087125-k40npnauipqm631cgjp6t5c0dbn5r62d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIuohiWYY6fdLBnDRYc0dwlmvUSvJBaMg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "260321087125-k40npnauipqm631cgjp6t5c0dbn5r62d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

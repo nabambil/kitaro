@@ -21,26 +21,27 @@ class ItemTile extends StatelessWidget {
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-        color: Color(0x214D627B),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(13.0),
-        child: Row(
-          children: [
-            const _Icon(),
-            const SizedBox(width: 12.0),
-            Expanded(
-              child: _ItemDetail(
-                materialType: item.itemType,
-                weight: item.itemWeight,
-                dateSubmitted: item.dateSubmitted,
+    return GestureDetector(
+      onTap: endTileAction,
+      child: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+          color: Color(0x214D627B),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(13.0),
+          child: Row(
+            children: [
+              const _Icon(),
+              const SizedBox(width: 12.0),
+              Expanded(
+                child: _ItemDetail(
+                  materialType: item.itemType,
+                  weight: item.itemWeight,
+                  dateSubmitted: item.dateSubmitted,
+                ),
               ),
-            ),
-            InkWell(
-              child: Padding(
+              Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   endTileTitle,
@@ -51,9 +52,8 @@ class ItemTile extends StatelessWidget {
                   ),
                 ),
               ),
-              onTap: endTileAction,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

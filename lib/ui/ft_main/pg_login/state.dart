@@ -1,12 +1,17 @@
-
+import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:kitaro/kitaro.dart';
 
 enum InvalidField {
   username,
   password,
 }
 
-class LoginPageState extends ChangeNotifier{
+class LoginPageState extends ChangeNotifier {
+  bool _isBusy = false;
+
+  bool get isBusy => _isBusy;
 
   // USER NAME -----------------------------------------------------------------
   // USER NAME //////////////////////////////////
@@ -31,8 +36,11 @@ class LoginPageState extends ChangeNotifier{
     try {
       _userNameError = null;
 
-      if (_userName == null) {
+      if (_userName == null || _userName!.trim().isEmpty) {
         _userNameError = 'username required';
+      }
+      else if (!EmailValidator.validate(_userName!)) {
+        _userNameError = 'username invalid';
       }
     } finally {
       notifyListeners();
@@ -67,6 +75,9 @@ class LoginPageState extends ChangeNotifier{
       if (_password == null || _password!.trim().isEmpty) {
         _passwordError = 'password required';
       }
+      else if (_password!.length < 8) {
+        _passwordError = 'password minimum 8 characters';
+      }
     } finally {
       notifyListeners();
     }
@@ -88,4 +99,22 @@ class LoginPageState extends ChangeNotifier{
     return null;
   }
 
+  Future<ErrorMessage?> logIn() async {
+    try {
+      _isBusy = true;
+      notifyListeners();
+
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: _userName!, password: _password!);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return ErrorMessage(
+        title: e.code,
+        message: e.message ?? '',
+      );
+    } finally {
+      _isBusy = false;
+      notifyListeners();
+    }
+  }
 }

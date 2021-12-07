@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kitaro/constants/assets.gen.dart';
 import 'package:kitaro/kitaro.dart';
+import 'package:kitaro/ui/ft_add_item/pg_add_item/dg_successful/dialog.dart';
 import 'package:provider/provider.dart';
 
 import 'state.dart';
@@ -241,6 +242,8 @@ class _SubmitButton extends StatelessWidget {
       builder: (_, state, __) {
         return LoginButton(
           caption: 'Sign in',
+          isBusy: state.isBusy,
+          enabled: !state.isBusy,
           onPressed: () => _onSubmitted(context),
         );
       },
@@ -248,7 +251,6 @@ class _SubmitButton extends StatelessWidget {
   }
 
   Future<void> _onSubmitted(BuildContext context) async {
-
     final state = Provider.of<LoginPageState>(context, listen: false);
     switch (state.validateAll()) {
       case null:
@@ -261,6 +263,11 @@ class _SubmitButton extends StatelessWidget {
         return;
     }
 
+    final err1 = await state.logIn();
+    if (err1 != null) {
+      await showWarningDialog(context, err1);
+      return;
+    }
     await context.router.push(const RecycleLocationPageRoute());
   }
 }

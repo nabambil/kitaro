@@ -26,6 +26,7 @@ class $AssetsIconsGen {
       const AssetGenImage('assets/icons/plastic_bottle.png');
   AssetGenImage get temporary =>
       const AssetGenImage('assets/icons/temporary.png');
+  AssetGenImage get warning => const AssetGenImage('assets/icons/warning.png');
 }
 
 class $AssetsLogosGen {

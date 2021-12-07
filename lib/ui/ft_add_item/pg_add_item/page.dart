@@ -327,12 +327,12 @@ class _SubmitButton extends StatelessWidget {
       child: SubmitButton(
         caption: 'Recycle',
         onPressed: () async {
-          await showDialog(
+          await showSuccessfulDialog(
             context: context,
-            builder: (context) {
-              return const SuccessfulDialog();
-            },
+            title: 'ITEM RECYCLED',
+            message: 'You have saved the earth, You\'re our Hero !',
           );
+          await context.router.replace(const HistoryItemListPageRoute());
         },
       ),
     );

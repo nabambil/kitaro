@@ -14,17 +14,62 @@ late GoogleMapController _mapController;
 Map<MarkerId, Marker> mapMarkers = {};
 final CarouselController _carouselController = CarouselController();
 
-class RecycleLocationPage extends StatelessWidget {
+class RecycleLocationPage extends StatefulWidget {
   const RecycleLocationPage({Key? key}) : super(key: key);
 
+  @override
+  State<RecycleLocationPage> createState() => _RecycleLocationPageState();
+}
+
+class _RecycleLocationPageState extends State<RecycleLocationPage> {
+  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RecycleLocationPageState>(
       create: (_) => RecycleLocationPageState(),
-      child: const Scaffold(
-        body: _Content(),
+      child: Scaffold(
+        body: const _Content(),
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: onTabTapped,
+          currentIndex: _currentIndex,
+          selectedItemColor: Colors.green,
+          unselectedItemColor: Colors.black26,
+          unselectedLabelStyle: const TextStyle(color: Colors.black26),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              title: Text(
+                'Profile',
+              ),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.qr_code),
+              title: Text(
+                'Profile',
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+      if (index == 2) {
+        context.router.push(const HistoryItemListPageRoute());
+        _currentIndex = 0;
+      }
+      if (index == 3) {
+        context.router.push(const AddItemListPageRoute());
+        _currentIndex = 0;
+      }
+    });
   }
 }
 
@@ -61,33 +106,39 @@ class _ContentState extends State<_Content> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Spacer(),
-              Consumer<RecycleLocationPageState>(builder: (_, state, __) {
-                return CarouselSlider.builder(
-                  carouselController: _carouselController,
-                  options: CarouselOptions(
-                    enlargeCenterPage: true,
-                    enableInfiniteScroll: false,
-                    height: 140,
-                    viewportFraction: 0.4,
-                    aspectRatio: 0,
-                    onPageChanged: (index, reason) async {
-                      setState(() async {
-                        enlargeMarker(
-                          context: context,
-                          markerId: state.positions.keys.elementAt(index),
-                        );
-                      });
+              Consumer<RecycleLocationPageState>(
+                builder: (_, state, __) {
+                  return CarouselSlider.builder(
+                    carouselController: _carouselController,
+                    options: CarouselOptions(
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: false,
+                      height: 140,
+                      viewportFraction: 0.4,
+                      aspectRatio: 0,
+                      onPageChanged: (index, reason) async {
+                        setState(() async {
+                          await enlargeMarker(
+                            context: context,
+                            markerId: state.positions.keys.elementAt(index),
+                          );
+                          await enlargeMarker(
+                            context: context,
+                            markerId: state.positions.keys.elementAt(index),
+                          );
+                        });
+                      },
+                    ),
+                    itemCount: state.positions.length,
+                    itemBuilder: (context, itemIndex, pageViewIndex) {
+                      return _CentreTile(
+                          markerId: state.positions.keys.elementAt(itemIndex));
                     },
-                  ),
-                  itemCount: state.positions.length,
-                  itemBuilder: (context, itemIndex, pageViewIndex) {
-                    return _CentreTile(
-                        markerId: state.positions.keys.elementAt(itemIndex));
-                  },
-                );
-              }),
-              const SizedBox(height: 28.0),
-              const _ProfileDetail(),
+                  );
+                },
+              ),
+              // const SizedBox(height: 28.0),
+              // const _ProfileDetail(),
             ],
           ),
         ),
@@ -472,8 +523,8 @@ Future<void> enlargeMarker(
   mapMarkers.forEach((key, value) async {
     if (markerId == value.markerId) {
       mapMarkers[value.markerId] = mapMarkers[value.markerId]!.copyWith(
-          iconParam: BitmapDescriptor.fromBytes(
-              await state.getBytesFromAsset(path: Assets.gifs.greenPng.path,width: 120, height: 200)));
+          iconParam: BitmapDescriptor.fromBytes(await state.getBytesFromAsset(
+              path: Assets.gifs.greenPng.path, width: 120, height: 200)));
     } else {
       mapMarkers[value.markerId] = mapMarkers[value.markerId]!
           .copyWith(iconParam: BitmapDescriptor.fromBytes(state.markerIcon!));

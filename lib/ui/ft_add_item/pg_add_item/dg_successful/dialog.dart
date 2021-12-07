@@ -1,8 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:kitaro/kitaro.dart';
 
-class SuccessfulDialog extends StatelessWidget {
-  const SuccessfulDialog({
+// ################################# FUNCTIONS #################################
+Future<T?> showRawDialog<T>({
+  required BuildContext context,
+  required AlertDialog dialog,
+  bool? barrierDismissible,
+}) async {
+  return await showGeneralDialog<T>(
+    context: context,
+    barrierDismissible: barrierDismissible ?? true,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    pageBuilder: (_, __, ___) => dialog,
+    transitionDuration: const Duration(milliseconds: 250),
+  );
+}
+
+Future<void> showWarningDialog(BuildContext context, ErrorMessage message) {
+  return showRawDialog(
+    context: context,
+    barrierDismissible: false,
+    dialog: AlertDialog(
+      title: message.title,
+      message: message.message,
+      buttonText: 'RETURN',
+      titleTextColor: Colors.red,
+      icon: Assets.icons.warning,
+    ),
+  );
+}
+
+Future<void> showSuccessfulDialog({
+  required BuildContext context,
+  required String title,
+  required String message,
+}) {
+  return showRawDialog(
+    context: context,
+    dialog: AlertDialog(
+      title: title,
+      message: message,
+      buttonText: 'THANK YOU',
+      titleTextColor: const Color(0xff77D353),
+      icon: Assets.icons.balloon,
+    ),
+  );
+}
+
+class AlertDialog extends StatelessWidget {
+  final String title;
+  final String message;
+  final String buttonText;
+  final Color titleTextColor;
+  final ImageProvider icon;
+
+  const AlertDialog({
+    required this.title,
+    required this.message,
+    required this.buttonText,
+    required this.titleTextColor,
+    required this.icon,
     Key? key,
   }) : super(key: key);
 
@@ -14,24 +71,24 @@ class SuccessfulDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image(
-            image: Assets.icons.balloon,
+            image: icon,
             height: 79,
             width: 79,
           ),
           const SizedBox(height: 20),
-          const Text(
-            'ITEM RECYCLED',
+          Text(
+            title,
             style: TextStyle(
-              color: Color(0xff77D353),
+              color: titleTextColor,
               fontSize: 32,
               fontFamily: FontFamily.norwester,
             ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
-          const Text(
-            'You have saved the earth, You\'re our Hero !',
-            style: TextStyle(
+          Text(
+            message,
+            style: const TextStyle(
               color: Color(0xff47525E),
               fontSize: 16,
             ),
@@ -39,11 +96,10 @@ class SuccessfulDialog extends StatelessWidget {
           ),
           const SizedBox(height: 40),
           SubmitButton(
-              caption: 'THANK YOU',
-              onPressed: () async{
-                await context.router.pop();
-                await context.router.replace(const HistoryItemListPageRoute());
-              }
+            caption: buttonText,
+            onPressed: () async {
+              await context.router.pop();
+            },
           )
         ],
       ),

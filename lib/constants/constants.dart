@@ -1,4 +1,5 @@
 export 'assets.gen.dart';
+export 'error_message.dart';
 export 'fonts.gen.dart';
 export 'item_detail.dart';
 
