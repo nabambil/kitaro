@@ -61,11 +61,11 @@ class _RecycleLocationPageState extends State<RecycleLocationPage> {
   void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
-      if (index == 2) {
+      if (index == 1) {
         context.router.push(const HistoryItemListPageRoute());
         _currentIndex = 0;
       }
-      if (index == 3) {
+      if (index == 2) {
         context.router.push(const AddItemListPageRoute());
         _currentIndex = 0;
       }

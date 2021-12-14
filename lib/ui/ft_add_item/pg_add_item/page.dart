@@ -327,6 +327,8 @@ class _SubmitButton extends StatelessWidget {
       child: SubmitButton(
         caption: 'Recycle',
         onPressed: () async {
+          final state = Provider.of<AddItemListPageState>(context, listen: false);
+          state.test();
           await showSuccessfulDialog(
             context: context,
             title: 'ITEM RECYCLED',
