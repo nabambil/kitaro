@@ -22,7 +22,7 @@ Future<void> showWarningDialog(BuildContext context, ErrorMessage message) {
     barrierDismissible: false,
     dialog: AlertDialog(
       title: message.title,
-      message: message.message,
+      message: message.message!,
       buttonText: 'RETURN',
       titleTextColor: Colors.red,
       icon: Assets.icons.warning,
