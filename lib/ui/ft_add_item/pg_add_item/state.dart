@@ -19,6 +19,7 @@ class AddItemListPageState extends ChangeNotifier {
   }
   // ------------------------------- FIELDS -------------------------------
   static AddItemListPageState? _instance = AddItemListPageState._();
+
   // ITEM TYPE -----------------------------------------------------------------
   List<String> itemTypeList = [
     "Paper",
@@ -195,5 +196,30 @@ class AddItemListPageState extends ChangeNotifier {
         itemImages: _itemImages
     );
     notifyListeners();
+  }
+
+  void test(){
+    var decode = {
+      'fullName' : 'Syaza',
+      'address' : 'No37, jalan Cempaka 31',
+      'address2' : 'Taman Cempaka',
+      'city' : 'Ampang',
+      'state' : 'Selangor',
+      'postcode' : '68000',
+      'country' : 'Malaysia',
+      'phone_number' : '0179893071',
+    };
+    var encode = KitaroProfile(
+      fullName: 'Syaza',
+      address: 'No37, jalan Cempaka 31',
+      address2: 'Taman Cempaka',
+      city: 'Ampang',
+      state: 'Selangor',
+      country: 'Malaysia',
+      postcode: '68000',
+      phoneNumber: '0179893071',
+    );
+    print(KitaroProfile.fromJson(decode).fullName);
+    print(encode.toJson());
   }
 }
