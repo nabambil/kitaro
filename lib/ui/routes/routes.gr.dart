@@ -1,3 +1,7 @@
+// **************************************************************************
+// AutoRouteGenerator
+// **************************************************************************
+
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -49,39 +53,45 @@ class AppRouter extends _i2.RootStackRouter {
       ];
 }
 
-/// generated route for [_i1.SplashPage]
+/// generated route for
+/// [_i1.SplashPage]
 class SplashPageRoute extends _i2.PageRouteInfo<void> {
-  const SplashPageRoute() : super(name, path: '/');
+  const SplashPageRoute() : super(SplashPageRoute.name, path: '/');
 
   static const String name = 'SplashPageRoute';
 }
 
-/// generated route for [_i1.LoginPage]
+/// generated route for
+/// [_i1.LoginPage]
 class LoginPageRoute extends _i2.PageRouteInfo<void> {
-  const LoginPageRoute() : super(name, path: '/login-page');
+  const LoginPageRoute() : super(LoginPageRoute.name, path: '/login-page');
 
   static const String name = 'LoginPageRoute';
 }
 
-/// generated route for [_i1.AddItemListPage]
+/// generated route for
+/// [_i1.AddItemListPage]
 class AddItemListPageRoute extends _i2.PageRouteInfo<void> {
-  const AddItemListPageRoute() : super(name, path: '/add-item-list-page');
+  const AddItemListPageRoute()
+      : super(AddItemListPageRoute.name, path: '/add-item-list-page');
 
   static const String name = 'AddItemListPageRoute';
 }
 
-/// generated route for [_i1.HistoryItemListPage]
+/// generated route for
+/// [_i1.HistoryItemListPage]
 class HistoryItemListPageRoute extends _i2.PageRouteInfo<void> {
   const HistoryItemListPageRoute()
-      : super(name, path: '/history-item-list-page');
+      : super(HistoryItemListPageRoute.name, path: '/history-item-list-page');
 
   static const String name = 'HistoryItemListPageRoute';
 }
 
-/// generated route for [_i1.RecycleLocationPage]
+/// generated route for
+/// [_i1.RecycleLocationPage]
 class RecycleLocationPageRoute extends _i2.PageRouteInfo<void> {
   const RecycleLocationPageRoute()
-      : super(name, path: '/recycle-location-page');
+      : super(RecycleLocationPageRoute.name, path: '/recycle-location-page');
 
   static const String name = 'RecycleLocationPageRoute';
 }

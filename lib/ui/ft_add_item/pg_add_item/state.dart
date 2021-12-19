@@ -193,33 +193,32 @@ class AddItemListPageState extends ChangeNotifier {
     _itemsAdded[index] = ItemDetails(
         itemType: _itemType!,
         itemWeight: _itemWeight!,
-        itemImages: _itemImages
-    );
+        itemImages: _itemImages);
     notifyListeners();
   }
 
-  void test(){
+  void test() {
     var decode = {
-      'fullName' : 'Syaza',
-      'address' : 'No37, jalan Cempaka 31',
-      'address2' : 'Taman Cempaka',
-      'city' : 'Ampang',
-      'state' : 'Selangor',
-      'postcode' : '68000',
-      'country' : 'Malaysia',
-      'phone_number' : '0179893071',
+      'fullName': 'Syaza',
+      'address': 'No37, jalan Cempaka 31',
+      'address2': 'Taman Cempaka',
+      'city': 'Ampang',
+      'state': 'Selangor',
+      'postcode': '68000',
+      'country': 'Malaysia',
+      'phone_number': '0179893071',
     };
-    var encode = KitaroProfile(
-      fullName: 'Syaza',
-      address: 'No37, jalan Cempaka 31',
-      address2: 'Taman Cempaka',
-      city: 'Ampang',
-      state: 'Selangor',
-      country: 'Malaysia',
-      postcode: '68000',
-      phoneNumber: '0179893071',
-    );
-    print(KitaroProfile.fromJson(decode).fullName);
-    print(encode.toJson());
+    // var encode = KitaroProfile(
+    //   fullName: 'Syaza',
+    //   address: 'No37, jalan Cempaka 31',
+    //   address2: 'Taman Cempaka',
+    //   city: 'Ampang',
+    //   state: 'Selangor',
+    //   country: 'Malaysia',
+    //   postcode: '68000',
+    //   phoneNumber: '0179893071',
+    // );
+    // print(KitaroProfile.fromJson(decode).fullName);
+    // print(encode.toJson());
   }
 }

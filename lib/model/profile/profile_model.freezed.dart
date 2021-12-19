@@ -22,23 +22,19 @@ class _$KitaroProfileTearOff {
   const _$KitaroProfileTearOff();
 
   _KitaroProfile call(
-      {@JsonKey(name: 'fullName') String? fullName,
-      @JsonKey(name: 'address') String? address,
-      @JsonKey(name: 'address2') String? address2,
-      @JsonKey(name: 'city') String? city,
-      @JsonKey(name: 'state') String? state,
-      @JsonKey(name: 'postcode') String? postcode,
-      @JsonKey(name: 'country') String? country,
-      @JsonKey(name: 'phone_number') String? phoneNumber}) {
+      {@JsonKey(name: 'firstName') String? firstName,
+      @JsonKey(name: 'lastName') String? lastName,
+      @JsonKey(name: 'phone') String? phoneNumber,
+      @JsonKey(name: 'email') String? email,
+      @JsonKey(name: 'idNo') String? idNo,
+      @JsonKey(name: 'address') AddressModel? address}) {
     return _KitaroProfile(
-      fullName: fullName,
-      address: address,
-      address2: address2,
-      city: city,
-      state: state,
-      postcode: postcode,
-      country: country,
+      firstName: firstName,
+      lastName: lastName,
       phoneNumber: phoneNumber,
+      email: email,
+      idNo: idNo,
+      address: address,
     );
   }
 
@@ -52,22 +48,18 @@ const $KitaroProfile = _$KitaroProfileTearOff();
 
 /// @nodoc
 mixin _$KitaroProfile {
-  @JsonKey(name: 'fullName')
-  String? get fullName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'address')
-  String? get address => throw _privateConstructorUsedError;
-  @JsonKey(name: 'address2')
-  String? get address2 => throw _privateConstructorUsedError;
-  @JsonKey(name: 'city')
-  String? get city => throw _privateConstructorUsedError;
-  @JsonKey(name: 'state')
-  String? get state => throw _privateConstructorUsedError;
-  @JsonKey(name: 'postcode')
-  String? get postcode => throw _privateConstructorUsedError;
-  @JsonKey(name: 'country')
-  String? get country => throw _privateConstructorUsedError;
-  @JsonKey(name: 'phone_number')
+  @JsonKey(name: 'firstName')
+  String? get firstName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'lastName')
+  String? get lastName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'phone')
   String? get phoneNumber => throw _privateConstructorUsedError;
+  @JsonKey(name: 'email')
+  String? get email => throw _privateConstructorUsedError;
+  @JsonKey(name: 'idNo')
+  String? get idNo => throw _privateConstructorUsedError;
+  @JsonKey(name: 'address')
+  AddressModel? get address => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -81,14 +73,14 @@ abstract class $KitaroProfileCopyWith<$Res> {
           KitaroProfile value, $Res Function(KitaroProfile) then) =
       _$KitaroProfileCopyWithImpl<$Res>;
   $Res call(
-      {@JsonKey(name: 'fullName') String? fullName,
-      @JsonKey(name: 'address') String? address,
-      @JsonKey(name: 'address2') String? address2,
-      @JsonKey(name: 'city') String? city,
-      @JsonKey(name: 'state') String? state,
-      @JsonKey(name: 'postcode') String? postcode,
-      @JsonKey(name: 'country') String? country,
-      @JsonKey(name: 'phone_number') String? phoneNumber});
+      {@JsonKey(name: 'firstName') String? firstName,
+      @JsonKey(name: 'lastName') String? lastName,
+      @JsonKey(name: 'phone') String? phoneNumber,
+      @JsonKey(name: 'email') String? email,
+      @JsonKey(name: 'idNo') String? idNo,
+      @JsonKey(name: 'address') AddressModel? address});
+
+  $AddressModelCopyWith<$Res>? get address;
 }
 
 /// @nodoc
@@ -102,49 +94,50 @@ class _$KitaroProfileCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? fullName = freezed,
-    Object? address = freezed,
-    Object? address2 = freezed,
-    Object? city = freezed,
-    Object? state = freezed,
-    Object? postcode = freezed,
-    Object? country = freezed,
+    Object? firstName = freezed,
+    Object? lastName = freezed,
     Object? phoneNumber = freezed,
+    Object? email = freezed,
+    Object? idNo = freezed,
+    Object? address = freezed,
   }) {
     return _then(_value.copyWith(
-      fullName: fullName == freezed
-          ? _value.fullName
-          : fullName // ignore: cast_nullable_to_non_nullable
+      firstName: firstName == freezed
+          ? _value.firstName
+          : firstName // ignore: cast_nullable_to_non_nullable
               as String?,
-      address: address == freezed
-          ? _value.address
-          : address // ignore: cast_nullable_to_non_nullable
-              as String?,
-      address2: address2 == freezed
-          ? _value.address2
-          : address2 // ignore: cast_nullable_to_non_nullable
-              as String?,
-      city: city == freezed
-          ? _value.city
-          : city // ignore: cast_nullable_to_non_nullable
-              as String?,
-      state: state == freezed
-          ? _value.state
-          : state // ignore: cast_nullable_to_non_nullable
-              as String?,
-      postcode: postcode == freezed
-          ? _value.postcode
-          : postcode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      country: country == freezed
-          ? _value.country
-          : country // ignore: cast_nullable_to_non_nullable
+      lastName: lastName == freezed
+          ? _value.lastName
+          : lastName // ignore: cast_nullable_to_non_nullable
               as String?,
       phoneNumber: phoneNumber == freezed
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String?,
+      email: email == freezed
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idNo: idNo == freezed
+          ? _value.idNo
+          : idNo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      address: address == freezed
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as AddressModel?,
     ));
+  }
+
+  @override
+  $AddressModelCopyWith<$Res>? get address {
+    if (_value.address == null) {
+      return null;
+    }
+
+    return $AddressModelCopyWith<$Res>(_value.address!, (value) {
+      return _then(_value.copyWith(address: value));
+    });
   }
 }
 
@@ -156,14 +149,15 @@ abstract class _$KitaroProfileCopyWith<$Res>
       __$KitaroProfileCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@JsonKey(name: 'fullName') String? fullName,
-      @JsonKey(name: 'address') String? address,
-      @JsonKey(name: 'address2') String? address2,
-      @JsonKey(name: 'city') String? city,
-      @JsonKey(name: 'state') String? state,
-      @JsonKey(name: 'postcode') String? postcode,
-      @JsonKey(name: 'country') String? country,
-      @JsonKey(name: 'phone_number') String? phoneNumber});
+      {@JsonKey(name: 'firstName') String? firstName,
+      @JsonKey(name: 'lastName') String? lastName,
+      @JsonKey(name: 'phone') String? phoneNumber,
+      @JsonKey(name: 'email') String? email,
+      @JsonKey(name: 'idNo') String? idNo,
+      @JsonKey(name: 'address') AddressModel? address});
+
+  @override
+  $AddressModelCopyWith<$Res>? get address;
 }
 
 /// @nodoc
@@ -179,48 +173,38 @@ class __$KitaroProfileCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? fullName = freezed,
-    Object? address = freezed,
-    Object? address2 = freezed,
-    Object? city = freezed,
-    Object? state = freezed,
-    Object? postcode = freezed,
-    Object? country = freezed,
+    Object? firstName = freezed,
+    Object? lastName = freezed,
     Object? phoneNumber = freezed,
+    Object? email = freezed,
+    Object? idNo = freezed,
+    Object? address = freezed,
   }) {
     return _then(_KitaroProfile(
-      fullName: fullName == freezed
-          ? _value.fullName
-          : fullName // ignore: cast_nullable_to_non_nullable
+      firstName: firstName == freezed
+          ? _value.firstName
+          : firstName // ignore: cast_nullable_to_non_nullable
               as String?,
-      address: address == freezed
-          ? _value.address
-          : address // ignore: cast_nullable_to_non_nullable
-              as String?,
-      address2: address2 == freezed
-          ? _value.address2
-          : address2 // ignore: cast_nullable_to_non_nullable
-              as String?,
-      city: city == freezed
-          ? _value.city
-          : city // ignore: cast_nullable_to_non_nullable
-              as String?,
-      state: state == freezed
-          ? _value.state
-          : state // ignore: cast_nullable_to_non_nullable
-              as String?,
-      postcode: postcode == freezed
-          ? _value.postcode
-          : postcode // ignore: cast_nullable_to_non_nullable
-              as String?,
-      country: country == freezed
-          ? _value.country
-          : country // ignore: cast_nullable_to_non_nullable
+      lastName: lastName == freezed
+          ? _value.lastName
+          : lastName // ignore: cast_nullable_to_non_nullable
               as String?,
       phoneNumber: phoneNumber == freezed
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String?,
+      email: email == freezed
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idNo: idNo == freezed
+          ? _value.idNo
+          : idNo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      address: address == freezed
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as AddressModel?,
     ));
   }
 }
@@ -230,46 +214,38 @@ class __$KitaroProfileCopyWithImpl<$Res>
 @JsonSerializable(checked: true)
 class _$_KitaroProfile implements _KitaroProfile {
   _$_KitaroProfile(
-      {@JsonKey(name: 'fullName') this.fullName,
-      @JsonKey(name: 'address') this.address,
-      @JsonKey(name: 'address2') this.address2,
-      @JsonKey(name: 'city') this.city,
-      @JsonKey(name: 'state') this.state,
-      @JsonKey(name: 'postcode') this.postcode,
-      @JsonKey(name: 'country') this.country,
-      @JsonKey(name: 'phone_number') this.phoneNumber});
+      {@JsonKey(name: 'firstName') this.firstName,
+      @JsonKey(name: 'lastName') this.lastName,
+      @JsonKey(name: 'phone') this.phoneNumber,
+      @JsonKey(name: 'email') this.email,
+      @JsonKey(name: 'idNo') this.idNo,
+      @JsonKey(name: 'address') this.address});
 
   factory _$_KitaroProfile.fromJson(Map<String, dynamic> json) =>
       _$$_KitaroProfileFromJson(json);
 
   @override
-  @JsonKey(name: 'fullName')
-  final String? fullName;
+  @JsonKey(name: 'firstName')
+  final String? firstName;
+  @override
+  @JsonKey(name: 'lastName')
+  final String? lastName;
+  @override
+  @JsonKey(name: 'phone')
+  final String? phoneNumber;
+  @override
+  @JsonKey(name: 'email')
+  final String? email;
+  @override
+  @JsonKey(name: 'idNo')
+  final String? idNo;
   @override
   @JsonKey(name: 'address')
-  final String? address;
-  @override
-  @JsonKey(name: 'address2')
-  final String? address2;
-  @override
-  @JsonKey(name: 'city')
-  final String? city;
-  @override
-  @JsonKey(name: 'state')
-  final String? state;
-  @override
-  @JsonKey(name: 'postcode')
-  final String? postcode;
-  @override
-  @JsonKey(name: 'country')
-  final String? country;
-  @override
-  @JsonKey(name: 'phone_number')
-  final String? phoneNumber;
+  final AddressModel? address;
 
   @override
   String toString() {
-    return 'KitaroProfile(fullName: $fullName, address: $address, address2: $address2, city: $city, state: $state, postcode: $postcode, country: $country, phoneNumber: $phoneNumber)';
+    return 'KitaroProfile(firstName: $firstName, lastName: $lastName, phoneNumber: $phoneNumber, email: $email, idNo: $idNo, address: $address)';
   }
 
   @override
@@ -277,23 +253,20 @@ class _$_KitaroProfile implements _KitaroProfile {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _KitaroProfile &&
-            (identical(other.fullName, fullName) ||
-                other.fullName == fullName) &&
-            (identical(other.address, address) || other.address == address) &&
-            (identical(other.address2, address2) ||
-                other.address2 == address2) &&
-            (identical(other.city, city) || other.city == city) &&
-            (identical(other.state, state) || other.state == state) &&
-            (identical(other.postcode, postcode) ||
-                other.postcode == postcode) &&
-            (identical(other.country, country) || other.country == country) &&
+            (identical(other.firstName, firstName) ||
+                other.firstName == firstName) &&
+            (identical(other.lastName, lastName) ||
+                other.lastName == lastName) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                other.phoneNumber == phoneNumber));
+                other.phoneNumber == phoneNumber) &&
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.idNo, idNo) || other.idNo == idNo) &&
+            (identical(other.address, address) || other.address == address));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, fullName, address, address2,
-      city, state, postcode, country, phoneNumber);
+  int get hashCode => Object.hash(
+      runtimeType, firstName, lastName, phoneNumber, email, idNo, address);
 
   @JsonKey(ignore: true)
   @override
@@ -308,42 +281,34 @@ class _$_KitaroProfile implements _KitaroProfile {
 
 abstract class _KitaroProfile implements KitaroProfile {
   factory _KitaroProfile(
-      {@JsonKey(name: 'fullName') String? fullName,
-      @JsonKey(name: 'address') String? address,
-      @JsonKey(name: 'address2') String? address2,
-      @JsonKey(name: 'city') String? city,
-      @JsonKey(name: 'state') String? state,
-      @JsonKey(name: 'postcode') String? postcode,
-      @JsonKey(name: 'country') String? country,
-      @JsonKey(name: 'phone_number') String? phoneNumber}) = _$_KitaroProfile;
+      {@JsonKey(name: 'firstName') String? firstName,
+      @JsonKey(name: 'lastName') String? lastName,
+      @JsonKey(name: 'phone') String? phoneNumber,
+      @JsonKey(name: 'email') String? email,
+      @JsonKey(name: 'idNo') String? idNo,
+      @JsonKey(name: 'address') AddressModel? address}) = _$_KitaroProfile;
 
   factory _KitaroProfile.fromJson(Map<String, dynamic> json) =
       _$_KitaroProfile.fromJson;
 
   @override
-  @JsonKey(name: 'fullName')
-  String? get fullName;
+  @JsonKey(name: 'firstName')
+  String? get firstName;
+  @override
+  @JsonKey(name: 'lastName')
+  String? get lastName;
+  @override
+  @JsonKey(name: 'phone')
+  String? get phoneNumber;
+  @override
+  @JsonKey(name: 'email')
+  String? get email;
+  @override
+  @JsonKey(name: 'idNo')
+  String? get idNo;
   @override
   @JsonKey(name: 'address')
-  String? get address;
-  @override
-  @JsonKey(name: 'address2')
-  String? get address2;
-  @override
-  @JsonKey(name: 'city')
-  String? get city;
-  @override
-  @JsonKey(name: 'state')
-  String? get state;
-  @override
-  @JsonKey(name: 'postcode')
-  String? get postcode;
-  @override
-  @JsonKey(name: 'country')
-  String? get country;
-  @override
-  @JsonKey(name: 'phone_number')
-  String? get phoneNumber;
+  AddressModel? get address;
   @override
   @JsonKey(ignore: true)
   _$KitaroProfileCopyWith<_KitaroProfile> get copyWith =>

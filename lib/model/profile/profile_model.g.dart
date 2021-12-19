@@ -12,28 +12,28 @@ _$_KitaroProfile _$$_KitaroProfileFromJson(Map<String, dynamic> json) =>
       json,
       ($checkedConvert) {
         final val = _$_KitaroProfile(
-          fullName: $checkedConvert('fullName', (v) => v as String?),
-          address: $checkedConvert('address', (v) => v as String?),
-          address2: $checkedConvert('address2', (v) => v as String?),
-          city: $checkedConvert('city', (v) => v as String?),
-          state: $checkedConvert('state', (v) => v as String?),
-          postcode: $checkedConvert('postcode', (v) => v as String?),
-          country: $checkedConvert('country', (v) => v as String?),
-          phoneNumber: $checkedConvert('phone_number', (v) => v as String?),
+          firstName: $checkedConvert('firstName', (v) => v as String?),
+          lastName: $checkedConvert('lastName', (v) => v as String?),
+          phoneNumber: $checkedConvert('phone', (v) => v as String?),
+          email: $checkedConvert('email', (v) => v as String?),
+          idNo: $checkedConvert('idNo', (v) => v as String?),
+          address: $checkedConvert(
+              'address',
+              (v) => v == null
+                  ? null
+                  : AddressModel.fromJson(v as Map<String, dynamic>)),
         );
         return val;
       },
-      fieldKeyMap: const {'phoneNumber': 'phone_number'},
+      fieldKeyMap: const {'phoneNumber': 'phone'},
     );
 
 Map<String, dynamic> _$$_KitaroProfileToJson(_$_KitaroProfile instance) =>
     <String, dynamic>{
-      'fullName': instance.fullName,
+      'firstName': instance.firstName,
+      'lastName': instance.lastName,
+      'phone': instance.phoneNumber,
+      'email': instance.email,
+      'idNo': instance.idNo,
       'address': instance.address,
-      'address2': instance.address2,
-      'city': instance.city,
-      'state': instance.state,
-      'postcode': instance.postcode,
-      'country': instance.country,
-      'phone_number': instance.phoneNumber,
     };

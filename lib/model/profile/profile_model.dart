@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:kitaro/model/address/address_model.dart';
 
 part 'profile_model.freezed.dart';
 part 'profile_model.g.dart';
@@ -8,16 +9,14 @@ class KitaroProfile with _$KitaroProfile {
   // ---------------------------- CONSTRUCTORS ----------------------------
   @JsonSerializable(checked: true)
   factory KitaroProfile({
-    @JsonKey(name: 'fullName') String? fullName,
-    @JsonKey(name: 'address') String? address,
-    @JsonKey(name: 'address2') String? address2,
-    @JsonKey(name: 'city') String? city,
-    @JsonKey(name: 'state') String? state,
-    @JsonKey(name: 'postcode') String? postcode,
-    @JsonKey(name: 'country') String? country,
-    @JsonKey(name: 'phone_number') String? phoneNumber,
+    @JsonKey(name: 'firstName') String? firstName,
+    @JsonKey(name: 'lastName') String? lastName,
+    @JsonKey(name: 'phone') String? phoneNumber,
+    @JsonKey(name: 'email') String? email,
+    @JsonKey(name: 'idNo') String? idNo,
+    @JsonKey(name: 'address') AddressModel? address,
   }) = _KitaroProfile;
 
   factory KitaroProfile.fromJson(Map<String, dynamic> json) =>
-    _$KitaroProfileFromJson(json);
+      _$KitaroProfileFromJson(json);
 }
