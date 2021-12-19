@@ -5,6 +5,16 @@ export 'item_detail.dart';
 
 import 'package:flutter/material.dart';
 
+// ----------------------------- PROPERTIES -----------------------------
+String get errorTitleUnknown => 'Unknown Error';
+String get  errorMessageUnknown =>
+    'This may be due to bad data connection or device error.';
+String get  errorTitleWarning => 'Warning!';
+String get  errorTitleNotFound => 'No Items Found.';
+String get  errorTitleInvalidForm => 'Mandatory Fields Not Completed';
+String get  errorMessageInvalidForm =>
+    'All mandatory fields need to be completed before proceeding.';
+
 const kDefaultPadding = EdgeInsets.zero;
 final kDefaultErrorTextColor = Colors.red.shade700;
 const kDefaultLabelTextDarkColor = Color(0xffdddddd);
