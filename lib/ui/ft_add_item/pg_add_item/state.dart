@@ -193,7 +193,8 @@ class AddItemListPageState extends ChangeNotifier {
     _itemsAdded[index] = ItemDetails(
         itemType: _itemType!,
         itemWeight: _itemWeight!,
-        itemImages: _itemImages);
+        itemImages: _itemImages
+    );
     notifyListeners();
   }
 

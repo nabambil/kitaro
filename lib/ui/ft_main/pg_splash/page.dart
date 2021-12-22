@@ -1,8 +1,8 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
-import 'package:kitaro/constants/assets.gen.dart';
 import 'package:kitaro/kitaro.dart';
 
 // ------------------------------- CLASSES ------------------------------
@@ -31,9 +31,31 @@ class _ContentState extends State<_Content> {
   @override
   void initState() {
     super.initState();
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      print(event.notification!.body);
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('Message clicked!');
+    });
     SchedulerBinding.instance!.addPostFrameCallback((_) async {
+      bool _isFirstTime = true;
+      MySharedPreferences.instance
+          .getBooleanValue(isFirstRun)
+          .then((value) => setState(() {
+        _isFirstTime = value;
+      }));
       await Future.delayed(const Duration(seconds: 1));
-      await context.router.replace(const LoginPageRoute());
+      if(_isFirstTime){
+        await context.router.replace(const OnBoardingPageRoute());
+        return;
+      }
+      final loggedIn = Authentication.handleAuthState();
+      if (!loggedIn) {
+        await context.router.replace(const LoginPageRoute());
+        return;
+      }
+      await context.router.replace(const RecycleLocationPageRoute());
     });
   }
 

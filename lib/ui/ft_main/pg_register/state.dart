@@ -1,7 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kitaro/kitaro.dart';
 
 enum InvalidField {
@@ -9,17 +8,10 @@ enum InvalidField {
   password,
 }
 
-class LoginPageState extends ChangeNotifier {
+class RegisterPageState extends ChangeNotifier {
   bool _isBusy = false;
 
   bool get isBusy => _isBusy;
-
-  bool _isFirstTime = false;
-
-  bool get isFirstTime => _isFirstTime;
-  set isFirstTime(bool value) {
-    _isFirstTime = value;
-  }
 
   // USER NAME -----------------------------------------------------------------
   // USER NAME //////////////////////////////////
@@ -91,6 +83,42 @@ class LoginPageState extends ChangeNotifier {
     }
   }
 
+  // RE-TYPE PASSWORD ------------------------------------------------------------------
+  // RE-TYPE PASSWORD ///////////////////////////////////
+  String? _passwordRecheck;
+
+  String? get passwordRecheck => _passwordRecheck;
+
+  set passwordRecheck(String? value) {
+    _passwordRecheck = value;
+    validatePasswordRecheck();
+  }
+
+  // PASSWORD ERROR /////////////////////////////
+  String? _passwordRecheckError;
+
+  String? get passwordRecheckError => _passwordRecheckError;
+
+  bool get passwordRecheckHasError {
+    return _passwordRecheckError != null;
+  }
+
+  @protected
+  void validatePasswordRecheck() {
+    try {
+      _passwordRecheckError = null;
+
+      if (_passwordRecheck == null || _passwordRecheck!.trim().isEmpty) {
+        _passwordRecheckError = 'password required';
+      }
+      else if (_passwordRecheck! != _password) {
+        _passwordRecheckError = 'password invalid';
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
+
   // ------------------------------- METHODS ------------------------------
   InvalidField? validateAll() {
     // ALWAYS: Validate the fields that can be focused first!
@@ -107,13 +135,13 @@ class LoginPageState extends ChangeNotifier {
     return null;
   }
 
-  Future<ErrorMessage?> logIn() async {
+  Future<ErrorMessage?> register() async {
     try {
       _isBusy = true;
       notifyListeners();
 
       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: _userName!, password: _password!);
+          .createUserWithEmailAndPassword(email: _userName!, password: _password!);
       return null;
     } on FirebaseAuthException catch (e) {
       return ErrorMessage(
@@ -123,69 +151,6 @@ class LoginPageState extends ChangeNotifier {
     } finally {
       _isBusy = false;
       notifyListeners();
-    }
-  }
-
-  Future<ErrorMessage?> signInWithGoogle() async {
-    User? user;
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-    final GoogleSignInAccount? googleSignInAccount =
-        await GoogleSignIn().signIn();
-
-    if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
-
-      try {
-        final UserCredential userCredential =
-            await auth.signInWithCredential(credential);
-
-        user = userCredential.user;
-        await _checkFirstTimeUser(userCredential);
-      } on FirebaseAuthException catch (e) {
-        return ErrorMessage(title: e.code, message: e.message!);
-      } catch (e) {
-        return ErrorMessage(title: e.toString(), message: '');
-      }
-    }
-
-    return null;
-  }
-
-  Future<ErrorMessage?> signInWithFacebook() async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    // try {
-    //   final LoginResult result = await FacebookAuth.instance.login();
-    //   switch (result.status) {
-    //     case LoginStatus.success:
-    //       final AuthCredential facebookCredential =
-    //       FacebookAuthProvider.credential(result.accessToken!.token);
-    //       final userCredential =
-    //       await _auth.signInWithCredential(facebookCredential);
-    //       return null;
-    //     case LoginStatus.cancelled:
-    //       return ErrorMessage(title: 'Cancelled', message: 'Login Cancelled');
-    //     case LoginStatus.failed:
-    //       return ErrorMessage(title: 'Failed', message: result.message!);
-    //     default:
-    //       return null;
-    //   }
-    // } on FirebaseAuthException catch (e) {
-    //   throw e;
-    // }
-  }
-
-  Future<void>? _checkFirstTimeUser(UserCredential userCredential) {
-    if (userCredential.additionalUserInfo!.isNewUser) {
-      print('firstTimer');
-    } else {
-      print('not-firstTimer');
     }
   }
 }

@@ -13,6 +13,12 @@ export 'routes.gr.dart';
       page: LoginPage,
     ),
     AutoRoute(
+      page: OnBoardingPage,
+    ),
+    AutoRoute(
+      page: RegisterPage,
+    ),
+    AutoRoute(
       page: AddItemListPage,
     ),
     AutoRoute(

@@ -11,6 +11,8 @@ class $AssetsGifsGen {
   String get greenApng => 'assets/gifs/green.apng';
   AssetGenImage get greenPng => const AssetGenImage('assets/gifs/green.png');
   AssetGenImage get marker => const AssetGenImage('assets/gifs/marker.png');
+  AssetGenImage get recycle => const AssetGenImage('assets/gifs/recycle.png');
+  AssetGenImage get scanQr => const AssetGenImage('assets/gifs/scan_qr.png');
 }
 
 class $AssetsIconsGen {
@@ -32,6 +34,9 @@ class $AssetsIconsGen {
 class $AssetsLogosGen {
   const $AssetsLogosGen();
 
+  AssetGenImage get facebook =>
+      const AssetGenImage('assets/logos/facebook.png');
+  AssetGenImage get google => const AssetGenImage('assets/logos/google.png');
   AssetGenImage get logo => const AssetGenImage('assets/logos/logo.png');
 }
 

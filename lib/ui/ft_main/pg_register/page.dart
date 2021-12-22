@@ -11,17 +11,18 @@ import 'state.dart';
 // ------------------------------ VARIABLES -----------------------------
 late FocusNode _usernameNode;
 late FocusNode _passwordNode;
+late FocusNode _passwordRecheckNode;
 
 // ------------------------------- CLASSES ------------------------------
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ChangeNotifierProvider<LoginPageState>(
-          create: (_) => LoginPageState(),
+        child: ChangeNotifierProvider<RegisterPageState>(
+          create: (_) => RegisterPageState(),
           child: const _Content(),
         ),
       ),
@@ -68,33 +69,19 @@ class _ContentState extends State<_Content> {
         _Logo(),
         SizedBox(height: 30),
         Text(
-          'Welcome Back !',
+          'Welcome',
           style: TextStyle(
             color: Color(0xff47525E),
             fontSize: 28,
             fontWeight: FontWeight.w900,
           ),
         ),
-        SizedBox(height: 8),
-        Text(
-          'Please, sign in to continue',
-          style: TextStyle(
-            color: Color(0xff969FAA),
-            fontSize: 14,
-          ),
-        ),
         SizedBox(height: 60),
         _Username(),
         _Password(),
-        SizedBox(height: 20),
-        _ForgotPassword(),
+        _PasswordRecheck(),
         SizedBox(height: 52),
         _SubmitButton(),
-        SizedBox(height: 5),
-        _SignInWithGoogle(),
-        _SignInWithFacebook(),
-        SizedBox(height: 10),
-        _SignUp(),
       ],
     );
   }
@@ -145,7 +132,7 @@ class _UsernameState extends State<_Username> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginPageState>(
+    return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroUsernameTextField(
           labelText: 'Username',
@@ -189,12 +176,12 @@ class _PasswordState extends State<_Password> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginPageState>(
+    return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroPasswordTextField(
           labelText: 'Password',
           errorText: state.passwordError,
-          focusNode: _usernameNode,
+          focusNode: _passwordNode,
           onChanged: (v) => state.password = v,
           onSubmitted: (v) {
             state.password = v;
@@ -212,27 +199,50 @@ class _PasswordState extends State<_Password> {
   }
 }
 
-class _ForgotPassword extends StatelessWidget {
+class _PasswordRecheck extends StatefulWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
-  const _ForgotPassword({
+  const _PasswordRecheck({
     Key? key,
   }) : super(key: key);
 
   // ------------------------------- METHODS ------------------------------
   @override
+  State<_PasswordRecheck> createState() => _PasswordRecheckState();
+}
+
+class _PasswordRecheckState extends State<_PasswordRecheck> {
+  // ------------------------------- METHODS ------------------------------
+  @override
+  void initState() {
+    super.initState();
+    _passwordRecheckNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _passwordRecheckNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Consumer<LoginPageState>(
+    return Consumer<RegisterPageState>(
       builder: (_, state, __) {
-        return InkWell(
-          child: const Text(
-            'Forgot Password?',
-            style: TextStyle(
-              color: Color(0xff77D353),
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          onTap: () {},
+        return KitaroPasswordTextField(
+          labelText: 'Re-type Password',
+          errorText: state.passwordRecheckError,
+          focusNode: _passwordRecheckNode,
+          onChanged: (v) => state.passwordRecheck = v,
+          onSubmitted: (v) {
+            state.passwordRecheck = v;
+            final focusScope = FocusScope.of(context);
+            if (focusScope.hasFocus) {
+              focusScope.unfocus();
+            }
+            if (focusScope.hasPrimaryFocus) {
+              focusScope.unfocus();
+            }
+          },
         );
       },
     );
@@ -248,7 +258,7 @@ class _SignUp extends StatelessWidget {
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginPageState>(
+    return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return Center(
           child: RichText(
@@ -266,8 +276,8 @@ class _SignUp extends StatelessWidget {
                       fontSize: 12,
                       fontWeight: FontWeight.bold),
                   recognizer: TapGestureRecognizer()
-                    ..onTap = () async{
-                      await context.router.push(const RegisterPageRoute());
+                    ..onTap = () {
+                      // navigate to desired screen
                     },
                 ),
               ],
@@ -288,10 +298,10 @@ class _SubmitButton extends StatelessWidget {
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginPageState>(
+    return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return LoginButton(
-          caption: 'Sign in',
+          caption: 'Register',
           isBusy: state.isBusy,
           enabled: !state.isBusy,
           onPressed: () => _onSubmitted(context),
@@ -301,7 +311,7 @@ class _SubmitButton extends StatelessWidget {
   }
 
   Future<void> _onSubmitted(BuildContext context) async {
-    final state = Provider.of<LoginPageState>(context, listen: false);
+    final state = Provider.of<RegisterPageState>(context, listen: false);
     switch (state.validateAll()) {
       case null:
         break;
@@ -313,153 +323,11 @@ class _SubmitButton extends StatelessWidget {
         return;
     }
 
-    final err1 = await state.logIn();
+    final err1 = await state.register();
     if (err1 != null) {
       await showWarningDialog(context, err1);
       return;
     }
-    await context.router.replace(const RecycleLocationPageRoute());
-  }
-}
-
-class _SignInWithGoogle extends StatelessWidget {
-  // ---------------------------- CONSTRUCTORS ----------------------------
-  const _SignInWithGoogle({
-    Key? key,
-  }) : super(key: key);
-
-  // ------------------------------- METHODS ------------------------------
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<LoginPageState>(
-      builder: (_, state, __) {
-        return SizedBox(
-          height: 48.0,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28.0),
-            child: MaterialButton(
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12.0),
-                ),
-              ),
-              onPressed: () => _onSubmitted(context),
-              color: Colors.transparent,
-              colorBrightness: Brightness.dark,
-              elevation: 0.0,
-              focusElevation: 0.0,
-              highlightElevation: 0.0,
-              hoverElevation: 0.0,
-              disabledElevation: 0.0,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Image(
-                      image: Assets.logos.google,
-                      height: 35.0,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        'Sign in with Google',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> _onSubmitted(BuildContext context) async {
-    final err1 = await Authentication.signInWithGoogle();
-
-    if (err1 != null) {
-      await showWarningDialog(context, err1);
-      return;
-    }
-    await context.router.replace(const RecycleLocationPageRoute());
-  }
-}
-
-class _SignInWithFacebook extends StatelessWidget {
-  // ---------------------------- CONSTRUCTORS ----------------------------
-  const _SignInWithFacebook({
-    Key? key,
-  }) : super(key: key);
-
-  // ------------------------------- METHODS ------------------------------
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<LoginPageState>(
-      builder: (_, state, __) {
-        return SizedBox(
-          height: 48.0,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28.0),
-            child: MaterialButton(
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12.0),
-                ),
-              ),
-              onPressed: () => _onSubmitted(context),
-              color: Colors.transparent,
-              colorBrightness: Brightness.dark,
-              elevation: 0.0,
-              focusElevation: 0.0,
-              highlightElevation: 0.0,
-              hoverElevation: 0.0,
-              disabledElevation: 0.0,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Image(
-                      image: Assets.logos.facebook,
-                      height: 35.0,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        'Sign in with Facebook',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> _onSubmitted(BuildContext context) async {
-    final err1 = await Authentication.signInWithFacebook();
-
-    if (err1 != null) {
-      await showWarningDialog(context, err1);
-      return;
-    }
-    await context.router.replace(const RecycleLocationPageRoute());
+    await context.router.push(const RecycleLocationPageRoute());
   }
 }
