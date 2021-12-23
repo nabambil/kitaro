@@ -27,6 +27,14 @@ class AppRouter extends _i2.RootStackRouter {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i1.LoginPage());
     },
+    OnBoardingPageRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i1.OnBoardingPage());
+    },
+    RegisterPageRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i1.RegisterPage());
+    },
     AddItemListPageRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i1.AddItemListPage());
@@ -45,6 +53,8 @@ class AppRouter extends _i2.RootStackRouter {
   List<_i2.RouteConfig> get routes => [
         _i2.RouteConfig(SplashPageRoute.name, path: '/'),
         _i2.RouteConfig(LoginPageRoute.name, path: '/login-page'),
+        _i2.RouteConfig(OnBoardingPageRoute.name, path: '/on-boarding-page'),
+        _i2.RouteConfig(RegisterPageRoute.name, path: '/register-page'),
         _i2.RouteConfig(AddItemListPageRoute.name, path: '/add-item-list-page'),
         _i2.RouteConfig(HistoryItemListPageRoute.name,
             path: '/history-item-list-page'),
@@ -67,6 +77,24 @@ class LoginPageRoute extends _i2.PageRouteInfo<void> {
   const LoginPageRoute() : super(LoginPageRoute.name, path: '/login-page');
 
   static const String name = 'LoginPageRoute';
+}
+
+/// generated route for
+/// [_i1.OnBoardingPage]
+class OnBoardingPageRoute extends _i2.PageRouteInfo<void> {
+  const OnBoardingPageRoute()
+      : super(OnBoardingPageRoute.name, path: '/on-boarding-page');
+
+  static const String name = 'OnBoardingPageRoute';
+}
+
+/// generated route for
+/// [_i1.RegisterPage]
+class RegisterPageRoute extends _i2.PageRouteInfo<void> {
+  const RegisterPageRoute()
+      : super(RegisterPageRoute.name, path: '/register-page');
+
+  static const String name = 'RegisterPageRoute';
 }
 
 /// generated route for

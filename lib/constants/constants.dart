@@ -1,4 +1,5 @@
 export 'assets.gen.dart';
+export 'auth.dart';
 export 'error_message.dart';
 export 'fonts.gen.dart';
 export 'item_detail.dart';
@@ -14,6 +15,8 @@ String get  errorTitleNotFound => 'No Items Found.';
 String get  errorTitleInvalidForm => 'Mandatory Fields Not Completed';
 String get  errorMessageInvalidForm =>
     'All mandatory fields need to be completed before proceeding.';
+String get  isFirstRun =>
+    'isfirstRun';
 
 const kDefaultPadding = EdgeInsets.zero;
 final kDefaultErrorTextColor = Colors.red.shade700;

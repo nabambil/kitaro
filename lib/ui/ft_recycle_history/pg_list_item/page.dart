@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kitaro/ui/ft_add_item/pg_add_item/dg_successful/dialog.dart';
 import 'package:provider/provider.dart';
 
 import '../../../kitaro.dart';
@@ -97,9 +97,9 @@ class _AppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: const [
-        PageBackButton(),
-        Expanded(
+      children: [
+        const PageBackButton(),
+        const Expanded(
           child: Center(
             child: Text(
               'Username',
@@ -110,15 +110,52 @@ class _AppBar extends StatelessWidget {
             ),
           ),
         ),
-        Text(
-          'Edit',
-          style: TextStyle(
-            color: Color(0xff8594A8),
-            fontSize: 15,
-          ),
-        )
+        PopupMenuButton(
+          offset: const Offset(0, 45),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          onSelected: (int u) => onSelected(u,context),
+          itemBuilder: (BuildContext context) {
+            return [
+              const PopupMenuItem(
+                value: 1,
+                child: Text(
+                  'Edit',
+                  style: TextStyle(
+                    color: Color(0xff8594A8),
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+              const PopupMenuItem(
+                value: 2,
+                child: Text(
+                  'Logout',
+                  style: TextStyle(
+                    color: Color(0xff8594A8),
+                    fontSize: 15,
+                  ),
+                ),
+              )
+            ];
+          },
+        ),
       ],
     );
+  }
+
+  Future<void> onSelected(int index, BuildContext context) async{
+    if(index == 1){
+      print('edit');
+    }
+    if(index == 2){
+      final err = await Authentication.signOutWithGoogle();
+      if(err != null){
+        await showWarningDialog(context, err);
+        return;
+      }
+      await context.router.replaceAll([const LoginPageRoute()]);
+    }
   }
 }
 
