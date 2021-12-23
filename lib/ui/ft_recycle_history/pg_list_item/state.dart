@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
+import 'package:kitaro/database/profile_dao.dart';
 
 import '../../../kitaro.dart';
 
-class HistoryItemListPageState extends ChangeNotifier{
+class HistoryItemListPageState extends ChangeNotifier {
   // REPORT IMAGE --------------------------------------------------------
   // REPORT IMAGE ///////////////////////////
   List<ItemDetails> _itemsAdded = [
@@ -26,4 +26,7 @@ class HistoryItemListPageState extends ChangeNotifier{
     notifyListeners();
   }
 
+  Future<KitaroProfile> get profile {
+    return ProfileDao("nabil").profile.catchError((err) => print(err));
+  }
 }

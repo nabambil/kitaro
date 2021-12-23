@@ -4,3 +4,4 @@ export 'constants/constants.dart';
 export 'ui/ui.dart';
 export 'model/model.dart';
 export 'service/service.dart';
+export 'database/_dao.dart';

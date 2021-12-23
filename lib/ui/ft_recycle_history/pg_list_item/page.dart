@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kitaro/database/profile_dao.dart';
 import 'package:kitaro/ui/ft_add_item/pg_add_item/dg_successful/dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -16,11 +17,14 @@ class HistoryItemListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HistoryItemListPageState>.value(
       value: HistoryItemListPageState(),
-      child: const Scaffold(
-        body: PageBase(
-          child: _Content(),
-        ),
-      ),
+      builder: (context, child) {
+        final _ = Provider.of<HistoryItemListPageState>(context).profile;
+        return const Scaffold(
+          body: PageBase(
+            child: _Content(),
+          ),
+        );
+      },
     );
   }
 }
@@ -114,7 +118,7 @@ class _AppBar extends StatelessWidget {
           offset: const Offset(0, 45),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          onSelected: (int u) => onSelected(u,context),
+          onSelected: (int u) => onSelected(u, context),
           itemBuilder: (BuildContext context) {
             return [
               const PopupMenuItem(
@@ -144,13 +148,13 @@ class _AppBar extends StatelessWidget {
     );
   }
 
-  Future<void> onSelected(int index, BuildContext context) async{
-    if(index == 1){
+  Future<void> onSelected(int index, BuildContext context) async {
+    if (index == 1) {
       print('edit');
     }
-    if(index == 2){
+    if (index == 2) {
       final err = await Authentication.signOutWithGoogle();
-      if(err != null){
+      if (err != null) {
         await showWarningDialog(context, err);
         return;
       }

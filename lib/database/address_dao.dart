@@ -3,33 +3,33 @@ import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:kitaro/kitaro.dart';
 
-class ProfileDao {
+class AddressDao {
   final Api _api;
 
-  ProfileDao(String? id) : _api = Api("$kProfile/$id");
+  AddressDao(String? id) : _api = Api("$kAddresses/$id");
 
-  Future<KitaroProfile> get profile async {
+  Future<AddressModel> get profile async {
     return _api.getDataCollection().then((event) => _converter(_data(event)));
   }
 
-  Stream<KitaroProfile> get profile$ {
+  Stream<AddressModel> get profile$ {
     return _api.streamDataCollection().transform(_handler);
   }
 
-  StreamTransformer<DatabaseEvent, KitaroProfile> get _handler {
+  StreamTransformer<DatabaseEvent, AddressModel> get _handler {
     return StreamTransformer.fromHandlers(handleData: (event, sink) {
       sink.add(_converter(_data(event)));
     });
   }
 
-  KitaroProfile _converter(Map value) {
-    return KitaroProfile.fromJson(Map<String, dynamic>.from(value));
+  AddressModel _converter(Map value) {
+    return AddressModel.fromJson(Map<String, dynamic>.from(value));
   }
 
   Map _data(DatabaseEvent event) => event.snapshot.value as Map;
 
-  Future<void> add(KitaroProfile value) => _api.addDocument(value.toJson());
+  Future<void> add(AddressModel value) => _api.addDocument(value.toJson());
 
-  Future<void> update(KitaroProfile value) =>
+  Future<void> update(AddressModel value) =>
       _api.updateDocument(value.toJson());
 }

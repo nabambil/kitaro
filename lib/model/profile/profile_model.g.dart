@@ -16,16 +16,14 @@ _$_KitaroProfile _$$_KitaroProfileFromJson(Map<String, dynamic> json) =>
           lastName: $checkedConvert('lastName', (v) => v as String?),
           phoneNumber: $checkedConvert('phone', (v) => v as String?),
           email: $checkedConvert('email', (v) => v as String?),
-          idNo: $checkedConvert('idNo', (v) => v as String?),
-          address: $checkedConvert(
-              'address',
-              (v) => v == null
-                  ? null
-                  : AddressModel.fromJson(v as Map<String, dynamic>)),
+          idNo: $checkedConvert('idNo', (v) => v as int?),
+          address: $checkedConvert('address', (v) => v as String?),
+          type: $checkedConvert('recycles',
+              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
         );
         return val;
       },
-      fieldKeyMap: const {'phoneNumber': 'phone'},
+      fieldKeyMap: const {'phoneNumber': 'phone', 'type': 'recycles'},
     );
 
 Map<String, dynamic> _$$_KitaroProfileToJson(_$_KitaroProfile instance) =>
@@ -36,4 +34,5 @@ Map<String, dynamic> _$$_KitaroProfileToJson(_$_KitaroProfile instance) =>
       'email': instance.email,
       'idNo': instance.idNo,
       'address': instance.address,
+      'recycles': instance.type,
     };

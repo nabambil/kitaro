@@ -13,12 +13,16 @@ class Api {
     return ref.once();
   }
 
+  Future<DatabaseEvent> getDataCollectionBy(String key, String value) {
+    return ref.orderByChild(key).equalTo(value).once();
+  }
+
   Stream<DatabaseEvent> streamDataCollection() {
     return ref.onValue;
   }
 
-  Future<DatabaseEvent> getDocumentById(String id) {
-    return ref.child(id).once();
+  Stream<DatabaseEvent> streamDataCollectionBy(String key, String value) {
+    return ref.orderByChild(key).equalTo(value).onValue;
   }
 
   Future<void> removeDocument(String id) {
@@ -26,10 +30,10 @@ class Api {
   }
 
   Future<void> addDocument(Map data) {
-    return ref.set(data);
+    return ref.push().set(data);
   }
 
-  Future<void> updateDocument(Map<String, String> data, String id) {
-    return ref.child(id).update(data);
+  Future<void> updateDocument(Map<String, dynamic> data) {
+    return ref.update(data);
   }
 }

@@ -13,8 +13,9 @@ class KitaroProfile with _$KitaroProfile {
     @JsonKey(name: 'lastName') String? lastName,
     @JsonKey(name: 'phone') String? phoneNumber,
     @JsonKey(name: 'email') String? email,
-    @JsonKey(name: 'idNo') String? idNo,
-    @JsonKey(name: 'address') AddressModel? address,
+    @JsonKey(name: 'idNo') int? idNo,
+    @JsonKey(name: 'address') String? address,
+    @JsonKey(name: 'recycles') List<String>? type,
   }) = _KitaroProfile;
 
   factory KitaroProfile.fromJson(Map<String, dynamic> json) =>

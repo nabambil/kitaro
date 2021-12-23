@@ -26,8 +26,9 @@ class _$KitaroProfileTearOff {
       @JsonKey(name: 'lastName') String? lastName,
       @JsonKey(name: 'phone') String? phoneNumber,
       @JsonKey(name: 'email') String? email,
-      @JsonKey(name: 'idNo') String? idNo,
-      @JsonKey(name: 'address') AddressModel? address}) {
+      @JsonKey(name: 'idNo') int? idNo,
+      @JsonKey(name: 'address') String? address,
+      @JsonKey(name: 'recycles') List<String>? type}) {
     return _KitaroProfile(
       firstName: firstName,
       lastName: lastName,
@@ -35,6 +36,7 @@ class _$KitaroProfileTearOff {
       email: email,
       idNo: idNo,
       address: address,
+      type: type,
     );
   }
 
@@ -57,9 +59,11 @@ mixin _$KitaroProfile {
   @JsonKey(name: 'email')
   String? get email => throw _privateConstructorUsedError;
   @JsonKey(name: 'idNo')
-  String? get idNo => throw _privateConstructorUsedError;
+  int? get idNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'address')
-  AddressModel? get address => throw _privateConstructorUsedError;
+  String? get address => throw _privateConstructorUsedError;
+  @JsonKey(name: 'recycles')
+  List<String>? get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -77,10 +81,9 @@ abstract class $KitaroProfileCopyWith<$Res> {
       @JsonKey(name: 'lastName') String? lastName,
       @JsonKey(name: 'phone') String? phoneNumber,
       @JsonKey(name: 'email') String? email,
-      @JsonKey(name: 'idNo') String? idNo,
-      @JsonKey(name: 'address') AddressModel? address});
-
-  $AddressModelCopyWith<$Res>? get address;
+      @JsonKey(name: 'idNo') int? idNo,
+      @JsonKey(name: 'address') String? address,
+      @JsonKey(name: 'recycles') List<String>? type});
 }
 
 /// @nodoc
@@ -100,6 +103,7 @@ class _$KitaroProfileCopyWithImpl<$Res>
     Object? email = freezed,
     Object? idNo = freezed,
     Object? address = freezed,
+    Object? type = freezed,
   }) {
     return _then(_value.copyWith(
       firstName: firstName == freezed
@@ -121,23 +125,16 @@ class _$KitaroProfileCopyWithImpl<$Res>
       idNo: idNo == freezed
           ? _value.idNo
           : idNo // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       address: address == freezed
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
-              as AddressModel?,
+              as String?,
+      type: type == freezed
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
-  }
-
-  @override
-  $AddressModelCopyWith<$Res>? get address {
-    if (_value.address == null) {
-      return null;
-    }
-
-    return $AddressModelCopyWith<$Res>(_value.address!, (value) {
-      return _then(_value.copyWith(address: value));
-    });
   }
 }
 
@@ -153,11 +150,9 @@ abstract class _$KitaroProfileCopyWith<$Res>
       @JsonKey(name: 'lastName') String? lastName,
       @JsonKey(name: 'phone') String? phoneNumber,
       @JsonKey(name: 'email') String? email,
-      @JsonKey(name: 'idNo') String? idNo,
-      @JsonKey(name: 'address') AddressModel? address});
-
-  @override
-  $AddressModelCopyWith<$Res>? get address;
+      @JsonKey(name: 'idNo') int? idNo,
+      @JsonKey(name: 'address') String? address,
+      @JsonKey(name: 'recycles') List<String>? type});
 }
 
 /// @nodoc
@@ -179,6 +174,7 @@ class __$KitaroProfileCopyWithImpl<$Res>
     Object? email = freezed,
     Object? idNo = freezed,
     Object? address = freezed,
+    Object? type = freezed,
   }) {
     return _then(_KitaroProfile(
       firstName: firstName == freezed
@@ -200,11 +196,15 @@ class __$KitaroProfileCopyWithImpl<$Res>
       idNo: idNo == freezed
           ? _value.idNo
           : idNo // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
       address: address == freezed
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
-              as AddressModel?,
+              as String?,
+      type: type == freezed
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -219,7 +219,8 @@ class _$_KitaroProfile implements _KitaroProfile {
       @JsonKey(name: 'phone') this.phoneNumber,
       @JsonKey(name: 'email') this.email,
       @JsonKey(name: 'idNo') this.idNo,
-      @JsonKey(name: 'address') this.address});
+      @JsonKey(name: 'address') this.address,
+      @JsonKey(name: 'recycles') this.type});
 
   factory _$_KitaroProfile.fromJson(Map<String, dynamic> json) =>
       _$$_KitaroProfileFromJson(json);
@@ -238,14 +239,17 @@ class _$_KitaroProfile implements _KitaroProfile {
   final String? email;
   @override
   @JsonKey(name: 'idNo')
-  final String? idNo;
+  final int? idNo;
   @override
   @JsonKey(name: 'address')
-  final AddressModel? address;
+  final String? address;
+  @override
+  @JsonKey(name: 'recycles')
+  final List<String>? type;
 
   @override
   String toString() {
-    return 'KitaroProfile(firstName: $firstName, lastName: $lastName, phoneNumber: $phoneNumber, email: $email, idNo: $idNo, address: $address)';
+    return 'KitaroProfile(firstName: $firstName, lastName: $lastName, phoneNumber: $phoneNumber, email: $email, idNo: $idNo, address: $address, type: $type)';
   }
 
   @override
@@ -261,12 +265,13 @@ class _$_KitaroProfile implements _KitaroProfile {
                 other.phoneNumber == phoneNumber) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.idNo, idNo) || other.idNo == idNo) &&
-            (identical(other.address, address) || other.address == address));
+            (identical(other.address, address) || other.address == address) &&
+            const DeepCollectionEquality().equals(other.type, type));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, firstName, lastName, phoneNumber, email, idNo, address);
+  int get hashCode => Object.hash(runtimeType, firstName, lastName, phoneNumber,
+      email, idNo, address, const DeepCollectionEquality().hash(type));
 
   @JsonKey(ignore: true)
   @override
@@ -285,8 +290,9 @@ abstract class _KitaroProfile implements KitaroProfile {
       @JsonKey(name: 'lastName') String? lastName,
       @JsonKey(name: 'phone') String? phoneNumber,
       @JsonKey(name: 'email') String? email,
-      @JsonKey(name: 'idNo') String? idNo,
-      @JsonKey(name: 'address') AddressModel? address}) = _$_KitaroProfile;
+      @JsonKey(name: 'idNo') int? idNo,
+      @JsonKey(name: 'address') String? address,
+      @JsonKey(name: 'recycles') List<String>? type}) = _$_KitaroProfile;
 
   factory _KitaroProfile.fromJson(Map<String, dynamic> json) =
       _$_KitaroProfile.fromJson;
@@ -305,10 +311,13 @@ abstract class _KitaroProfile implements KitaroProfile {
   String? get email;
   @override
   @JsonKey(name: 'idNo')
-  String? get idNo;
+  int? get idNo;
   @override
   @JsonKey(name: 'address')
-  AddressModel? get address;
+  String? get address;
+  @override
+  @JsonKey(name: 'recycles')
+  List<String>? get type;
   @override
   @JsonKey(ignore: true)
   _$KitaroProfileCopyWith<_KitaroProfile> get copyWith =>

@@ -5,8 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'app.dart';
 import 'app_state.dart';
 
-void main() async{
-
+void main() async {
   final getIt = GetIt.instance;
   getIt.registerSingleton<KitaroAppState>(KitaroAppState());
 

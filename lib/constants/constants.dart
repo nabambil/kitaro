@@ -8,15 +8,14 @@ import 'package:flutter/material.dart';
 
 // ----------------------------- PROPERTIES -----------------------------
 String get errorTitleUnknown => 'Unknown Error';
-String get  errorMessageUnknown =>
+String get errorMessageUnknown =>
     'This may be due to bad data connection or device error.';
-String get  errorTitleWarning => 'Warning!';
-String get  errorTitleNotFound => 'No Items Found.';
-String get  errorTitleInvalidForm => 'Mandatory Fields Not Completed';
-String get  errorMessageInvalidForm =>
+String get errorTitleWarning => 'Warning!';
+String get errorTitleNotFound => 'No Items Found.';
+String get errorTitleInvalidForm => 'Mandatory Fields Not Completed';
+String get errorMessageInvalidForm =>
     'All mandatory fields need to be completed before proceeding.';
-String get  isFirstRun =>
-    'isfirstRun';
+String get isFirstRun => 'isfirstRun';
 
 const kDefaultPadding = EdgeInsets.zero;
 final kDefaultErrorTextColor = Colors.red.shade700;
@@ -31,3 +30,11 @@ const kDefaultTextLightColor = Color(0xff666666);
 const kDefaultSearchPageThreshold = 10;
 const kDefaultEmptyFlagColor = Color(0xffffffff);
 const kImageExtensions = ['jpg', 'jpeg', 'png'];
+
+const String kProfile = "profile";
+const String kRecycle = "recycle";
+const String kLocation = "locations";
+const String kFacilities = "facilities";
+const String kAddresses = "addresses";
+const String kUser = "users";
+const String kWaste = "wastes";
