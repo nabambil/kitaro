@@ -1,13 +1,12 @@
-import 'package:flutter/gestures.dart';
+// ------------------------------ VARIABLES -----------------------------
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:kitaro/kitaro.dart';
 import 'package:provider/provider.dart';
 
+import '../../../kitaro.dart';
 import 'state.dart';
 
-// ------------------------------ VARIABLES -----------------------------
 late FocusNode _firstNameNode;
 late FocusNode _lastNameNode;
 late FocusNode _emailNode;
@@ -21,16 +20,21 @@ late FocusNode _passwordNode;
 late FocusNode _passwordRecheckNode;
 
 // ------------------------------- CLASSES ------------------------------
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class EditProfilePage extends StatelessWidget {
+  EditProfilePage({
+    required this.test,
+    Key? key,
+  }) : super(key: key);
+
+  ProfileDetailsTest test;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ChangeNotifierProvider<RegisterPageState>(
-          create: (_) => RegisterPageState(),
-          child: const _Content(),
+        child: ChangeNotifierProvider<EditProfilePageState>(
+          create: (_) => EditProfilePageState(test: test),
+          child: _Content(test: test),
         ),
       ),
     );
@@ -39,9 +43,12 @@ class RegisterPage extends StatelessWidget {
 
 class _Content extends StatefulWidget {
   // ------------------------------- CONSTRUCTORS ------------------------------
-  const _Content({
+  _Content({
+    required this.test,
     Key? key,
   }) : super(key: key);
+
+  ProfileDetailsTest test;
 
   // ------------------------------- METHODS ------------------------------
   @override
@@ -58,6 +65,8 @@ class _ContentState extends State<_Content> {
         DeviceOrientation.portraitUp,
       ]);
 
+      final state = Provider.of<EditProfilePageState>(context, listen: false);
+      await state.initialiseEditItem(widget.test);
       await Authentication.initializeFirebase();
     });
   }
@@ -76,7 +85,7 @@ class _ContentState extends State<_Content> {
         _Logo(),
         SizedBox(height: 30),
         Text(
-          'Welcome',
+          'Edit Profile Details',
           style: TextStyle(
             color: Color(0xff47525E),
             fontSize: 28,
@@ -85,15 +94,25 @@ class _ContentState extends State<_Content> {
         ),
         SizedBox(height: 60),
         _FirstNameField(),
+        SizedBox(height: 15),
         _LastNameField(),
+        SizedBox(height: 15),
         _EmailField(),
+        SizedBox(height: 15),
         _AddressLine1Field(),
+        SizedBox(height: 15),
         _AddressLine2Field(),
+        SizedBox(height: 15),
         _AddressLine3Field(),
+        SizedBox(height: 15),
         _CityField(),
+        SizedBox(height: 15),
         _StateField(),
+        SizedBox(height: 15),
         _PostcodeField(),
+        SizedBox(height: 15),
         _PasswordField(),
+        SizedBox(height: 15),
         _PasswordRecheckField(),
         SizedBox(height: 52),
         _SubmitButton(),
@@ -131,8 +150,16 @@ class _FirstNameField extends StatefulWidget {
   State<_FirstNameField> createState() => _FirstNameFieldState();
 }
 
-class _FirstNameFieldState extends State<_FirstNameField> {
-  // ------------------------------- METHODS ------------------------------
+class _FirstNameFieldState extends State<_FirstNameField>
+    with AutomaticKeepAliveClientMixin {
+  // ------------------------------- FIELDS -------------------------------
+  final _controller = TextEditingController();
+
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
+  // --------------------------------- METHODS ---------------------------------
   @override
   void initState() {
     super.initState();
@@ -147,9 +174,14 @@ class _FirstNameFieldState extends State<_FirstNameField> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RegisterPageState>(
+    super.build(context);
+    return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
-        return KitaroTextField(
+        if (state.updateTextController) {
+          _controller.text = state.firstName!;
+        }
+        return KitaroTextBox(
+          controller: _controller,
           labelText: 'first name *',
           errorText: state.firstNameError,
           focusNode: _firstNameNode,
@@ -175,8 +207,16 @@ class _LastNameField extends StatefulWidget {
   State<_LastNameField> createState() => _LastNameFieldState();
 }
 
-class _LastNameFieldState extends State<_LastNameField> {
-  // ------------------------------- METHODS ------------------------------
+class _LastNameFieldState extends State<_LastNameField>
+    with AutomaticKeepAliveClientMixin {
+  // ------------------------------- FIELDS -------------------------------
+  final _controller = TextEditingController();
+
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
+  // --------------------------------- METHODS ---------------------------------
   @override
   void initState() {
     super.initState();
@@ -191,9 +231,14 @@ class _LastNameFieldState extends State<_LastNameField> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RegisterPageState>(
+    super.build(context);
+    return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
-        return KitaroTextField(
+        if (state.updateTextController) {
+          _controller.text = state.lastName!;
+        }
+        return KitaroTextBox(
+          controller: _controller,
           labelText: 'last name *',
           errorText: state.lastNameError,
           focusNode: _lastNameNode,
@@ -219,8 +264,16 @@ class _EmailField extends StatefulWidget {
   State<_EmailField> createState() => _EmailFieldState();
 }
 
-class _EmailFieldState extends State<_EmailField> {
-  // ------------------------------- METHODS ------------------------------
+class _EmailFieldState extends State<_EmailField>
+    with AutomaticKeepAliveClientMixin {
+  // ------------------------------- FIELDS -------------------------------
+  final _controller = TextEditingController();
+
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
+  // --------------------------------- METHODS ---------------------------------
   @override
   void initState() {
     super.initState();
@@ -235,9 +288,14 @@ class _EmailFieldState extends State<_EmailField> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RegisterPageState>(
+    super.build(context);
+    return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
-        return KitaroTextField(
+        if (state.updateTextController) {
+          _controller.text = state.email!;
+        }
+        return KitaroTextBox(
+          controller: _controller,
           labelText: 'email *',
           errorText: state.emailError,
           focusNode: _emailNode,
@@ -263,8 +321,16 @@ class _AddressLine1Field extends StatefulWidget {
   State<_AddressLine1Field> createState() => _AddressLine1FieldState();
 }
 
-class _AddressLine1FieldState extends State<_AddressLine1Field> {
-  // ------------------------------- METHODS ------------------------------
+class _AddressLine1FieldState extends State<_AddressLine1Field>
+    with AutomaticKeepAliveClientMixin {
+  // ------------------------------- FIELDS -------------------------------
+  final _controller = TextEditingController();
+
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
+  // --------------------------------- METHODS ---------------------------------
   @override
   void initState() {
     super.initState();
@@ -279,9 +345,14 @@ class _AddressLine1FieldState extends State<_AddressLine1Field> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RegisterPageState>(
+    super.build(context);
+    return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
-        return KitaroTextField(
+        if (state.updateTextController) {
+          _controller.text = state.address1!;
+        }
+        return KitaroTextBox(
+          controller: _controller,
           labelText: 'address *',
           errorText: state.address1Error,
           focusNode: _address1Node,
@@ -307,8 +378,16 @@ class _AddressLine2Field extends StatefulWidget {
   State<_AddressLine2Field> createState() => _AddressLine2FieldState();
 }
 
-class _AddressLine2FieldState extends State<_AddressLine2Field> {
-  // ------------------------------- METHODS ------------------------------
+class _AddressLine2FieldState extends State<_AddressLine2Field>
+    with AutomaticKeepAliveClientMixin {
+  // ------------------------------- FIELDS -------------------------------
+  final _controller = TextEditingController();
+
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
+  // --------------------------------- METHODS ---------------------------------
   @override
   void initState() {
     super.initState();
@@ -323,9 +402,14 @@ class _AddressLine2FieldState extends State<_AddressLine2Field> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RegisterPageState>(
+    super.build(context);
+    return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
-        return KitaroTextField(
+        if (state.updateTextController) {
+          _controller.text = state.address2 ?? '';
+        }
+        return KitaroTextBox(
+          controller: _controller,
           labelText: 'address 2',
           focusNode: _address2Node,
           onChanged: (v) => state.address2 = v,
@@ -350,8 +434,16 @@ class _AddressLine3Field extends StatefulWidget {
   State<_AddressLine3Field> createState() => _AddressLine3FieldState();
 }
 
-class _AddressLine3FieldState extends State<_AddressLine3Field> {
-  // ------------------------------- METHODS ------------------------------
+class _AddressLine3FieldState extends State<_AddressLine3Field>
+    with AutomaticKeepAliveClientMixin {
+  // ------------------------------- FIELDS -------------------------------
+  final _controller = TextEditingController();
+
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
+  // --------------------------------- METHODS ---------------------------------
   @override
   void initState() {
     super.initState();
@@ -366,9 +458,14 @@ class _AddressLine3FieldState extends State<_AddressLine3Field> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RegisterPageState>(
+    super.build(context);
+    return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
-        return KitaroTextField(
+        if (state.updateTextController) {
+          _controller.text = state.address3 ?? '';
+        }
+        return KitaroTextBox(
+          controller: _controller,
           labelText: 'address 3',
           focusNode: _address3Node,
           onChanged: (v) => state.address3 = v,
@@ -393,8 +490,16 @@ class _CityField extends StatefulWidget {
   State<_CityField> createState() => _CityFieldState();
 }
 
-class _CityFieldState extends State<_CityField> {
-  // ------------------------------- METHODS ------------------------------
+class _CityFieldState extends State<_CityField>
+    with AutomaticKeepAliveClientMixin {
+  // ------------------------------- FIELDS -------------------------------
+  final _controller = TextEditingController();
+
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
+  // --------------------------------- METHODS ---------------------------------
   @override
   void initState() {
     super.initState();
@@ -409,12 +514,17 @@ class _CityFieldState extends State<_CityField> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RegisterPageState>(
+    super.build(context);
+    return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
-        return KitaroTextField(
+        if (state.updateTextController) {
+          _controller.text = state.city!;
+        }
+        return KitaroTextBox(
+          controller: _controller,
           labelText: 'city *',
-          errorText: state.cityError,
           focusNode: _cityNode,
+          errorText: state.cityError,
           onChanged: (v) => state.city = v,
           onSubmitted: (v) {
             state.city = v;
@@ -437,8 +547,16 @@ class _StateField extends StatefulWidget {
   State<_StateField> createState() => _StateFieldState();
 }
 
-class _StateFieldState extends State<_StateField> {
-  // ------------------------------- METHODS ------------------------------
+class _StateFieldState extends State<_StateField>
+    with AutomaticKeepAliveClientMixin {
+  // ------------------------------- FIELDS -------------------------------
+  final _controller = TextEditingController();
+
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
+  // --------------------------------- METHODS ---------------------------------
   @override
   void initState() {
     super.initState();
@@ -453,12 +571,17 @@ class _StateFieldState extends State<_StateField> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RegisterPageState>(
+    super.build(context);
+    return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
-        return KitaroTextField(
+        if (state.updateTextController) {
+          _controller.text = state.state!;
+        }
+        return KitaroTextBox(
+          controller: _controller,
           labelText: 'state *',
-          errorText: state.stateError,
           focusNode: _stateNode,
+          errorText: state.stateError,
           onChanged: (v) => state.state = v,
           onSubmitted: (v) {
             state.state = v;
@@ -481,8 +604,16 @@ class _PostcodeField extends StatefulWidget {
   State<_PostcodeField> createState() => _PostcodeFieldState();
 }
 
-class _PostcodeFieldState extends State<_PostcodeField> {
-  // ------------------------------- METHODS ------------------------------
+class _PostcodeFieldState extends State<_PostcodeField>
+    with AutomaticKeepAliveClientMixin {
+  // ------------------------------- FIELDS -------------------------------
+  final _controller = TextEditingController();
+
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
+  // --------------------------------- METHODS ---------------------------------
   @override
   void initState() {
     super.initState();
@@ -497,12 +628,17 @@ class _PostcodeFieldState extends State<_PostcodeField> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RegisterPageState>(
+    super.build(context);
+    return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
-        return KitaroTextField(
-          labelText: 'postcode*',
-          errorText: state.postcodeError,
+        if (state.updateTextController) {
+          _controller.text = state.postcode!;
+        }
+        return KitaroTextBox(
+          controller: _controller,
+          labelText: 'postcode *',
           focusNode: _postcodeNode,
+          errorText: state.postcodeError,
           onChanged: (v) => state.postcode = v,
           onSubmitted: (v) {
             state.postcode = v;
@@ -525,8 +661,16 @@ class _PasswordField extends StatefulWidget {
   State<_PasswordField> createState() => _PasswordFieldState();
 }
 
-class _PasswordFieldState extends State<_PasswordField> {
-  // ------------------------------- METHODS ------------------------------
+class _PasswordFieldState extends State<_PasswordField>
+    with AutomaticKeepAliveClientMixin {
+  // ------------------------------- FIELDS -------------------------------
+  final _controller = TextEditingController();
+
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
+  // --------------------------------- METHODS ---------------------------------
   @override
   void initState() {
     super.initState();
@@ -541,11 +685,16 @@ class _PasswordFieldState extends State<_PasswordField> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RegisterPageState>(
+    super.build(context);
+    return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
-        return KitaroPasswordTextField(
-          labelText: 'password *',
+        if (state.updateTextController) {
+          _controller.text = state.password ?? '';
+        }
+        return KitaroTextBox(
+          controller: _controller,
           errorText: state.passwordError,
+          labelText: 'password *',
           focusNode: _passwordNode,
           onChanged: (v) => state.password = v,
           onSubmitted: (v) {
@@ -566,11 +715,19 @@ class _PasswordRecheckField extends StatefulWidget {
 
   // ------------------------------- METHODS ------------------------------
   @override
-  State<_PasswordRecheckField> createState() => _PasswordRecheckFieldState();
+  State<_PasswordRecheckField> createState() => __PasswordRecheckFieldState();
 }
 
-class _PasswordRecheckFieldState extends State<_PasswordRecheckField> {
-  // ------------------------------- METHODS ------------------------------
+class __PasswordRecheckFieldState extends State<_PasswordRecheckField>
+    with AutomaticKeepAliveClientMixin {
+  // ------------------------------- FIELDS -------------------------------
+  final _controller = TextEditingController();
+
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
+  // --------------------------------- METHODS ---------------------------------
   @override
   void initState() {
     super.initState();
@@ -585,13 +742,18 @@ class _PasswordRecheckFieldState extends State<_PasswordRecheckField> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RegisterPageState>(
+    super.build(context);
+    return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
-        return KitaroPasswordTextField(
+        if (state.updateTextController) {
+          _controller.text = state.passwordRecheck ?? '';
+        }
+        return KitaroTextBox(
+          controller: _controller,
           labelText: 're-type password *',
           errorText: state.passwordRecheckError,
           focusNode: _passwordRecheckNode,
-          onChanged: (v) => state.passwordRecheck = v,
+          onChanged: (v) => state.password = v,
           onSubmitted: (v) {
             state.passwordRecheck = v;
             final focusScope = FocusScope.of(context);
@@ -617,10 +779,10 @@ class _SubmitButton extends StatelessWidget {
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
-    return Consumer<RegisterPageState>(
+    return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
         return LoginButton(
-          caption: 'Register',
+          caption: 'Edit',
           isBusy: state.isBusy,
           enabled: !state.isBusy,
           onPressed: () => _onSubmitted(context),
@@ -630,7 +792,7 @@ class _SubmitButton extends StatelessWidget {
   }
 
   Future<void> _onSubmitted(BuildContext context) async {
-    final state = Provider.of<RegisterPageState>(context, listen: false);
+    final state = Provider.of<EditProfilePageState>(context, listen: false);
     switch (state.validateAll()) {
       case null:
         break;
@@ -663,11 +825,11 @@ class _SubmitButton extends StatelessWidget {
         return;
     }
 
-    final err1 = await state.register();
-    if (err1 != null) {
-      await showWarningDialog(context, err1);
-      return;
-    }
-    await context.router.push(EditProfilePageRoute(test: state.test!));
+    // final err1 = await state.register();
+    // if (err1 != null) {
+    //   await showWarningDialog(context, err1);
+    //   return;
+    // }
+    await context.router.push(const RecycleLocationPageRoute());
   }
 }

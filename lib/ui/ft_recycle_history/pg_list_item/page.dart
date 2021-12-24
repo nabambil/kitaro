@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kitaro/database/profile_dao.dart';
-import 'package:kitaro/ui/ft_add_item/pg_add_item/dg_successful/dialog.dart';
 import 'package:provider/provider.dart';
 
 import '../../../kitaro.dart';

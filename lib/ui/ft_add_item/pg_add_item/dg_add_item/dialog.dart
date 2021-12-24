@@ -185,7 +185,7 @@ class __ItemWeightTextFieldState extends State<_ItemWeightTextField>
         if (state.updateTextController) {
           _controller.text = state.itemWeight!;
         }
-        return CustomTextField(
+        return KitaroTextBox(
           controller: _controller,
           labelText: '0.70',
           onChanged: (v) => state.itemWeight = v,

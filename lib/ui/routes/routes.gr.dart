@@ -35,6 +35,12 @@ class AppRouter extends _i2.RootStackRouter {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i1.RegisterPage());
     },
+    EditProfilePageRoute.name: (routeData) {
+      final args = routeData.argsAs<EditProfilePageRouteArgs>();
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData,
+          child: _i1.EditProfilePage(test: args.test, key: args.key));
+    },
     AddItemListPageRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i1.AddItemListPage());
@@ -55,6 +61,7 @@ class AppRouter extends _i2.RootStackRouter {
         _i2.RouteConfig(LoginPageRoute.name, path: '/login-page'),
         _i2.RouteConfig(OnBoardingPageRoute.name, path: '/on-boarding-page'),
         _i2.RouteConfig(RegisterPageRoute.name, path: '/register-page'),
+        _i2.RouteConfig(EditProfilePageRoute.name, path: '/edit-profile-page'),
         _i2.RouteConfig(AddItemListPageRoute.name, path: '/add-item-list-page'),
         _i2.RouteConfig(HistoryItemListPageRoute.name,
             path: '/history-item-list-page'),
@@ -95,6 +102,30 @@ class RegisterPageRoute extends _i2.PageRouteInfo<void> {
       : super(RegisterPageRoute.name, path: '/register-page');
 
   static const String name = 'RegisterPageRoute';
+}
+
+/// generated route for
+/// [_i1.EditProfilePage]
+class EditProfilePageRoute extends _i2.PageRouteInfo<EditProfilePageRouteArgs> {
+  EditProfilePageRoute({required _i1.ProfileDetailsTest test, _i3.Key? key})
+      : super(EditProfilePageRoute.name,
+            path: '/edit-profile-page',
+            args: EditProfilePageRouteArgs(test: test, key: key));
+
+  static const String name = 'EditProfilePageRoute';
+}
+
+class EditProfilePageRouteArgs {
+  const EditProfilePageRouteArgs({required this.test, this.key});
+
+  final _i1.ProfileDetailsTest test;
+
+  final _i3.Key? key;
+
+  @override
+  String toString() {
+    return 'EditProfilePageRouteArgs{test: $test, key: $key}';
+  }
 }
 
 /// generated route for
