@@ -147,7 +147,7 @@ class _UsernameState extends State<_Username> {
   Widget build(BuildContext context) {
     return Consumer<LoginPageState>(
       builder: (_, state, __) {
-        return KitaroUsernameTextField(
+        return KitaroTextField(
           labelText: 'Username',
           errorText: state.userNameError,
           focusNode: _usernameNode,

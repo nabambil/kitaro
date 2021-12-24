@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class KitaroUsernameTextField extends StatelessWidget {
+class KitaroTextField extends StatelessWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
-  const KitaroUsernameTextField({
+  const KitaroTextField({
     Key? key,
     required this.labelText,
     required this.onChanged,
-    required this.errorText,
+    this.errorText,
     this.onSubmitted,
     this.focusNode,
   }) : super(key: key);
@@ -32,6 +32,7 @@ class KitaroUsernameTextField extends StatelessWidget {
           labelStyle: TextStyle(
             fontSize: 14.0,
             color: hasError ? Colors.red.shade900 : const Color(0xff969FAA),
+            fontWeight: FontWeight.normal
           ),
           border: const UnderlineInputBorder(
             borderSide: BorderSide(
@@ -61,7 +62,7 @@ class KitaroPasswordTextField extends StatefulWidget {
     Key? key,
     required this.labelText,
     required this.onChanged,
-    required this.errorText,
+    this.errorText,
     this.onSubmitted,
     this.focusNode,
   }) : super(key: key);
@@ -94,6 +95,7 @@ class _KitaroPasswordTextFieldState extends State<KitaroPasswordTextField> {
           labelStyle: TextStyle(
             fontSize: 14.0,
             color: hasError ? Colors.red.shade900 : const Color(0xff969FAA),
+            fontWeight: FontWeight.normal
           ),
           border: const UnderlineInputBorder(
             borderSide: BorderSide(
@@ -129,9 +131,9 @@ class _KitaroPasswordTextFieldState extends State<KitaroPasswordTextField> {
   }
 }
 
-class CustomTextField extends StatelessWidget {
+class KitaroTextBox extends StatelessWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
-  const CustomTextField({
+  const KitaroTextBox({
     Key? key,
     required this.controller,
     required this.labelText,
