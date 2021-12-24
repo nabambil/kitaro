@@ -59,7 +59,7 @@ class AddButton extends StatelessWidget {
       onTap: onPressed,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: const[
+        children: const [
           Icon(
             Icons.add,
             color: Color(0xff8594A8),
@@ -106,7 +106,7 @@ class LoginButton extends StatelessWidget {
         child: MaterialButton(
           shape: RoundedRectangleBorder(borderRadius: borderRadius),
           onPressed: enabled ? (isBusy ? null : onPressed) : null,
-          color: const Color(0xff13CE66),
+          color: const Color(0xFF16b04a),
           colorBrightness: Brightness.dark,
           elevation: 0.0,
           focusElevation: 0.0,

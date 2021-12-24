@@ -1,8 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:kitaro/kitaro.dart';
 
 // ------------------------------- CLASSES ------------------------------
@@ -12,9 +12,7 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: SafeArea(
-        child: _Content(),
-      ),
+      body: _Content(),
     );
   }
 }
@@ -43,10 +41,10 @@ class _ContentState extends State<_Content> {
       MySharedPreferences.instance
           .getBooleanValue(isFirstRun)
           .then((value) => setState(() {
-        _isFirstTime = value;
-      }));
+                _isFirstTime = value;
+              }));
       await Future.delayed(const Duration(seconds: 1));
-      if(_isFirstTime){
+      if (_isFirstTime) {
         await context.router.replace(const OnBoardingPageRoute());
         return;
       }
@@ -61,7 +59,8 @@ class _ContentState extends State<_Content> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      color: const Color(0xFF16b04a),
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: const Center(
@@ -81,9 +80,9 @@ class _Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image(
-      image: Assets.logos.logo,
-      height: 56,
-      width: 57,
+      image: Assets.logos.kitaroLogo,
+      height: 200,
+      width: 200,
       alignment: Alignment.topLeft,
     );
   }
