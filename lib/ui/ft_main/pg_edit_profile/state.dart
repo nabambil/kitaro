@@ -15,19 +15,19 @@ enum InvalidField {
   recheckPassword,
 }
 
-class RegisterPageState extends ChangeNotifier {
+class EditProfilePageState extends ChangeNotifier {
 
-  ProfileDetailsTest? _test;
-  ProfileDetailsTest? get test => _test;
+  EditProfilePageState({required this.test});
 
-  set test(ProfileDetailsTest? value) {
-    _test = value;
-    notifyListeners();
-  }
-
+  ProfileDetailsTest test;
   bool _isBusy = false;
 
   bool get isBusy => _isBusy;
+
+  // UPDATE TEXT CONTROLLER /////////////////////
+  bool _updateTextController = false;
+
+  bool get updateTextController => _updateTextController;
 
   // FIRST NAME -----------------------------------------------------------------
   // FIRST NAME //////////////////////////////////
@@ -49,6 +49,7 @@ class RegisterPageState extends ChangeNotifier {
   }
 
   void validateFirstName() {
+    _updateTextController = false;
     try {
       _firstNameError = null;
 
@@ -80,6 +81,7 @@ class RegisterPageState extends ChangeNotifier {
   }
 
   void validateLastName() {
+    _updateTextController = false;
     try {
       _lastNameError = null;
 
@@ -111,6 +113,7 @@ class RegisterPageState extends ChangeNotifier {
   }
 
   void validateEmail() {
+    _updateTextController = false;
     try {
       _emailError = null;
 
@@ -145,6 +148,7 @@ class RegisterPageState extends ChangeNotifier {
   }
 
   void validateAddress1() {
+    _updateTextController = false;
     try {
       _address1Error = null;
 
@@ -163,6 +167,7 @@ class RegisterPageState extends ChangeNotifier {
 
   set address2(String? value) {
     _address2 = value;
+    _updateTextController = false;
     notifyListeners();
   }
 
@@ -173,6 +178,7 @@ class RegisterPageState extends ChangeNotifier {
 
   set address3(String? value) {
     _address3 = value;
+    _updateTextController = false;
     notifyListeners();
   }
 
@@ -198,6 +204,7 @@ class RegisterPageState extends ChangeNotifier {
 
   @protected
   void validateCity() {
+    _updateTextController = false;
     try {
       _cityError = null;
 
@@ -231,6 +238,7 @@ class RegisterPageState extends ChangeNotifier {
 
   @protected
   void validateState() {
+    _updateTextController = false;
     try {
       _stateError = null;
 
@@ -264,6 +272,7 @@ class RegisterPageState extends ChangeNotifier {
 
   @protected
   void validatePostcode() {
+    _updateTextController = false;
     try {
       _postcodeError = null;
 
@@ -297,6 +306,7 @@ class RegisterPageState extends ChangeNotifier {
 
   @protected
   void validatePassword() {
+    _updateTextController = false;
     try {
       _passwordError = null;
 
@@ -333,6 +343,7 @@ class RegisterPageState extends ChangeNotifier {
 
   @protected
   void validatePasswordRecheck() {
+    _updateTextController = false;
     try {
       _passwordRecheckError = null;
 
@@ -348,6 +359,25 @@ class RegisterPageState extends ChangeNotifier {
   }
 
   // ------------------------------- METHODS ------------------------------
+  Future<void> initialiseEditItem(ProfileDetailsTest item) async {
+    try {
+      _firstName = item.firstName;
+      _lastName = item.lastName;
+      _email = item.email;
+      _address1 = item.address1;
+      _address2 = item.address2;
+      _address3 = item.address3;
+      _city = item.city;
+      _state = item.state;
+      _postcode = item.postcode;
+      _password = item.password;
+      _passwordRecheck = item.passwordRecheck;
+    } finally {
+      _updateTextController = true;
+      notifyListeners();
+    }
+  }
+
   InvalidField? validateAll() {
     // ALWAYS: Validate the fields that can be focused first!
     validateFirstName();
@@ -396,28 +426,14 @@ class RegisterPageState extends ChangeNotifier {
       _isBusy = true;
       notifyListeners();
 
-      _test = ProfileDetailsTest(
-          firstName: _firstName!,
-          lastName: _lastName!,
-          email: _email,
-          address1: _address1,
-          address2: _address2,
-          address3: _address3,
-          city: _city,
-          state: _state,
-          postcode: _postcode,
-          password: _password,
-          passwordRecheck: _passwordRecheck,
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: _email!, password: _password!);
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return ErrorMessage(
+        title: e.code,
+        message: e.message ?? '',
       );
-
-    //   await FirebaseAuth.instance
-    //       .createUserWithEmailAndPassword(email: _email!, password: _password!);
-    //   return null;
-    // } on FirebaseAuthException catch (e) {
-    //   return ErrorMessage(
-    //     title: e.code,
-    //     message: e.message ?? '',
-    //   );
     } finally {
       _isBusy = false;
       notifyListeners();

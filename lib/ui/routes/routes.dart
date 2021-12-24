@@ -19,6 +19,9 @@ export 'routes.gr.dart';
       page: RegisterPage,
     ),
     AutoRoute(
+      page: EditProfilePage,
+    ),
+    AutoRoute(
       page: AddItemListPage,
     ),
     AutoRoute(

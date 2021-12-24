@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 
 import 'dg_add_item/dialog.dart';
 import 'dg_edit_item/dialog.dart';
-import 'dg_successful/dialog.dart';
 import 'state.dart';
 
 class AddItemListPage extends StatelessWidget {

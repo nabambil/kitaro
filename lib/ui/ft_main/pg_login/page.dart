@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:kitaro/kitaro.dart';
-import 'package:kitaro/ui/ft_add_item/pg_add_item/dg_successful/dialog.dart';
 import 'package:provider/provider.dart';
 
 import 'state.dart';
