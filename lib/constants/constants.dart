@@ -29,6 +29,8 @@ const kDefaultFocusedBorderLightColor = Color(0xff000000);
 const kDefaultTextLightColor = Color(0xff666666);
 const kDefaultSearchPageThreshold = 10;
 const kDefaultEmptyFlagColor = Color(0xffffffff);
+const kThemeColor = Color(0xFF16b04a);
+const kWhiteColor = Colors.white;
 const kImageExtensions = ['jpg', 'jpeg', 'png'];
 
 const String kProfile = "profile";

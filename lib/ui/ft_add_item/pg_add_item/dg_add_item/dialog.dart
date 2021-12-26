@@ -31,7 +31,10 @@ class AddItemDialog extends StatelessWidget {
     return ChangeNotifierProvider<AddItemListPageState>.value(
       value: AddItemListPageState(),
       child: DialogBase(
-        child: _Content(isEdit: isEdit, index: index,),
+        child: _Content(
+          isEdit: isEdit,
+          index: index,
+        ),
       ),
     );
   }
@@ -81,18 +84,18 @@ class _Title extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Recycle Item Info',
+          'Recycle Item',
           style: TextStyle(
               color: Color(0xff4D627B),
-              fontSize: 14,
+              fontSize: 20,
               fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8.0),
-        Container(
-          height: 1.0,
-          width: 30,
-          color: const Color(0xff4D627B),
-        ),
+        // Container(
+        //   height: 1.0,
+        //   width: 30,
+        //   color: const Color(0xff4D627B),
+        // ),
       ],
     );
   }

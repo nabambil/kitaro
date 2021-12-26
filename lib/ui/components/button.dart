@@ -1,6 +1,7 @@
 import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kitaro/constants/constants.dart';
 
 class PageBackButton extends StatelessWidget {
   // ------------------------------- CONSTRUCTORS ------------------------------
@@ -26,12 +27,13 @@ class PageBackButton extends StatelessWidget {
             children: [
               Icon(
                 CupertinoIcons.left_chevron,
-                color: color,
-                size: 36.0,
+                color: colorOverride ?? Colors.white,
+                size: 28.0,
               ),
-              const Text(
+              Text(
                 'Back',
-                style: TextStyle(color: Color(0xff8190A5), fontSize: 13),
+                style: TextStyle(
+                    color: colorOverride ?? Colors.white, fontSize: 16),
               )
             ],
           ),
@@ -153,7 +155,7 @@ class SubmitButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 38.0),
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
         onPressed: enabled ? (isBusy ? null : onPressed) : null,
-        color: const Color(0xff77D353),
+        color: kThemeColor,
         colorBrightness: Brightness.dark,
         elevation: 0.0,
         focusElevation: 0.0,
@@ -164,7 +166,7 @@ class SubmitButton extends StatelessWidget {
           caption,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 16,
+            fontSize: 20,
           ),
         ),
       ),

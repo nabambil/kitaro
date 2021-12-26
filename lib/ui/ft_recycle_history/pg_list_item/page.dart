@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kitaro/database/profile_dao.dart';
 import 'package:provider/provider.dart';
 
 import '../../../kitaro.dart';
@@ -69,7 +68,7 @@ class _Header extends StatelessWidget {
               padding: const EdgeInsets.only(left: 20.0),
               child: Row(
                 children: [
-                  const _ProfileIcon(),
+                  // const _ProfileIcon(),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
@@ -77,6 +76,7 @@ class _Header extends StatelessWidget {
                       _Text(text: 'Phone Number'),
                       SizedBox(height: 5.0),
                       _Text(text: 'Email Address'),
+                      SizedBox(height: 16)
                     ],
                   )
                 ],
@@ -101,19 +101,22 @@ class _AppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const PageBackButton(),
+        const PageBackButton(
+          colorOverride: Colors.white,
+        ),
         const Expanded(
           child: Center(
             child: Text(
-              'Username',
+              'Profile',
               style: TextStyle(
-                color: Color(0xff47525E),
-                fontSize: 15,
+                color: Colors.white, //(0xff47525E),
+                fontSize: 20,
               ),
             ),
           ),
         ),
         PopupMenuButton(
+          icon: Icon(Icons.menu, color: Colors.white),
           offset: const Offset(0, 45),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -149,7 +152,8 @@ class _AppBar extends StatelessWidget {
 
   Future<void> onSelected(int index, BuildContext context) async {
     if (index == 1) {
-      print('edit');
+      await context.router.push(EditProfilePageRoute(
+          test: ProfileDetailsTest(firstName: "nabil", lastName: "hairul")));
     }
     if (index == 2) {
       final err = await Authentication.signOutWithGoogle();
@@ -166,11 +170,13 @@ class _Text extends StatelessWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const _Text({
     required this.text,
+    this.color = const Color(0xff4D627B),
     Key? key,
   }) : super(key: key);
 
   // ---------------------------------- FIELDS ---------------------------------
   final String? text;
+  final Color? color;
 
   // ------------------------------- METHODS ------------------------------
   @override
@@ -180,8 +186,8 @@ class _Text extends StatelessWidget {
       child: Text(
         text!,
         style: const TextStyle(
-          color: Color(0xff4D627B),
-          fontSize: 14,
+          color: Colors.white,
+          fontSize: 16,
         ),
       ),
     );
@@ -259,8 +265,8 @@ class _BodyTitle extends StatelessWidget {
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
+          children: const [
+            Text(
               'Previous Recycle Item',
               style: TextStyle(
                 fontSize: 18,
@@ -268,12 +274,12 @@ class _BodyTitle extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 8.0),
-            Container(
-              height: 1.0,
-              width: 30,
-              color: const Color(0xff4D627B),
-            )
+            SizedBox(height: 8.0),
+            // Container(
+            //   height: 1.0,
+            //   width: 30,
+            //   color: const Color(0xff4D627B),
+            // )
           ],
         ),
       ],

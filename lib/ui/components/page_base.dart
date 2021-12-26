@@ -16,7 +16,7 @@ class PageBase extends StatelessWidget {
           children: [
             Container(
               height: MediaQuery.of(context).size.height * 0.5,
-              color: const Color(0x3377D353),
+              color: const Color(0xFF16b04a),
             ),
             Expanded(
               child: Container(

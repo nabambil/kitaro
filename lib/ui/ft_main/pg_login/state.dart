@@ -46,8 +46,7 @@ class LoginPageState extends ChangeNotifier {
 
       if (_userName == null || _userName!.trim().isEmpty) {
         _userNameError = 'username required';
-      }
-      else if (!EmailValidator.validate(_userName!)) {
+      } else if (!EmailValidator.validate(_userName!)) {
         _userNameError = 'username invalid';
       }
     } finally {
@@ -82,8 +81,7 @@ class LoginPageState extends ChangeNotifier {
 
       if (_password == null || _password!.trim().isEmpty) {
         _passwordError = 'password required';
-      }
-      else if (_password!.length < 8) {
+      } else if (_password!.length < 8) {
         _passwordError = 'password minimum 8 characters';
       }
     } finally {
@@ -112,9 +110,12 @@ class LoginPageState extends ChangeNotifier {
       _isBusy = true;
       notifyListeners();
 
-      await FirebaseAuth.instance
+      final _acc = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: _userName!, password: _password!);
-      return null;
+
+      final _token = await FirebaseAuth.instance.currentUser?.getIdToken();
+
+      return _updateToken(_token, _acc.user?.uid);
     } on FirebaseAuthException catch (e) {
       return ErrorMessage(
         title: e.code,
@@ -148,6 +149,10 @@ class LoginPageState extends ChangeNotifier {
 
         user = userCredential.user;
         await _checkFirstTimeUser(userCredential);
+
+        final _token = await FirebaseAuth.instance.currentUser?.getIdToken();
+
+        return _updateToken(_token, user?.uid);
       } on FirebaseAuthException catch (e) {
         return ErrorMessage(title: e.code, message: e.message!);
       } catch (e) {
@@ -187,5 +192,17 @@ class LoginPageState extends ChangeNotifier {
     } else {
       print('not-firstTimer');
     }
+  }
+
+  Future<ErrorMessage?> _updateToken(String? token, String? id) {
+    return UserDao().profile.then((value) {
+      final _profile = value.copyWith(token: token);
+      return _profile;
+    }).then((value) {
+      final _network = UserDao(id: id);
+      _network.update(value);
+
+      return;
+    });
   }
 }

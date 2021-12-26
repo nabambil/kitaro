@@ -29,8 +29,11 @@ class Api {
     return ref.child(id).remove();
   }
 
-  Future<void> addDocument(Map data) {
-    return ref.push().set(data);
+  Future<String?> addDocument(Map data) async {
+    final _action = ref.push();
+    await _action.set(data);
+
+    return _action.key;
   }
 
   Future<void> updateDocument(Map<String, dynamic> data) {

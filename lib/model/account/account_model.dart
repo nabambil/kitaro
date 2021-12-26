@@ -11,6 +11,11 @@ class KitaroAccount with _$KitaroAccount {
     @JsonKey(name: "username") String? username,
     @JsonKey(name: "token") String? token,
     @JsonKey(name: "role") String? role,
+    @JsonKey(name: "firstName") String? firstName,
+    @JsonKey(name: "lastName") String? lastName,
+    @JsonKey(name: "phone") String? phone,
+    @JsonKey(name: "address") String? address,
+    @JsonKey(name: "idNo") String? idNo,
   }) = _KitaroAccount;
 
   factory KitaroAccount.fromJson(Map<String, dynamic> json) =>

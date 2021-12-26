@@ -73,11 +73,12 @@ class _Icon extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(20.0)),
-        color: Color(0xff77D353),
+        //color:  Color(0xff77D353),
       ),
       child: Image(
-        image: Assets.icons.leave,
+        image: Assets.logos.logo,
         height: 35,
+        color: kThemeColor,
       ),
     );
   }

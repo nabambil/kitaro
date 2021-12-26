@@ -4,7 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../../../kitaro.dart';
+import 'package:kitaro/kitaro.dart';
 import 'state.dart';
 
 late FocusNode _firstNameNode;
@@ -83,7 +83,7 @@ class _ContentState extends State<_Content> {
       ),
       children: const [
         _Logo(),
-        SizedBox(height: 30),
+        // SizedBox(height: 30),
         Text(
           'Edit Profile Details',
           style: TextStyle(
@@ -131,9 +131,10 @@ class _Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image(
-      image: Assets.logos.logo,
-      height: 56,
-      width: 57,
+      image: Assets.logos.kitaroLogo,
+      height: 120,
+      width: 120,
+      color: kThemeColor,
       alignment: Alignment.topLeft,
     );
   }
@@ -178,7 +179,7 @@ class _FirstNameFieldState extends State<_FirstNameField>
     return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
-          _controller.text = state.firstName!;
+          _controller.text = state.firstName ?? "";
         }
         return KitaroTextBox(
           controller: _controller,
@@ -235,7 +236,7 @@ class _LastNameFieldState extends State<_LastNameField>
     return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
-          _controller.text = state.lastName!;
+          _controller.text = state.lastName ?? "";
         }
         return KitaroTextBox(
           controller: _controller,
@@ -292,7 +293,7 @@ class _EmailFieldState extends State<_EmailField>
     return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
-          _controller.text = state.email!;
+          _controller.text = state.email ?? "";
         }
         return KitaroTextBox(
           controller: _controller,
@@ -349,7 +350,7 @@ class _AddressLine1FieldState extends State<_AddressLine1Field>
     return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
-          _controller.text = state.address1!;
+          _controller.text = state.address1 ?? "";
         }
         return KitaroTextBox(
           controller: _controller,
@@ -518,7 +519,7 @@ class _CityFieldState extends State<_CityField>
     return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
-          _controller.text = state.city!;
+          _controller.text = state.city ?? "";
         }
         return KitaroTextBox(
           controller: _controller,
@@ -575,7 +576,7 @@ class _StateFieldState extends State<_StateField>
     return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
-          _controller.text = state.state!;
+          _controller.text = state.state ?? "";
         }
         return KitaroTextBox(
           controller: _controller,
@@ -632,7 +633,7 @@ class _PostcodeFieldState extends State<_PostcodeField>
     return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
-          _controller.text = state.postcode!;
+          _controller.text = state.postcode ?? "";
         }
         return KitaroTextBox(
           controller: _controller,

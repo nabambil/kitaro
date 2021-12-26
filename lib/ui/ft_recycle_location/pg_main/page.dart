@@ -373,9 +373,11 @@ class _CentreTile extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(15.0),
+            width: 320,
+            height: 120,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.0),
-              color: Colors.white,
+              color: const Color(0xFF16b04a),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.3),
@@ -386,14 +388,14 @@ class _CentreTile extends StatelessWidget {
               ],
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: const [
                 _CentreName(),
                 _OperationHour(),
-                SizedBox(height: 15),
+                SizedBox(height: 14),
                 _CentreType(),
-                SizedBox(height: 10),
-                _Icons()
+                // SizedBox(height: 8),
+                // _Icons()
               ],
             ),
           ),
@@ -425,11 +427,10 @@ class _CentreName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Text(
-      'Centre Name ',
+      "HQ of Worldwide Holdings Berhad",
+      textAlign: TextAlign.center,
       style: TextStyle(
-        color: Color(0xff47525E),
-        fontSize: 14,
-      ),
+          color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
     );
   }
 }
@@ -442,8 +443,8 @@ class _OperationHour extends StatelessWidget {
     return const Text(
       '10 am - 5 pm',
       style: TextStyle(
-        color: Color(0xff47525E),
-        fontSize: 14,
+        color: Colors.white,
+        fontSize: 16,
       ),
     );
   }
@@ -457,8 +458,8 @@ class _CentreType extends StatelessWidget {
     return const Text(
       'Kiosk',
       style: TextStyle(
-        color: Color(0xb347525E),
-        fontSize: 14,
+        color: Colors.white,
+        fontSize: 16,
       ),
     );
   }
@@ -475,19 +476,23 @@ class _Icons extends StatelessWidget {
         Image(
           image: Assets.icons.plasticBottle,
           height: 25,
+          color: const Color(0xFF16b04a),
         ),
         Image(
           image: Assets.icons.paper,
           height: 25,
+          color: const Color(0xFF16b04a),
         ),
         Image(
           image: Assets.icons.can,
           height: 25,
+          color: const Color(0xFF16b04a),
         ),
         SizedBox(width: 15),
         Image(
           image: Assets.icons.favourite,
           height: 25,
+          color: const Color(0xFF16b04a),
         ),
       ],
     );

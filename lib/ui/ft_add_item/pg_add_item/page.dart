@@ -1,9 +1,4 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
 import 'package:kitaro/kitaro.dart';
 import 'package:provider/provider.dart';
 
@@ -81,10 +76,10 @@ class _Header extends StatelessWidget {
             _Text(text: 'Centre Phone Number'),
             _Text(text: 'Cycle Type : Plastic, Metal, Paper'),
             SizedBox(height: 15),
-            _Text(text: 'Centre Address 1'),
-            _Text(text: 'Centre Address 2'),
-            _Text(text: 'Centre Address 3'),
-            SizedBox(height: 10),
+            // _Text(text: 'Centre Address 1'),
+            // _Text(text: 'Centre Address 2'),
+            // _Text(text: 'Centre Address 3'),
+            // SizedBox(height: 10),
           ],
         ),
       ),
@@ -107,10 +102,10 @@ class _AppBar extends StatelessWidget {
         const Expanded(
           child: Center(
             child: Text(
-              'Recycle Time !',
+              'Recycle Session',
               style: TextStyle(
-                color: Color(0xff47525E),
-                fontSize: 15,
+                color: Colors.white, //Color(0xff47525E),
+                fontSize: 20,
               ),
             ),
           ),
@@ -118,14 +113,12 @@ class _AppBar extends StatelessWidget {
         Image(
           image: Assets.icons.plasticBottle,
           height: 25,
-        ),
-        Image(
-          image: Assets.icons.paper,
-          height: 25,
+          color: kThemeColor,
         ),
         Image(
           image: Assets.icons.can,
           height: 25,
+          color: kThemeColor,
         ),
       ],
     );
@@ -146,11 +139,11 @@ class _Text extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20.0),
+      padding: const EdgeInsets.only(left: 20.0, top: 4),
       child: Text(
         text!,
         style: const TextStyle(
-          color: Color(0xff4D627B),
+          color: kWhiteColor, //Color(0xff4D627B),
           fontSize: 14,
         ),
       ),
@@ -212,8 +205,8 @@ class _BodyTitle extends StatelessWidget {
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
+            children: const [
+              Text(
                 'Recycle Item',
                 style: TextStyle(
                   fontSize: 22,
@@ -221,12 +214,7 @@ class _BodyTitle extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(height: 8.0),
-              Container(
-                height: 1.0,
-                width: 30,
-                color: const Color(0xff4D627B),
-              )
+              SizedBox(height: 8.0),
             ],
           ),
           AddButton(
@@ -326,7 +314,8 @@ class _SubmitButton extends StatelessWidget {
       child: SubmitButton(
         caption: 'Recycle',
         onPressed: () async {
-          final state = Provider.of<AddItemListPageState>(context, listen: false);
+          final state =
+              Provider.of<AddItemListPageState>(context, listen: false);
           state.test();
           await showSuccessfulDialog(
             context: context,

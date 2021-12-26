@@ -6,7 +6,7 @@ import 'package:kitaro/kitaro.dart';
 class UserDao {
   final Api _api;
 
-  UserDao(String? id) : _api = Api("$kUser/$id");
+  UserDao({String? id}) : _api = Api("$kUser/$id");
 
   Future<KitaroAccount> get profile async {
     return _api.getDataCollection().then((event) => _converter(_data(event)));

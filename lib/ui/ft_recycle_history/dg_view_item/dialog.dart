@@ -60,20 +60,20 @@ class _Title extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
+      children: const [
+        Text(
           'Recycle Item Info',
           style: TextStyle(
               color: Color(0xff4D627B),
-              fontSize: 14,
+              fontSize: 20,
               fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 8.0),
-        Container(
-          height: 1.0,
-          width: 30,
-          color: const Color(0xff4D627B),
-        ),
+        SizedBox(height: 8.0),
+        // Container(
+        //   height: 1.0,
+        //   width: 30,
+        //   color: const Color(0xff4D627B),
+        // ),
       ],
     );
   }
@@ -84,18 +84,16 @@ class _ItemType extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ViewItemDialogState>(
-      builder: (_, state, __) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _FieldTitle(title: 'Type *'),
-            const SizedBox(height: 8.0),
-            _Field(text: state.item.itemType),
-          ],
-        );
-      }
-    );
+    return Consumer<ViewItemDialogState>(builder: (_, state, __) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _FieldTitle(title: 'Type *'),
+          const SizedBox(height: 8.0),
+          _Field(text: state.item.itemType),
+        ],
+      );
+    });
   }
 }
 
@@ -104,18 +102,16 @@ class _ItemWeight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ViewItemDialogState>(
-        builder: (_, state, __) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const _FieldTitle(title: 'Weight (KG) *'),
-              const SizedBox(height: 8.0),
-              _Field(text: state.item.itemWeight),
-            ],
-          );
-        }
-    );
+    return Consumer<ViewItemDialogState>(builder: (_, state, __) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _FieldTitle(title: 'Weight (KG) *'),
+          const SizedBox(height: 8.0),
+          _Field(text: state.item.itemWeight),
+        ],
+      );
+    });
   }
 }
 
@@ -124,34 +120,32 @@ class _ItemPhotos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ViewItemDialogState>(
-        builder: (_, state, __) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const _FieldTitle(title: 'Photo (Max 3)'),
-              const SizedBox(height: 8.0),
-              SizedBox(
-                height: MediaQuery.of(context).size.width * 0.17,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: state.item.itemImages?.length ?? 0,
-                  itemBuilder: (ctx, index) {
-                    // if (state.item.itemImages != null &&
-                    //     state.item.itemImages!.length > index) {
-                    //   return _Placeholder(index: index);
-                    // }
-                    return const Padding(
-                      padding: EdgeInsets.all(2.0),
-                      child: _ImageBox(),
-                    );
-                  },
-                ),
-              )
-            ],
-          );
-        }
-    );
+    return Consumer<ViewItemDialogState>(builder: (_, state, __) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _FieldTitle(title: 'Photo (Max 3)'),
+          const SizedBox(height: 8.0),
+          SizedBox(
+            height: MediaQuery.of(context).size.width * 0.17,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: state.item.itemImages?.length ?? 0,
+              itemBuilder: (ctx, index) {
+                // if (state.item.itemImages != null &&
+                //     state.item.itemImages!.length > index) {
+                //   return _Placeholder(index: index);
+                // }
+                return const Padding(
+                  padding: EdgeInsets.all(2.0),
+                  child: _ImageBox(),
+                );
+              },
+            ),
+          )
+        ],
+      );
+    });
   }
 }
 
@@ -223,4 +217,3 @@ class _ImageBox extends StatelessWidget {
     );
   }
 }
-

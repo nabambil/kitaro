@@ -16,7 +16,6 @@ enum InvalidField {
 }
 
 class RegisterPageState extends ChangeNotifier {
-
   ProfileDetailsTest? _test;
   ProfileDetailsTest? get test => _test;
 
@@ -116,8 +115,7 @@ class RegisterPageState extends ChangeNotifier {
 
       if (_email == null || _email!.trim().isEmpty) {
         _emailError = 'email required';
-      }
-      else if (!EmailValidator.validate(_email!)) {
+      } else if (!EmailValidator.validate(_email!)) {
         _emailError = 'email invalid';
       }
     } finally {
@@ -267,7 +265,7 @@ class RegisterPageState extends ChangeNotifier {
     try {
       _postcodeError = null;
 
-      if (_postcode== null || _postcode!.trim().isEmpty) {
+      if (_postcode == null || _postcode!.trim().isEmpty) {
         _postcodeError = 'postcode required';
       }
     } finally {
@@ -302,8 +300,7 @@ class RegisterPageState extends ChangeNotifier {
 
       if (_password == null || _password!.trim().isEmpty) {
         _passwordError = 'password required';
-      }
-      else if (_password!.length < 8) {
+      } else if (_password!.length < 8) {
         _passwordError = 'password minimum 8 characters';
       }
     } finally {
@@ -338,8 +335,7 @@ class RegisterPageState extends ChangeNotifier {
 
       if (_passwordRecheck == null || _passwordRecheck!.trim().isEmpty) {
         _passwordRecheckError = 'password required';
-      }
-      else if (_passwordRecheck! != _password) {
+      } else if (_passwordRecheck! != _password) {
         _passwordRecheckError = 'password invalid';
       }
     } finally {
@@ -396,28 +392,44 @@ class RegisterPageState extends ChangeNotifier {
       _isBusy = true;
       notifyListeners();
 
-      _test = ProfileDetailsTest(
-          firstName: _firstName!,
-          lastName: _lastName!,
-          email: _email,
-          address1: _address1,
-          address2: _address2,
-          address3: _address3,
-          city: _city,
-          state: _state,
-          postcode: _postcode,
-          password: _password,
-          passwordRecheck: _passwordRecheck,
+      final _address = AddressModel(
+        address1: _address1,
+        address2: _address2,
+        address3: _address3,
+        city: _city,
+        state: _state,
+        postcode: _postcode,
       );
 
-    //   await FirebaseAuth.instance
-    //       .createUserWithEmailAndPassword(email: _email!, password: _password!);
-    //   return null;
-    // } on FirebaseAuthException catch (e) {
-    //   return ErrorMessage(
-    //     title: e.code,
-    //     message: e.message ?? '',
-    //   );
+      final _acc = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: _email!, password: _password!);
+
+      AddressDao().add(_address).then((value) {
+        final _user = KitaroAccount(
+          firstName: _firstName!,
+          lastName: _lastName!,
+          username: _email,
+          address: value,
+          token: _acc.user?.uid,
+          role: "user",
+        );
+
+        return _user;
+      }).then((value) => UserDao().add(value));
+
+      _test = ProfileDetailsTest(
+        firstName: _firstName!,
+        lastName: _lastName!,
+        email: _email,
+        address1: _address1,
+        address2: _address2,
+        address3: _address3,
+        city: _city,
+        state: _state,
+        postcode: _postcode,
+        password: _password,
+        passwordRecheck: _passwordRecheck,
+      );
     } finally {
       _isBusy = false;
       notifyListeners();

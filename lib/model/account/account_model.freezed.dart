@@ -24,11 +24,21 @@ class _$KitaroAccountTearOff {
   _KitaroAccount call(
       {@JsonKey(name: "username") String? username,
       @JsonKey(name: "token") String? token,
-      @JsonKey(name: "role") String? role}) {
+      @JsonKey(name: "role") String? role,
+      @JsonKey(name: "firstName") String? firstName,
+      @JsonKey(name: "lastName") String? lastName,
+      @JsonKey(name: "phone") String? phone,
+      @JsonKey(name: "address") String? address,
+      @JsonKey(name: "idNo") String? idNo}) {
     return _KitaroAccount(
       username: username,
       token: token,
       role: role,
+      firstName: firstName,
+      lastName: lastName,
+      phone: phone,
+      address: address,
+      idNo: idNo,
     );
   }
 
@@ -48,6 +58,16 @@ mixin _$KitaroAccount {
   String? get token => throw _privateConstructorUsedError;
   @JsonKey(name: "role")
   String? get role => throw _privateConstructorUsedError;
+  @JsonKey(name: "firstName")
+  String? get firstName => throw _privateConstructorUsedError;
+  @JsonKey(name: "lastName")
+  String? get lastName => throw _privateConstructorUsedError;
+  @JsonKey(name: "phone")
+  String? get phone => throw _privateConstructorUsedError;
+  @JsonKey(name: "address")
+  String? get address => throw _privateConstructorUsedError;
+  @JsonKey(name: "idNo")
+  String? get idNo => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -63,7 +83,12 @@ abstract class $KitaroAccountCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: "username") String? username,
       @JsonKey(name: "token") String? token,
-      @JsonKey(name: "role") String? role});
+      @JsonKey(name: "role") String? role,
+      @JsonKey(name: "firstName") String? firstName,
+      @JsonKey(name: "lastName") String? lastName,
+      @JsonKey(name: "phone") String? phone,
+      @JsonKey(name: "address") String? address,
+      @JsonKey(name: "idNo") String? idNo});
 }
 
 /// @nodoc
@@ -80,6 +105,11 @@ class _$KitaroAccountCopyWithImpl<$Res>
     Object? username = freezed,
     Object? token = freezed,
     Object? role = freezed,
+    Object? firstName = freezed,
+    Object? lastName = freezed,
+    Object? phone = freezed,
+    Object? address = freezed,
+    Object? idNo = freezed,
   }) {
     return _then(_value.copyWith(
       username: username == freezed
@@ -93,6 +123,26 @@ class _$KitaroAccountCopyWithImpl<$Res>
       role: role == freezed
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
+              as String?,
+      firstName: firstName == freezed
+          ? _value.firstName
+          : firstName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      lastName: lastName == freezed
+          ? _value.lastName
+          : lastName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      phone: phone == freezed
+          ? _value.phone
+          : phone // ignore: cast_nullable_to_non_nullable
+              as String?,
+      address: address == freezed
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idNo: idNo == freezed
+          ? _value.idNo
+          : idNo // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -108,7 +158,12 @@ abstract class _$KitaroAccountCopyWith<$Res>
   $Res call(
       {@JsonKey(name: "username") String? username,
       @JsonKey(name: "token") String? token,
-      @JsonKey(name: "role") String? role});
+      @JsonKey(name: "role") String? role,
+      @JsonKey(name: "firstName") String? firstName,
+      @JsonKey(name: "lastName") String? lastName,
+      @JsonKey(name: "phone") String? phone,
+      @JsonKey(name: "address") String? address,
+      @JsonKey(name: "idNo") String? idNo});
 }
 
 /// @nodoc
@@ -127,6 +182,11 @@ class __$KitaroAccountCopyWithImpl<$Res>
     Object? username = freezed,
     Object? token = freezed,
     Object? role = freezed,
+    Object? firstName = freezed,
+    Object? lastName = freezed,
+    Object? phone = freezed,
+    Object? address = freezed,
+    Object? idNo = freezed,
   }) {
     return _then(_KitaroAccount(
       username: username == freezed
@@ -141,6 +201,26 @@ class __$KitaroAccountCopyWithImpl<$Res>
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
               as String?,
+      firstName: firstName == freezed
+          ? _value.firstName
+          : firstName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      lastName: lastName == freezed
+          ? _value.lastName
+          : lastName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      phone: phone == freezed
+          ? _value.phone
+          : phone // ignore: cast_nullable_to_non_nullable
+              as String?,
+      address: address == freezed
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idNo: idNo == freezed
+          ? _value.idNo
+          : idNo // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -152,7 +232,12 @@ class _$_KitaroAccount implements _KitaroAccount {
   const _$_KitaroAccount(
       {@JsonKey(name: "username") this.username,
       @JsonKey(name: "token") this.token,
-      @JsonKey(name: "role") this.role});
+      @JsonKey(name: "role") this.role,
+      @JsonKey(name: "firstName") this.firstName,
+      @JsonKey(name: "lastName") this.lastName,
+      @JsonKey(name: "phone") this.phone,
+      @JsonKey(name: "address") this.address,
+      @JsonKey(name: "idNo") this.idNo});
 
   factory _$_KitaroAccount.fromJson(Map<String, dynamic> json) =>
       _$$_KitaroAccountFromJson(json);
@@ -166,10 +251,25 @@ class _$_KitaroAccount implements _KitaroAccount {
   @override
   @JsonKey(name: "role")
   final String? role;
+  @override
+  @JsonKey(name: "firstName")
+  final String? firstName;
+  @override
+  @JsonKey(name: "lastName")
+  final String? lastName;
+  @override
+  @JsonKey(name: "phone")
+  final String? phone;
+  @override
+  @JsonKey(name: "address")
+  final String? address;
+  @override
+  @JsonKey(name: "idNo")
+  final String? idNo;
 
   @override
   String toString() {
-    return 'KitaroAccount(username: $username, token: $token, role: $role)';
+    return 'KitaroAccount(username: $username, token: $token, role: $role, firstName: $firstName, lastName: $lastName, phone: $phone, address: $address, idNo: $idNo)';
   }
 
   @override
@@ -180,11 +280,19 @@ class _$_KitaroAccount implements _KitaroAccount {
             (identical(other.username, username) ||
                 other.username == username) &&
             (identical(other.token, token) || other.token == token) &&
-            (identical(other.role, role) || other.role == role));
+            (identical(other.role, role) || other.role == role) &&
+            (identical(other.firstName, firstName) ||
+                other.firstName == firstName) &&
+            (identical(other.lastName, lastName) ||
+                other.lastName == lastName) &&
+            (identical(other.phone, phone) || other.phone == phone) &&
+            (identical(other.address, address) || other.address == address) &&
+            (identical(other.idNo, idNo) || other.idNo == idNo));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, username, token, role);
+  int get hashCode => Object.hash(runtimeType, username, token, role, firstName,
+      lastName, phone, address, idNo);
 
   @JsonKey(ignore: true)
   @override
@@ -201,7 +309,12 @@ abstract class _KitaroAccount implements KitaroAccount {
   const factory _KitaroAccount(
       {@JsonKey(name: "username") String? username,
       @JsonKey(name: "token") String? token,
-      @JsonKey(name: "role") String? role}) = _$_KitaroAccount;
+      @JsonKey(name: "role") String? role,
+      @JsonKey(name: "firstName") String? firstName,
+      @JsonKey(name: "lastName") String? lastName,
+      @JsonKey(name: "phone") String? phone,
+      @JsonKey(name: "address") String? address,
+      @JsonKey(name: "idNo") String? idNo}) = _$_KitaroAccount;
 
   factory _KitaroAccount.fromJson(Map<String, dynamic> json) =
       _$_KitaroAccount.fromJson;
@@ -215,6 +328,21 @@ abstract class _KitaroAccount implements KitaroAccount {
   @override
   @JsonKey(name: "role")
   String? get role;
+  @override
+  @JsonKey(name: "firstName")
+  String? get firstName;
+  @override
+  @JsonKey(name: "lastName")
+  String? get lastName;
+  @override
+  @JsonKey(name: "phone")
+  String? get phone;
+  @override
+  @JsonKey(name: "address")
+  String? get address;
+  @override
+  @JsonKey(name: "idNo")
+  String? get idNo;
   @override
   @JsonKey(ignore: true)
   _$KitaroAccountCopyWith<_KitaroAccount> get copyWith =>

@@ -1,5 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:kitaro/database/profile_dao.dart';
 
 import '../../../kitaro.dart';
 
@@ -26,7 +26,8 @@ class HistoryItemListPageState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<KitaroProfile> get profile {
-    return ProfileDao("nabil").profile.catchError((err) => print(err));
+  Future<KitaroAccount> get profile {
+    final _uid = FirebaseAuth.instance.currentUser?.uid;
+    return UserDao(id: _uid).profile;
   }
 }

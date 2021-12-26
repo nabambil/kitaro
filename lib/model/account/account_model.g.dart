@@ -15,6 +15,11 @@ _$_KitaroAccount _$$_KitaroAccountFromJson(Map<String, dynamic> json) =>
           username: $checkedConvert('username', (v) => v as String?),
           token: $checkedConvert('token', (v) => v as String?),
           role: $checkedConvert('role', (v) => v as String?),
+          firstName: $checkedConvert('firstName', (v) => v as String?),
+          lastName: $checkedConvert('lastName', (v) => v as String?),
+          phone: $checkedConvert('phone', (v) => v as String?),
+          address: $checkedConvert('address', (v) => v as String?),
+          idNo: $checkedConvert('idNo', (v) => v as String?),
         );
         return val;
       },
@@ -25,4 +30,9 @@ Map<String, dynamic> _$$_KitaroAccountToJson(_$_KitaroAccount instance) =>
       'username': instance.username,
       'token': instance.token,
       'role': instance.role,
+      'firstName': instance.firstName,
+      'lastName': instance.lastName,
+      'phone': instance.phone,
+      'address': instance.address,
+      'idNo': instance.idNo,
     };
