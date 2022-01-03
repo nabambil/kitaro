@@ -22,14 +22,14 @@ class _$LocationModelTearOff {
   const _$LocationModelTearOff();
 
   _LocationModel call(
-      {@JsonKey(name: 'address') AddressModel? address,
+      {@JsonKey(name: 'address') String? address,
       @JsonKey(name: 'direction') String? direction,
       @JsonKey(name: 'isWeight') int? isWeight,
-      @JsonKey(name: 'lat') int? lat,
-      @JsonKey(name: 'long') int? long,
-      @JsonKey(name: 'name') int? name,
-      @JsonKey(name: 'type') int? type,
-      @JsonKey(name: 'wastes') List<WasteModel>? wastes}) {
+      @JsonKey(name: 'lat') double? lat,
+      @JsonKey(name: 'long') double? long,
+      @JsonKey(name: 'name') String? name,
+      @JsonKey(name: 'type') String? type,
+      @JsonKey(name: 'wastes') List<String>? wastes}) {
     return _LocationModel(
       address: address,
       direction: direction,
@@ -53,21 +53,21 @@ const $LocationModel = _$LocationModelTearOff();
 /// @nodoc
 mixin _$LocationModel {
   @JsonKey(name: 'address')
-  AddressModel? get address => throw _privateConstructorUsedError;
+  String? get address => throw _privateConstructorUsedError;
   @JsonKey(name: 'direction')
   String? get direction => throw _privateConstructorUsedError;
   @JsonKey(name: 'isWeight')
   int? get isWeight => throw _privateConstructorUsedError;
   @JsonKey(name: 'lat')
-  int? get lat => throw _privateConstructorUsedError;
+  double? get lat => throw _privateConstructorUsedError;
   @JsonKey(name: 'long')
-  int? get long => throw _privateConstructorUsedError;
+  double? get long => throw _privateConstructorUsedError;
   @JsonKey(name: 'name')
-  int? get name => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
   @JsonKey(name: 'type')
-  int? get type => throw _privateConstructorUsedError;
+  String? get type => throw _privateConstructorUsedError;
   @JsonKey(name: 'wastes')
-  List<WasteModel>? get wastes => throw _privateConstructorUsedError;
+  List<String>? get wastes => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -81,16 +81,14 @@ abstract class $LocationModelCopyWith<$Res> {
           LocationModel value, $Res Function(LocationModel) then) =
       _$LocationModelCopyWithImpl<$Res>;
   $Res call(
-      {@JsonKey(name: 'address') AddressModel? address,
+      {@JsonKey(name: 'address') String? address,
       @JsonKey(name: 'direction') String? direction,
       @JsonKey(name: 'isWeight') int? isWeight,
-      @JsonKey(name: 'lat') int? lat,
-      @JsonKey(name: 'long') int? long,
-      @JsonKey(name: 'name') int? name,
-      @JsonKey(name: 'type') int? type,
-      @JsonKey(name: 'wastes') List<WasteModel>? wastes});
-
-  $AddressModelCopyWith<$Res>? get address;
+      @JsonKey(name: 'lat') double? lat,
+      @JsonKey(name: 'long') double? long,
+      @JsonKey(name: 'name') String? name,
+      @JsonKey(name: 'type') String? type,
+      @JsonKey(name: 'wastes') List<String>? wastes});
 }
 
 /// @nodoc
@@ -117,7 +115,7 @@ class _$LocationModelCopyWithImpl<$Res>
       address: address == freezed
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
-              as AddressModel?,
+              as String?,
       direction: direction == freezed
           ? _value.direction
           : direction // ignore: cast_nullable_to_non_nullable
@@ -129,35 +127,24 @@ class _$LocationModelCopyWithImpl<$Res>
       lat: lat == freezed
           ? _value.lat
           : lat // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       long: long == freezed
           ? _value.long
           : long // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       wastes: wastes == freezed
           ? _value.wastes
           : wastes // ignore: cast_nullable_to_non_nullable
-              as List<WasteModel>?,
+              as List<String>?,
     ));
-  }
-
-  @override
-  $AddressModelCopyWith<$Res>? get address {
-    if (_value.address == null) {
-      return null;
-    }
-
-    return $AddressModelCopyWith<$Res>(_value.address!, (value) {
-      return _then(_value.copyWith(address: value));
-    });
   }
 }
 
@@ -169,17 +156,14 @@ abstract class _$LocationModelCopyWith<$Res>
       __$LocationModelCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@JsonKey(name: 'address') AddressModel? address,
+      {@JsonKey(name: 'address') String? address,
       @JsonKey(name: 'direction') String? direction,
       @JsonKey(name: 'isWeight') int? isWeight,
-      @JsonKey(name: 'lat') int? lat,
-      @JsonKey(name: 'long') int? long,
-      @JsonKey(name: 'name') int? name,
-      @JsonKey(name: 'type') int? type,
-      @JsonKey(name: 'wastes') List<WasteModel>? wastes});
-
-  @override
-  $AddressModelCopyWith<$Res>? get address;
+      @JsonKey(name: 'lat') double? lat,
+      @JsonKey(name: 'long') double? long,
+      @JsonKey(name: 'name') String? name,
+      @JsonKey(name: 'type') String? type,
+      @JsonKey(name: 'wastes') List<String>? wastes});
 }
 
 /// @nodoc
@@ -208,7 +192,7 @@ class __$LocationModelCopyWithImpl<$Res>
       address: address == freezed
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
-              as AddressModel?,
+              as String?,
       direction: direction == freezed
           ? _value.direction
           : direction // ignore: cast_nullable_to_non_nullable
@@ -220,23 +204,23 @@ class __$LocationModelCopyWithImpl<$Res>
       lat: lat == freezed
           ? _value.lat
           : lat // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       long: long == freezed
           ? _value.long
           : long // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       wastes: wastes == freezed
           ? _value.wastes
           : wastes // ignore: cast_nullable_to_non_nullable
-              as List<WasteModel>?,
+              as List<String>?,
     ));
   }
 }
@@ -260,7 +244,7 @@ class _$_LocationModel implements _LocationModel {
 
   @override
   @JsonKey(name: 'address')
-  final AddressModel? address;
+  final String? address;
   @override
   @JsonKey(name: 'direction')
   final String? direction;
@@ -269,19 +253,19 @@ class _$_LocationModel implements _LocationModel {
   final int? isWeight;
   @override
   @JsonKey(name: 'lat')
-  final int? lat;
+  final double? lat;
   @override
   @JsonKey(name: 'long')
-  final int? long;
+  final double? long;
   @override
   @JsonKey(name: 'name')
-  final int? name;
+  final String? name;
   @override
   @JsonKey(name: 'type')
-  final int? type;
+  final String? type;
   @override
   @JsonKey(name: 'wastes')
-  final List<WasteModel>? wastes;
+  final List<String>? wastes;
 
   @override
   String toString() {
@@ -322,21 +306,21 @@ class _$_LocationModel implements _LocationModel {
 
 abstract class _LocationModel implements LocationModel {
   const factory _LocationModel(
-      {@JsonKey(name: 'address') AddressModel? address,
+      {@JsonKey(name: 'address') String? address,
       @JsonKey(name: 'direction') String? direction,
       @JsonKey(name: 'isWeight') int? isWeight,
-      @JsonKey(name: 'lat') int? lat,
-      @JsonKey(name: 'long') int? long,
-      @JsonKey(name: 'name') int? name,
-      @JsonKey(name: 'type') int? type,
-      @JsonKey(name: 'wastes') List<WasteModel>? wastes}) = _$_LocationModel;
+      @JsonKey(name: 'lat') double? lat,
+      @JsonKey(name: 'long') double? long,
+      @JsonKey(name: 'name') String? name,
+      @JsonKey(name: 'type') String? type,
+      @JsonKey(name: 'wastes') List<String>? wastes}) = _$_LocationModel;
 
   factory _LocationModel.fromJson(Map<String, dynamic> json) =
       _$_LocationModel.fromJson;
 
   @override
   @JsonKey(name: 'address')
-  AddressModel? get address;
+  String? get address;
   @override
   @JsonKey(name: 'direction')
   String? get direction;
@@ -345,19 +329,19 @@ abstract class _LocationModel implements LocationModel {
   int? get isWeight;
   @override
   @JsonKey(name: 'lat')
-  int? get lat;
+  double? get lat;
   @override
   @JsonKey(name: 'long')
-  int? get long;
+  double? get long;
   @override
   @JsonKey(name: 'name')
-  int? get name;
+  String? get name;
   @override
   @JsonKey(name: 'type')
-  int? get type;
+  String? get type;
   @override
   @JsonKey(name: 'wastes')
-  List<WasteModel>? get wastes;
+  List<String>? get wastes;
   @override
   @JsonKey(ignore: true)
   _$LocationModelCopyWith<_LocationModel> get copyWith =>

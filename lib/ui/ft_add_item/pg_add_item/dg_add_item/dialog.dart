@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -82,15 +81,15 @@ class _Title extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
+      children: const [
+        Text(
           'Recycle Item',
           style: TextStyle(
               color: Color(0xff4D627B),
               fontSize: 20,
               fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 8.0),
+        SizedBox(height: 8.0),
         // Container(
         //   height: 1.0,
         //   width: 30,
@@ -190,10 +189,11 @@ class __ItemWeightTextFieldState extends State<_ItemWeightTextField>
         }
         return KitaroTextBox(
           controller: _controller,
-          labelText: '0.70',
+          hintText: '0.70',
           onChanged: (v) => state.itemWeight = v,
           errorText: state.itemWeightError,
           focusNode: _itemWeightNode,
+          keyboardType: TextInputType.numberWithOptions(decimal: false,signed: false,),
         );
       },
     );

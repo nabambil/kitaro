@@ -5,57 +5,35 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:kitaro/constants/assets.gen.dart';
 import 'package:kitaro/kitaro.dart';
 
 class RecycleLocationPageState extends ChangeNotifier {
-  double? latitude = 3.1718;
-  double? longitude = 101.7577;
-  // Map<MarkerId, Marker> mapMarkers = {};
-  int _markerId = 0;
+  double? latitude;
+  double? longitude;
+  Map<String, LocationModel> locations = {};
   Uint8List? markerIcon;
-  Map<MarkerId, LatLng> positions = {
-    MarkerId('1'): LatLng(3.1718, 101.7577),
-    MarkerId('2'): LatLng(3.1771, 101.7511),
-    MarkerId('3'): LatLng(3.1491, 101.7625),
-    MarkerId('4'): LatLng(3.1466, 101.6958),
-  };
+  Uint8List? selectedMarkerIcon;
+
+  Map<MarkerId, Marker> _mapMarkers = {};
+  Map<MarkerId, Marker> get mapMarkers => _mapMarkers;
+  set mapMarkers(Map<MarkerId, Marker> value) {
+    _mapMarkers = value;
+    notifyListeners();
+  }
+
+  String currentLocationId = '';
+
+  String? onSelectMarker;
 
   Future<void> initialise() async {
     markerIcon =
         await getBytesFromAsset(path: Assets.gifs.marker.path, width: 120);
-    // mapMarkers.clear();
-    //
-    // mapMarkers[MarkerId('1')] = Marker(
-    //   markerId: MarkerId('1'),
-    //   position: LatLng(3.1718, 101.7577),
-    //     onTap: () async => await test(markerId: '1', position: LatLng(3.1718, 101.7577)),
-    //     icon: BitmapDescriptor.fromBytes(markerIcon!)
-    // );
-    // mapMarkers[MarkerId('2')] = Marker(
-    //   markerId: MarkerId('2'),
-    //   position: LatLng(3.1771, 101.7511),
-    //     icon: BitmapDescriptor.fromBytes(markerIcon!),
-    //   onTap: () async => await test(markerId: '2', position: LatLng(3.1771, 101.7511)),
-    // );
-    // mapMarkers[MarkerId('3')] = Marker(
-    //   markerId: MarkerId('3'),
-    //   position: LatLng(3.1491, 101.7625),
-    //     icon: BitmapDescriptor.fromBytes(markerIcon!)
-    // );
-    // mapMarkers[MarkerId('4')] = Marker(
-    //   markerId: MarkerId('4'),
-    //   position: LatLng(3.1466, 101.6958),
-    //     icon: BitmapDescriptor.fromBytes(markerIcon!)
-    // );
-    // for (var i = 0; i < 4; i++) {
-    //   _markerId = _markerId + 1;
-    //   mapMarkers[MarkerId(_markerId.toString())] = Marker(
-    //     markerId: MarkerId(_markerId.toString()),
-    //     position: LatLng(latitude!, longitude!),
-    //     // icon: customGeoFenceEnterMarkerIcon!,
-    //   );
-    // }
+    selectedMarkerIcon = await getBytesFromAsset(
+      path: Assets.gifs.greenPng.path,
+      width: 120,
+      height: 200,
+    );
+    await getLocation();
     notifyListeners();
   }
 
@@ -83,5 +61,27 @@ class RecycleLocationPageState extends ChangeNotifier {
   //   );
   //   notifyListeners();
   // }
-}
 
+  Future<void>? getLocation() {
+    LocationDao().location$.listen((event) {
+      _mapMarkers.clear();
+      locations = event;
+      latitude = locations.entries.elementAt(0).value.lat;
+      longitude = locations.entries.elementAt(0).value.long;
+      currentLocationId = locations.entries.first.key;
+      notifyListeners();
+      event.forEach((key, data) {
+        _mapMarkers[MarkerId(key)] = Marker(
+            markerId: MarkerId(key),
+            position: LatLng(data.lat!, data.long!),
+            onTap: () {
+              onSelectMarker = key;
+              notifyListeners();
+            },
+            icon: BitmapDescriptor.fromBytes(markerIcon!));
+      });
+      notifyListeners();
+    });
+    return null;
+  }
+}

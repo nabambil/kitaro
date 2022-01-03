@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'package:cross_file/cross_file.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 Future<XFile?> choosePicture({

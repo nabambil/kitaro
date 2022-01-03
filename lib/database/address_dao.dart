@@ -6,13 +6,13 @@ import 'package:kitaro/kitaro.dart';
 class AddressDao {
   final Api _api;
 
-  AddressDao({String? id}) : _api = Api("$kAddresses/$id");
+  AddressDao({String? id}) : _api = id == null ? Api(kAddresses) : Api("$kAddresses/$id");
 
-  Future<AddressModel> get profile async {
+  Future<AddressModel> get address async {
     return _api.getDataCollection().then((event) => _converter(_data(event)));
   }
 
-  Stream<AddressModel> get profile$ {
+  Stream<AddressModel> get address$ {
     return _api.streamDataCollection().transform(_handler);
   }
 

@@ -17,7 +17,7 @@ _$_AddressModel _$$_AddressModelFromJson(Map<String, dynamic> json) =>
           address3: $checkedConvert('address3', (v) => v as String?),
           city: $checkedConvert('city', (v) => v as String?),
           state: $checkedConvert('state', (v) => v as String?),
-          postcode: $checkedConvert('postcode', (v) => v as String?),
+          postcode: $checkedConvert('postcode', (v) => v as int?),
         );
         return val;
       },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 import '../../../kitaro.dart';
@@ -16,7 +17,6 @@ class HistoryItemListPage extends StatelessWidget {
     return ChangeNotifierProvider<HistoryItemListPageState>.value(
       value: HistoryItemListPageState(),
       builder: (context, child) {
-        final _ = Provider.of<HistoryItemListPageState>(context).profile;
         return const Scaffold(
           body: PageBase(
             child: _Content(),
@@ -27,13 +27,30 @@ class HistoryItemListPage extends StatelessWidget {
   }
 }
 
-class _Content extends StatelessWidget {
+class _Content extends StatefulWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const _Content({
     Key? key,
   }) : super(key: key);
 
   // ------------------------------- METHODS ------------------------------
+  @override
+  State<_Content> createState() => _ContentState();
+}
+
+class _ContentState extends State<_Content> {
+  // --------------------------------- METHODS ---------------------------------
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance!.addPostFrameCallback((_) async {
+      final state =
+          Provider.of<HistoryItemListPageState>(context, listen: false);
+      await state.getUserProfile();
+      await state.initialise();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -56,37 +73,41 @@ class _Header extends StatelessWidget {
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 12),
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _AppBar(),
-            const SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0),
-              child: Row(
-                children: [
-                  // const _ProfileIcon(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      _Text(text: 'Full Name'),
-                      _Text(text: 'Phone Number'),
-                      SizedBox(height: 5.0),
-                      _Text(text: 'Email Address'),
-                      SizedBox(height: 16)
-                    ],
-                  )
-                ],
+    return Consumer<HistoryItemListPageState>(builder: (_, state, __) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 8.0, right: 12),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const _AppBar(),
+              const SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Row(
+                  children: [
+                    // const _ProfileIcon(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _Text(
+                            text:
+                                '${state.userProfile?.firstName} ${state.userProfile?.lastName}'),
+                        _Text(text: state.userProfile?.phone),
+                        const SizedBox(height: 5.0),
+                        _Text(text: state.userProfile?.username),
+                        const SizedBox(height: 16)
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-          ],
+              const SizedBox(height: 10),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -116,7 +137,7 @@ class _AppBar extends StatelessWidget {
           ),
         ),
         PopupMenuButton(
-          icon: Icon(Icons.menu, color: Colors.white),
+          icon: const Icon(Icons.menu, color: Colors.white),
           offset: const Offset(0, 45),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -145,15 +166,20 @@ class _AppBar extends StatelessWidget {
               )
             ];
           },
-        ),
+        )
       ],
     );
   }
 
   Future<void> onSelected(int index, BuildContext context) async {
+    final state = Provider.of<HistoryItemListPageState>(context, listen: false);
     if (index == 1) {
-      await context.router.push(EditProfilePageRoute(
-          test: ProfileDetailsTest(firstName: "nabil", lastName: "hairul")));
+      await context.router.push(
+        EditProfilePageRoute(
+          user: state.userProfile!,
+          userAddress: state.address!,
+        ),
+      );
     }
     if (index == 2) {
       final err = await Authentication.signOutWithGoogle();
@@ -184,7 +210,7 @@ class _Text extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 20.0),
       child: Text(
-        text!,
+        text ?? '',
         style: const TextStyle(
           color: Colors.white,
           fontSize: 16,

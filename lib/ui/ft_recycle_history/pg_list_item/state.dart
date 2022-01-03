@@ -6,28 +6,42 @@ import '../../../kitaro.dart';
 class HistoryItemListPageState extends ChangeNotifier {
   // REPORT IMAGE --------------------------------------------------------
   // REPORT IMAGE ///////////////////////////
-  List<ItemDetails> _itemsAdded = [
-    ItemDetails(
-      itemType: 'PAPER',
-      itemWeight: '0.70',
-      dateSubmitted: '10 jan 2021',
-    ),
-    ItemDetails(
-      itemType: 'CAN',
-      itemWeight: '0.90',
-      dateSubmitted: '10 jan 2021',
-    ),
-  ];
+  List<RecycleModel> _itemsAdded = [];
 
-  List<ItemDetails> get itemsAdded => _itemsAdded;
+  List<RecycleModel> get itemsAdded => _itemsAdded;
 
-  set itemsAdded(List<ItemDetails> value) {
+  set itemsAdded(List<RecycleModel> value) {
     _itemsAdded = value;
     notifyListeners();
   }
 
-  Future<KitaroAccount> get profile {
+  // USER --------------------------------------------------------
+  // USER ///////////////////////////
+  KitaroAccount? _userProfile;
+
+  KitaroAccount? get userProfile => _userProfile;
+
+  // ADDRESS --------------------------------------------------------
+  // ADDRESS ///////////////////////////
+  AddressModel? _address;
+
+  AddressModel? get address => _address;
+
+  Future<void> getUserProfile() async {
     final _uid = FirebaseAuth.instance.currentUser?.uid;
-    return UserDao(id: _uid).profile;
+    _userProfile = await UserDao(id: _uid).profile;
+    _address = await AddressDao(id: _userProfile?.address).address;
+    notifyListeners();
+    return;
+  }
+
+  Future<void> initialise() async {
+    var _t = await RecycleDao()
+        .test(key: 'username', value: _userProfile!.username!);
+    _t.forEach((key, value) {
+      _itemsAdded.add(value);
+      notifyListeners();
+    });
+    return;
   }
 }

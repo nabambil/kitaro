@@ -136,11 +136,13 @@ class KitaroTextBox extends StatelessWidget {
   const KitaroTextBox({
     Key? key,
     required this.controller,
-    required this.labelText,
+    this.labelText,
     required this.onChanged,
+    this.hintText,
     this.errorText,
     this.onSubmitted,
     this.focusNode,
+    this.keyboardType,
   }) : super(key: key);
 
   // ------------------------------- FIELDS -------------------------------
@@ -148,8 +150,10 @@ class KitaroTextBox extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
   final String? labelText;
+  final String? hintText;
   final String? errorText;
   final FocusNode? focusNode;
+  final TextInputType? keyboardType;
 
   // ------------------------------- METHODS ------------------------------
   @override
@@ -161,7 +165,7 @@ class KitaroTextBox extends StatelessWidget {
       focusNode: focusNode,
       decoration: InputDecoration(
         isDense: true,
-        hintText: labelText,
+        hintText: hintText,
         hintStyle: const TextStyle(
           color: Color(0x424D627B),
           fontSize: 14.0,
@@ -170,6 +174,7 @@ class KitaroTextBox extends StatelessWidget {
           fontSize: 14.0,
           color: hasError ? Colors.red.shade900 : const Color(0xff969FAA),
         ),
+        labelText: labelText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5.0),
           borderSide: const BorderSide(
@@ -179,7 +184,7 @@ class KitaroTextBox extends StatelessWidget {
         ),
         errorText: errorText,
       ),
-      keyboardType: TextInputType.text,
+      keyboardType: keyboardType ?? TextInputType.text,
       textInputAction: TextInputAction.next,
       style: const TextStyle(
         color: Color(0xff343F4B),
@@ -188,6 +193,91 @@ class KitaroTextBox extends StatelessWidget {
       ),
       onChanged: onChanged,
       onSubmitted: onSubmitted,
+    );
+  }
+}
+
+class KitaroPasswordTextBox extends StatefulWidget {
+  // ---------------------------- CONSTRUCTORS ----------------------------
+  const KitaroPasswordTextBox({
+    Key? key,
+    required this.controller,
+    this.labelText,
+    required this.onChanged,
+    this.hintText,
+    this.errorText,
+    this.onSubmitted,
+    this.focusNode,
+  }) : super(key: key);
+
+  // ------------------------------- FIELDS -------------------------------
+  final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final String? labelText;
+  final String? hintText;
+  final String? errorText;
+  final FocusNode? focusNode;
+
+  // ------------------------------- METHODS ------------------------------
+  @override
+  State<KitaroPasswordTextBox> createState() => _KitaroPasswordTextBoxState();
+}
+
+class _KitaroPasswordTextBoxState extends State<KitaroPasswordTextBox> {
+  // ------------------------------- FIELDS -------------------------------
+  bool _obscureText = true;
+
+  // ------------------------------- METHODS ------------------------------
+  @override
+  Widget build(BuildContext context) {
+    final hasError = widget.errorText?.isNotEmpty == true;
+
+    return TextField(
+      controller: widget.controller,
+      focusNode: widget.focusNode,
+      decoration: InputDecoration(
+        isDense: true,
+        hintText: widget.hintText,
+        hintStyle: const TextStyle(
+          color: Color(0x424D627B),
+          fontSize: 14.0,
+        ),
+        labelStyle: TextStyle(
+          fontSize: 14.0,
+          color: hasError ? Colors.red.shade900 : const Color(0xff969FAA),
+        ),
+        labelText: widget.labelText,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5.0),
+          borderSide: const BorderSide(
+            color: Color(0xff969FAA),
+            width: 1.0,
+          ),
+        ),
+        suffixIcon: IconButton(
+          color: hasError
+              ? Colors.red.shade900
+              : const Color(0xff969FAA),
+          icon: Icon(
+            _obscureText
+                ? CupertinoIcons.eye_fill
+                : CupertinoIcons.eye_slash_fill,
+          ),
+          onPressed: () => setState(() => _obscureText = !_obscureText),
+        ),
+        errorText: widget.errorText,
+      ),
+      keyboardType: _obscureText ? TextInputType.text : TextInputType.visiblePassword,
+      textInputAction: TextInputAction.next,
+      style: const TextStyle(
+        color: Color(0xff343F4B),
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+      ),
+      obscureText: _obscureText,
+      onChanged: widget.onChanged,
+      onSubmitted: widget.onSubmitted,
     );
   }
 }

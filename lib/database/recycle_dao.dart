@@ -1,18 +1,14 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:kitaro/kitaro.dart';
 
 class RecycleDao {
   final Api _api;
 
-  RecycleDao(String? id) : _api = Api("$kRecycle/$id");
+  RecycleDao({String? id}) : _api = id == null ? Api(kRecycle) : Api("$kRecycle/$id");
 
   Future<Map<String, RecycleModel>> get recycle async {
-    // final _id = FirebaseAuth.instance.currentUser?.uid;
-
-    //  _api.getDataCollectionBy("username", _id!).then((value) => null);
     return _api.getDataCollection().then((event) => _converter(_data(event)));
   }
 
@@ -36,7 +32,12 @@ class RecycleDao {
 
   Map _data(DatabaseEvent event) => event.snapshot.value as Map;
 
-  Future<void> add(RecycleModel value) => _api.addDocument(value.toJson());
+  Future<String?> add(RecycleModel value) => _api.addDocument(value.toJson());
+
+  Future<Map<String, RecycleModel>> test({required String key, required String value}) async{
+    var _t = await _api.getDataCollectionBy(key, value).then((event) => _converter(_data(event)));
+    return _t;
+  }
 
   Future<void> update(RecycleModel value) =>
       _api.updateDocument(value.toJson());

@@ -13,7 +13,7 @@ class ItemTile extends StatelessWidget {
   }) : super(key: key);
 
   // ---------------------------------- FIELDS ---------------------------------
-  final ItemDetails item;
+  final RecycleModel item;
   final int index;
   final String endTileTitle;
   final VoidCallback? endTileAction;
@@ -36,9 +36,9 @@ class ItemTile extends StatelessWidget {
               const SizedBox(width: 12.0),
               Expanded(
                 child: _ItemDetail(
-                  materialType: item.itemType,
-                  weight: item.itemWeight,
-                  dateSubmitted: item.dateSubmitted,
+                  materialType: item.type!,
+                  weight: item.weight.toString(),
+                  dateSubmitted: item.datetime,
                 ),
               ),
               Padding(
@@ -115,7 +115,7 @@ class _ItemDetail extends StatelessWidget {
         ),
         const SizedBox(height: 8.0),
         Text(
-          weight,
+          '$weight kg',
           style: const TextStyle(
             fontSize: 12,
             color: Color(0xff47525E),

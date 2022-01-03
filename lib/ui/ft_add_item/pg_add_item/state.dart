@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cross_file/cross_file.dart';
+import 'package:intl/intl.dart';
 
 import '../../../kitaro.dart';
 
@@ -20,12 +22,13 @@ class AddItemListPageState extends ChangeNotifier {
   // ------------------------------- FIELDS -------------------------------
   static AddItemListPageState? _instance = AddItemListPageState._();
 
+  String currentLocationId = '';
+  LocationModel? location;
+  String _username = '';
+  String _dateSubmitted = '';
+
   // ITEM TYPE -----------------------------------------------------------------
-  List<String> itemTypeList = [
-    "Paper",
-    "Bottle",
-    "Can",
-  ];
+  List<String> itemTypeList = [];
   // ITEM TYPE //////////////////////////////////
   String? _itemType;
   String? get itemType => _itemType;
@@ -134,20 +137,37 @@ class AddItemListPageState extends ChangeNotifier {
 
   // REPORT IMAGE --------------------------------------------------------
   // REPORT IMAGE ///////////////////////////
-  List<ItemDetails> _itemsAdded = [];
+  List<RecycleModel> _itemsAdded = [];
 
-  List<ItemDetails> get itemsAdded => _itemsAdded;
+  List<RecycleModel> get itemsAdded => _itemsAdded;
 
-  set itemsAdded(List<ItemDetails> value) {
+  set itemsAdded(List<RecycleModel> value) {
     _itemsAdded = value;
     notifyListeners();
   }
 
-  Future<void> initialiseEditItem(ItemDetails item) async {
+  Future<void> initialise() async {
+    return LocationDao(id: currentLocationId).location.then((value) {
+      location = value;
+      itemTypeList.clear();
+      for (var element in value.wastes!) {
+        WasteDao(id: element).waste.then((value) {
+          itemTypeList.add(value.name!);
+          notifyListeners();
+        });
+        notifyListeners();
+      }});
+  }
+
+  Future<void> initialiseEditItem(RecycleModel item) async {
     try {
-      _itemType = item.itemType;
-      _itemWeight = item.itemWeight;
-      _itemImages = item.itemImages!;
+      List<String> _test = [];
+      item.images?.forEach((element) {
+        _test.add(element);
+      });
+      _itemType = item.type;
+      _itemWeight = item.weight.toString();
+      _itemImages = _itemImages;
     } finally {
       _updateTextController = true;
       notifyListeners();
@@ -179,10 +199,29 @@ class AddItemListPageState extends ChangeNotifier {
   }
 
   Future<void> addItem() async {
-    _itemsAdded.add(ItemDetails(
-        itemType: _itemType!,
-        itemWeight: _itemWeight!,
-        itemImages: _itemImages));
+
+    _dateSubmitted = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
+
+    var _id = FirebaseAuth.instance.currentUser?.uid;
+
+    await UserDao(id: _id).profile.then((value) {
+      _username = value.username!;
+    });
+
+    List<String> _images = [];
+    for (var element in _itemImages) {
+      _images.add(element.path);
+    }
+
+    _itemsAdded.add(RecycleModel(
+        type: _itemType!,
+        weight: _itemWeight!,
+        datetime: _dateSubmitted,
+        images: _images,
+        location: currentLocationId,
+        username: _username,
+    ));
+
     _itemType = null;
     _itemWeight = null;
     _itemImages = [];
@@ -190,36 +229,33 @@ class AddItemListPageState extends ChangeNotifier {
   }
 
   Future<void> updateItem(int index) async {
-    _itemsAdded[index] = ItemDetails(
-        itemType: _itemType!,
-        itemWeight: _itemWeight!,
-        itemImages: _itemImages
+    List<String> _images = [];
+    for (var element in _itemImages) {
+      _images.add(element.path);
+    }
+    _itemsAdded[index] = RecycleModel(
+      type: _itemType!,
+      weight: _itemWeight!,
+      datetime: _dateSubmitted,
+      images: _images,
+      location: currentLocationId,
+      username: _username,
     );
     notifyListeners();
   }
 
-  void test() {
-    var decode = {
-      'fullName': 'Syaza',
-      'address': 'No37, jalan Cempaka 31',
-      'address2': 'Taman Cempaka',
-      'city': 'Ampang',
-      'state': 'Selangor',
-      'postcode': '68000',
-      'country': 'Malaysia',
-      'phone_number': '0179893071',
-    };
-    // var encode = KitaroProfile(
-    //   fullName: 'Syaza',
-    //   address: 'No37, jalan Cempaka 31',
-    //   address2: 'Taman Cempaka',
-    //   city: 'Ampang',
-    //   state: 'Selangor',
-    //   country: 'Malaysia',
-    //   postcode: '68000',
-    //   phoneNumber: '0179893071',
-    // );
-    // print(KitaroProfile.fromJson(decode).fullName);
-    // print(encode.toJson());
+  Future<ErrorMessage?> recycle() async{
+    try{
+      for (var element in _itemsAdded) {
+        RecycleDao().add(element);
+      }
+    } on FirebaseAuthException catch (e) {
+      return ErrorMessage(title: e.code, message: e.message!);
+    } catch (e) {
+      return ErrorMessage(title: e.toString(), message: '');
+    } finally{
+      _itemsAdded.clear();
+      notifyListeners();
+    }
   }
 }

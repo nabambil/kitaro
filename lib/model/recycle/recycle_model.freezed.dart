@@ -24,10 +24,10 @@ class _$RecycleModelTearOff {
   _RecycleModel call(
       {@JsonKey(name: 'datetime') String? datetime,
       @JsonKey(name: 'images') List<String>? images,
-      @JsonKey(name: 'location') LocationModel? location,
+      @JsonKey(name: 'location') String? location,
       @JsonKey(name: 'type') String? type,
       @JsonKey(name: 'username') String? username,
-      @JsonKey(name: 'weight') int? weight}) {
+      @JsonKey(name: 'weight') String? weight}) {
     return _RecycleModel(
       datetime: datetime,
       images: images,
@@ -53,13 +53,13 @@ mixin _$RecycleModel {
   @JsonKey(name: 'images')
   List<String>? get images => throw _privateConstructorUsedError;
   @JsonKey(name: 'location')
-  LocationModel? get location => throw _privateConstructorUsedError;
+  String? get location => throw _privateConstructorUsedError;
   @JsonKey(name: 'type')
   String? get type => throw _privateConstructorUsedError;
   @JsonKey(name: 'username')
   String? get username => throw _privateConstructorUsedError;
   @JsonKey(name: 'weight')
-  int? get weight => throw _privateConstructorUsedError;
+  String? get weight => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -75,12 +75,10 @@ abstract class $RecycleModelCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: 'datetime') String? datetime,
       @JsonKey(name: 'images') List<String>? images,
-      @JsonKey(name: 'location') LocationModel? location,
+      @JsonKey(name: 'location') String? location,
       @JsonKey(name: 'type') String? type,
       @JsonKey(name: 'username') String? username,
-      @JsonKey(name: 'weight') int? weight});
-
-  $LocationModelCopyWith<$Res>? get location;
+      @JsonKey(name: 'weight') String? weight});
 }
 
 /// @nodoc
@@ -112,7 +110,7 @@ class _$RecycleModelCopyWithImpl<$Res> implements $RecycleModelCopyWith<$Res> {
       location: location == freezed
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
-              as LocationModel?,
+              as String?,
       type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -124,19 +122,8 @@ class _$RecycleModelCopyWithImpl<$Res> implements $RecycleModelCopyWith<$Res> {
       weight: weight == freezed
           ? _value.weight
           : weight // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
     ));
-  }
-
-  @override
-  $LocationModelCopyWith<$Res>? get location {
-    if (_value.location == null) {
-      return null;
-    }
-
-    return $LocationModelCopyWith<$Res>(_value.location!, (value) {
-      return _then(_value.copyWith(location: value));
-    });
   }
 }
 
@@ -150,13 +137,10 @@ abstract class _$RecycleModelCopyWith<$Res>
   $Res call(
       {@JsonKey(name: 'datetime') String? datetime,
       @JsonKey(name: 'images') List<String>? images,
-      @JsonKey(name: 'location') LocationModel? location,
+      @JsonKey(name: 'location') String? location,
       @JsonKey(name: 'type') String? type,
       @JsonKey(name: 'username') String? username,
-      @JsonKey(name: 'weight') int? weight});
-
-  @override
-  $LocationModelCopyWith<$Res>? get location;
+      @JsonKey(name: 'weight') String? weight});
 }
 
 /// @nodoc
@@ -190,7 +174,7 @@ class __$RecycleModelCopyWithImpl<$Res> extends _$RecycleModelCopyWithImpl<$Res>
       location: location == freezed
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
-              as LocationModel?,
+              as String?,
       type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -202,7 +186,7 @@ class __$RecycleModelCopyWithImpl<$Res> extends _$RecycleModelCopyWithImpl<$Res>
       weight: weight == freezed
           ? _value.weight
           : weight // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
     ));
   }
 }
@@ -230,7 +214,7 @@ class _$_RecycleModel implements _RecycleModel {
   final List<String>? images;
   @override
   @JsonKey(name: 'location')
-  final LocationModel? location;
+  final String? location;
   @override
   @JsonKey(name: 'type')
   final String? type;
@@ -239,7 +223,7 @@ class _$_RecycleModel implements _RecycleModel {
   final String? username;
   @override
   @JsonKey(name: 'weight')
-  final int? weight;
+  final String? weight;
 
   @override
   String toString() {
@@ -287,10 +271,10 @@ abstract class _RecycleModel implements RecycleModel {
   const factory _RecycleModel(
       {@JsonKey(name: 'datetime') String? datetime,
       @JsonKey(name: 'images') List<String>? images,
-      @JsonKey(name: 'location') LocationModel? location,
+      @JsonKey(name: 'location') String? location,
       @JsonKey(name: 'type') String? type,
       @JsonKey(name: 'username') String? username,
-      @JsonKey(name: 'weight') int? weight}) = _$_RecycleModel;
+      @JsonKey(name: 'weight') String? weight}) = _$_RecycleModel;
 
   factory _RecycleModel.fromJson(Map<String, dynamic> json) =
       _$_RecycleModel.fromJson;
@@ -303,7 +287,7 @@ abstract class _RecycleModel implements RecycleModel {
   List<String>? get images;
   @override
   @JsonKey(name: 'location')
-  LocationModel? get location;
+  String? get location;
   @override
   @JsonKey(name: 'type')
   String? get type;
@@ -312,7 +296,7 @@ abstract class _RecycleModel implements RecycleModel {
   String? get username;
   @override
   @JsonKey(name: 'weight')
-  int? get weight;
+  String? get weight;
   @override
   @JsonKey(ignore: true)
   _$RecycleModelCopyWith<_RecycleModel> get copyWith =>

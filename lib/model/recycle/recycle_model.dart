@@ -11,10 +11,10 @@ class RecycleModel with _$RecycleModel {
   const factory RecycleModel({
     @JsonKey(name: 'datetime') String? datetime,
     @JsonKey(name: 'images') List<String>? images,
-    @JsonKey(name: 'location') LocationModel? location,
+    @JsonKey(name: 'location') String? location,
     @JsonKey(name: 'type') String? type,
     @JsonKey(name: 'username') String? username,
-    @JsonKey(name: 'weight') int? weight,
+    @JsonKey(name: 'weight') String? weight,
   }) = _RecycleModel;
 
   factory RecycleModel.fromJson(Map<String, dynamic> json) =>

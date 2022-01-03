@@ -6,6 +6,8 @@ import 'package:kitaro/kitaro.dart';
 enum InvalidField {
   firstName,
   lastName,
+  idNumber,
+  phoneNumber,
   email,
   address1,
   city,
@@ -16,10 +18,11 @@ enum InvalidField {
 }
 
 class EditProfilePageState extends ChangeNotifier {
+  EditProfilePageState({required this.user, required this.userAddress});
 
-  EditProfilePageState({required this.test});
+  final KitaroAccount user;
+  final AddressModel userAddress;
 
-  ProfileDetailsTest test;
   bool _isBusy = false;
 
   bool get isBusy => _isBusy;
@@ -93,6 +96,68 @@ class EditProfilePageState extends ChangeNotifier {
     }
   }
 
+  // ID NUMBER -----------------------------------------------------------------
+  // ID NUMBER //////////////////////////////////
+  String? _idNumber;
+  String? get idNumber => _idNumber;
+
+  set idNumber(String? value) {
+    _idNumber = value;
+    validateIdNumber();
+  }
+
+  // ID NUMBER ERROR ////////////////////////////
+  String? _idNumberError;
+
+  String? get idNumberError => _idNumberError;
+
+  bool get idNumberHasError {
+    return _idNumberError != null;
+  }
+
+  void validateIdNumber() {
+    try {
+      _idNumberError = null;
+
+      if (_idNumber == null || _idNumber!.trim().isEmpty) {
+        _idNumberError = 'id number required';
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  // PHONE NUMBER -----------------------------------------------------------------
+  // PHONE NUMBER //////////////////////////////////
+  String? _phoneNumber;
+  String? get phoneNumber => _phoneNumber;
+
+  set phoneNumber(String? value) {
+    _phoneNumber = value;
+    validatePhoneNumber();
+  }
+
+  // PHONE NUMBER ERROR ////////////////////////////
+  String? _phoneNumberError;
+
+  String? get phoneNumberError => _phoneNumberError;
+
+  bool get phoneNumberHasError {
+    return _phoneNumberError != null;
+  }
+
+  void validatePhoneNumber() {
+    try {
+      _phoneNumberError = null;
+
+      if (_phoneNumber == null || _phoneNumber!.trim().isEmpty) {
+        _phoneNumberError = 'phone number required';
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
+
   // EMAIL -----------------------------------------------------------------
   // EMAIL //////////////////////////////////
   String? _email;
@@ -119,8 +184,7 @@ class EditProfilePageState extends ChangeNotifier {
 
       if (_email == null || _email!.trim().isEmpty) {
         _emailError = 'email required';
-      }
-      else if (!EmailValidator.validate(_email!)) {
+      } else if (!EmailValidator.validate(_email!)) {
         _emailError = 'email invalid';
       }
     } finally {
@@ -276,7 +340,7 @@ class EditProfilePageState extends ChangeNotifier {
     try {
       _postcodeError = null;
 
-      if (_postcode== null || _postcode!.trim().isEmpty) {
+      if (_postcode == null || _postcode!.trim().isEmpty) {
         _postcodeError = 'postcode required';
       }
     } finally {
@@ -312,8 +376,7 @@ class EditProfilePageState extends ChangeNotifier {
 
       if (_password == null || _password!.trim().isEmpty) {
         _passwordError = 'password required';
-      }
-      else if (_password!.length < 8) {
+      } else if (_password!.length < 8) {
         _passwordError = 'password minimum 8 characters';
       }
     } finally {
@@ -349,8 +412,7 @@ class EditProfilePageState extends ChangeNotifier {
 
       if (_passwordRecheck == null || _passwordRecheck!.trim().isEmpty) {
         _passwordRecheckError = 'password required';
-      }
-      else if (_passwordRecheck! != _password) {
+      } else if (_passwordRecheck! != _password) {
         _passwordRecheckError = 'password invalid';
       }
     } finally {
@@ -359,19 +421,19 @@ class EditProfilePageState extends ChangeNotifier {
   }
 
   // ------------------------------- METHODS ------------------------------
-  Future<void> initialiseEditItem(ProfileDetailsTest item) async {
+  Future<void> initialiseEditItem() async {
     try {
-      _firstName = item.firstName;
-      _lastName = item.lastName;
-      _email = item.email;
-      _address1 = item.address1;
-      _address2 = item.address2;
-      _address3 = item.address3;
-      _city = item.city;
-      _state = item.state;
-      _postcode = item.postcode;
-      _password = item.password;
-      _passwordRecheck = item.passwordRecheck;
+      _firstName = user.firstName;
+      _lastName = user.lastName;
+      _idNumber = user.idNo;
+      _phoneNumber = user.phone;
+      _email = user.username;
+      _address1 = userAddress.address1;
+      _address2 = userAddress.address2;
+      _address3 = userAddress.address3;
+      _city = userAddress.city;
+      _state = userAddress.state;
+      _postcode = userAddress.postcode.toString();
     } finally {
       _updateTextController = true;
       notifyListeners();
@@ -382,19 +444,27 @@ class EditProfilePageState extends ChangeNotifier {
     // ALWAYS: Validate the fields that can be focused first!
     validateFirstName();
     validateLastName();
+    validateIdNumber();
+    validatePhoneNumber();
     validateEmail();
     validateAddress1();
     validateCity();
     validateState();
     validatePostcode();
-    validatePassword();
-    validatePasswordRecheck();
+    // validatePassword();
+    // validatePasswordRecheck();
 
     if (firstNameHasError) {
       return InvalidField.firstName;
     }
     if (lastNameHasError) {
       return InvalidField.lastName;
+    }
+    if (idNumberHasError) {
+      return InvalidField.idNumber;
+    }
+    if (phoneNumberHasError) {
+      return InvalidField.phoneNumber;
     }
     if (emailHasError) {
       return InvalidField.email;
@@ -411,12 +481,12 @@ class EditProfilePageState extends ChangeNotifier {
     if (postcodeHasError) {
       return InvalidField.postcode;
     }
-    if (passwordHasError) {
-      return InvalidField.password;
-    }
-    if (passwordRecheckHasError) {
-      return InvalidField.recheckPassword;
-    }
+    // if (passwordHasError) {
+    //   return InvalidField.password;
+    // }
+    // if (passwordRecheckHasError) {
+    //   return InvalidField.recheckPassword;
+    // }
 
     return null;
   }
@@ -426,8 +496,25 @@ class EditProfilePageState extends ChangeNotifier {
       _isBusy = true;
       notifyListeners();
 
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: _email!, password: _password!);
+      final _uid = FirebaseAuth.instance.currentUser?.uid;
+      await AddressDao(id: user.address).update(AddressModel(
+        address1: _address1,
+        address2: _address2,
+        address3: _address3,
+        city: _city,
+        state: _state,
+        postcode: int.parse(_postcode!),
+      ));
+      await UserDao(id: _uid).update(KitaroAccount(
+        username: _email,
+        token: user.token,
+        role: user.role,
+        firstName: _firstName,
+        lastName: _lastName,
+        phone: _phoneNumber,
+        address: user.address,
+        idNo: _idNumber,
+      ));
       return null;
     } on FirebaseAuthException catch (e) {
       return ErrorMessage(

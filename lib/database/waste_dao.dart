@@ -7,30 +7,30 @@ class WasteDao {
   final Api _api;
   final String? id;
 
-  WasteDao(this.id) : _api = Api("$kWaste/$id");
+  WasteDao({this.id}) : _api = id == null ? Api(kWaste) : Api("$kWaste/$id");
 
-  Future<Map<String, WasteModel>> get profile async {
+  Future<WasteModel> get waste async {
     return _api.getDataCollection().then((event) => _converter(_data(event)));
   }
 
-  Stream<Map<String, WasteModel>> get profile$ {
+  Stream<WasteModel> get waste$ {
     return _api.streamDataCollection().transform(_handler);
   }
 
-  StreamTransformer<DatabaseEvent, Map<String, WasteModel>> get _handler {
+  StreamTransformer<DatabaseEvent, WasteModel> get _handler {
     return StreamTransformer.fromHandlers(handleData: (event, sink) {
       sink.add(_converter(_data(event)));
     });
   }
 
-  Map<String, WasteModel> _converter(Map value) {
+  WasteModel _converter(Map value) {
     final _map = <String, WasteModel>{};
 
-    value.forEach((key, data) {
-      _map[key] = WasteModel.fromJson(Map<String, dynamic>.from(data));
-    });
+    // value.forEach((key, data) {
+    //   _map[key] = WasteModel.fromJson(Map<String, dynamic>.from(data));
+    // });
 
-    return _map;
+    return WasteModel.fromJson(Map<String, dynamic>.from(value));
   }
 
   Map _data(DatabaseEvent event) => event.snapshot.value as Map;
