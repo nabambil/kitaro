@@ -37,7 +37,7 @@ class ItemTile extends StatelessWidget {
               Expanded(
                 child: _ItemDetail(
                   materialType: item.type!,
-                  weight: item.weight.toString(),
+                  weight: item.weight,
                   dateSubmitted: item.datetime,
                 ),
               ),
@@ -95,7 +95,7 @@ class _ItemDetail extends StatelessWidget {
 
   // ---------------------------------- FIELDS ---------------------------------
   final String materialType;
-  final String weight;
+  final int? weight;
   final String? dateSubmitted;
 
   // ------------------------------- METHODS ------------------------------
@@ -114,13 +114,14 @@ class _ItemDetail extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8.0),
-        Text(
-          '$weight kg',
-          style: const TextStyle(
-            fontSize: 12,
-            color: Color(0xff47525E),
+        if (weight != null)
+          Text(
+            '$weight kg',
+            style: const TextStyle(
+              fontSize: 12,
+              color: Color(0xff47525E),
+            ),
           ),
-        ),
         if (dateSubmitted != null)
           Text(
             dateSubmitted!,

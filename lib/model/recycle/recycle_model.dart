@@ -14,7 +14,7 @@ class RecycleModel with _$RecycleModel {
     @JsonKey(name: 'location') String? location,
     @JsonKey(name: 'type') String? type,
     @JsonKey(name: 'username') String? username,
-    @JsonKey(name: 'weight') String? weight,
+    @JsonKey(name: 'weight') int? weight,
   }) = _RecycleModel;
 
   factory RecycleModel.fromJson(Map<String, dynamic> json) =>

@@ -26,6 +26,7 @@ class AddItemListPageState extends ChangeNotifier {
   LocationModel? location;
   String _username = '';
   String _dateSubmitted = '';
+  List<String> imagePath = [];
 
   // ITEM TYPE -----------------------------------------------------------------
   List<String> itemTypeList = [];
@@ -84,7 +85,7 @@ class AddItemListPageState extends ChangeNotifier {
     try {
       _itemWeightError = null;
 
-      if (_itemWeight == null) {
+      if (location?.isWeight == 1 && _itemWeight == null) {
         _itemWeightError = 'item weight required';
       }
     } finally {
@@ -161,13 +162,9 @@ class AddItemListPageState extends ChangeNotifier {
 
   Future<void> initialiseEditItem(RecycleModel item) async {
     try {
-      List<String> _test = [];
-      item.images?.forEach((element) {
-        _test.add(element);
-      });
       _itemType = item.type;
-      _itemWeight = item.weight.toString();
-      _itemImages = _itemImages;
+      _itemWeight = item.weight == null ? null : item.weight.toString();
+      imagePath = item.images!;
     } finally {
       _updateTextController = true;
       notifyListeners();
@@ -177,7 +174,7 @@ class AddItemListPageState extends ChangeNotifier {
   InvalidField? validateAll() {
     // ALWAYS: Validate the fields that can be focused first!
     validateItemType();
-    // validateItemWeight();
+    validateItemWeight();
     validateItemImage();
 
     if (itemTypeHasError) {
@@ -200,7 +197,7 @@ class AddItemListPageState extends ChangeNotifier {
 
   Future<void> addItem() async {
 
-    _dateSubmitted = DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now());
+    _dateSubmitted = DateFormat('dd MMM yyyy  hh:mm a').format(DateTime.now());
 
     var _id = FirebaseAuth.instance.currentUser?.uid;
 
@@ -215,7 +212,7 @@ class AddItemListPageState extends ChangeNotifier {
 
     _itemsAdded.add(RecycleModel(
         type: _itemType!,
-        weight: _itemWeight!,
+        weight: _itemWeight == null ? null : int.parse(_itemWeight!),
         datetime: _dateSubmitted,
         images: _images,
         location: currentLocationId,
@@ -229,15 +226,11 @@ class AddItemListPageState extends ChangeNotifier {
   }
 
   Future<void> updateItem(int index) async {
-    List<String> _images = [];
-    for (var element in _itemImages) {
-      _images.add(element.path);
-    }
     _itemsAdded[index] = RecycleModel(
       type: _itemType!,
-      weight: _itemWeight!,
+      weight: _itemWeight == null ? null : int.parse(_itemWeight!),
       datetime: _dateSubmitted,
-      images: _images,
+      images: imagePath,
       location: currentLocationId,
       username: _username,
     );
@@ -255,6 +248,9 @@ class AddItemListPageState extends ChangeNotifier {
       return ErrorMessage(title: e.toString(), message: '');
     } finally{
       _itemsAdded.clear();
+      _itemType = null;
+      _itemWeight = null;
+      _itemImages = [];
       notifyListeners();
     }
   }
