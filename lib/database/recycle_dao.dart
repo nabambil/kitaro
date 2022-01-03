@@ -34,9 +34,9 @@ class RecycleDao {
 
   Future<String?> add(RecycleModel value) => _api.addDocument(value.toJson());
 
-  Future<Map<String, RecycleModel>> test({required String key, required String value}) async{
-    var _t = await _api.getDataCollectionBy(key, value).then((event) => _converter(_data(event)));
-    return _t;
+  Future<Map<String, RecycleModel>> getRecycles({required String key, required String value}) async{
+    var _recycles = await _api.getDataCollectionBy(key, value).then((event) => _converter(_data(event)));
+    return _recycles;
   }
 
   Future<void> update(RecycleModel value) =>
