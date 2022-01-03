@@ -2,7 +2,6 @@ export 'assets.gen.dart';
 export 'auth.dart';
 export 'error_message.dart';
 export 'fonts.gen.dart';
-export 'item_detail.dart';
 
 import 'package:flutter/material.dart';
 

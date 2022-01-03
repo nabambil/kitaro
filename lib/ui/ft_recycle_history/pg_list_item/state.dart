@@ -36,9 +36,9 @@ class HistoryItemListPageState extends ChangeNotifier {
   }
 
   Future<void> initialise() async {
-    var _t = await RecycleDao()
-        .test(key: 'username', value: _userProfile!.username!);
-    _t.forEach((key, value) {
+    var _recycles = await RecycleDao()
+        .getRecycles(key: 'username', value: _userProfile!.username!);
+    _recycles.forEach((key, value) {
       _itemsAdded.add(value);
       notifyListeners();
     });
