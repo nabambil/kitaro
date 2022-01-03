@@ -18,7 +18,7 @@ _$_RecycleModel _$$_RecycleModelFromJson(Map<String, dynamic> json) =>
           location: $checkedConvert('location', (v) => v as String?),
           type: $checkedConvert('type', (v) => v as String?),
           username: $checkedConvert('username', (v) => v as String?),
-          weight: $checkedConvert('weight', (v) => v as String?),
+          weight: $checkedConvert('weight', (v) => v as int?),
         );
         return val;
       },

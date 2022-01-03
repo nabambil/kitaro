@@ -101,7 +101,7 @@ class _Header extends StatelessWidget {
               children: [
                 const _AppBar(),
                 const SizedBox(height: 15),
-                _Text(text: state.location?.name),
+                _Text(text: state.location?.name ?? ''),
                 const _Text(text: 'Centre Phone Number'),
                 _Text(text: state.itemTypeList.toString()),
                 const SizedBox(height: 15),

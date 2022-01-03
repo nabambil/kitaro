@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -51,26 +52,31 @@ class _Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const _Title(),
-        const SizedBox(height: 18.0),
-        const _ItemType(),
-        const SizedBox(height: 18.0),
-        const _ItemWeight(),
-        const SizedBox(height: 18.0),
-        const _ItemPhotos(),
-        const SizedBox(height: 25.0),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: _SubmitButton(
-            isEdit: isEdit,
-            index: index,
+    return Consumer<AddItemListPageState>(builder: (_, state, __) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _Title(),
+          const SizedBox(height: 18.0),
+          const _ItemType(),
+          const SizedBox(height: 18.0),
+          Visibility(
+            visible: state.location?.isWeight != 0,
+            child: const _ItemWeight(),
           ),
-        )
-      ],
-    );
+          const SizedBox(height: 18.0),
+          _ItemPhotos(isEdit: isEdit,),
+          const SizedBox(height: 25.0),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: _SubmitButton(
+              isEdit: isEdit,
+              index: index,
+            ),
+          )
+        ],
+      );
+    });
   }
 }
 
@@ -193,7 +199,10 @@ class __ItemWeightTextFieldState extends State<_ItemWeightTextField>
           onChanged: (v) => state.itemWeight = v,
           errorText: state.itemWeightError,
           focusNode: _itemWeightNode,
-          keyboardType: TextInputType.numberWithOptions(decimal: false,signed: false,),
+          keyboardType: const TextInputType.numberWithOptions(
+            decimal: false,
+            signed: false,
+          ),
         );
       },
     );
@@ -201,7 +210,9 @@ class __ItemWeightTextFieldState extends State<_ItemWeightTextField>
 }
 
 class _ItemPhotos extends StatelessWidget {
-  const _ItemPhotos({Key? key}) : super(key: key);
+  const _ItemPhotos({required this.isEdit, Key? key}) : super(key: key);
+
+  final bool isEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -216,19 +227,23 @@ class _ItemPhotos extends StatelessWidget {
               height: MediaQuery.of(context).size.width * 0.17,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: state.itemImages.isEmpty
+                itemCount: isEdit ? state.imagePath.length : state.itemImages.isEmpty
                     ? 1
                     : state.itemImages.length == 3
                         ? 3
                         : state.itemImages.length + 1,
                 itemBuilder: (ctx, index) {
-                  if (state.itemImages.isNotEmpty &&
+                  if (!isEdit && state.itemImages.isNotEmpty &&
                       state.itemImages.length > index) {
                     return _Placeholder(index: index);
                   }
-                  return const Padding(
-                    padding: EdgeInsets.all(2.0),
-                    child: _ImageBox(),
+                  return Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: _ImageBox(
+                      imagePath: isEdit ? state.imagePath[index] : null,
+                      isEdit: isEdit,
+                      index: index,
+                    ),
                   );
                 },
               ),
@@ -282,6 +297,9 @@ class _Placeholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AddItemListPageState>(
       builder: (_, state, __) {
+        if (index == null) {
+          return Container();
+        }
         return Padding(
           padding: const EdgeInsets.all(2.0),
           child: GestureDetector(
@@ -386,8 +404,15 @@ class _SubmitButton extends StatelessWidget {
 class _ImageBox extends StatefulWidget {
   // ------------------------------- CONSTRUCTORS ------------------------------
   const _ImageBox({
+    required this.isEdit,
+    required this.imagePath,
+    required this.index,
     Key? key,
   }) : super(key: key);
+
+  final bool isEdit;
+  final String? imagePath;
+  final int index;
 
   // --------------------------------- METHODS ---------------------------------
   @override
@@ -407,6 +432,9 @@ class __ImageBoxState extends State<_ImageBox> {
             );
 
             if (file != null) {
+              if(widget.isEdit){
+                state.imagePath[widget.index] = file.path;
+              }
               state.itemImage = file;
             }
           },
@@ -422,13 +450,19 @@ class __ImageBoxState extends State<_ImageBox> {
               ),
             ),
             child: Center(
-              child: Icon(
-                Icons.add,
-                color: state.itemImageHasError
-                    ? Colors.red.shade900
-                    : const Color(0xff8492A6),
-                size: 22,
-              ),
+              child: !widget.isEdit
+                  ? Icon(
+                      Icons.add,
+                      color: state.itemImageHasError
+                          ? Colors.red.shade900
+                          : const Color(0xff8492A6),
+                      size: 22,
+                    )
+                  : Center(
+                      child: Image.file(
+                        File(widget.imagePath!),
+                      ),
+                    ),
             ),
           ),
         );

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,26 +32,29 @@ class _Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const _Title(),
-        const SizedBox(height: 18.0),
-        const _ItemType(),
-        const SizedBox(height: 18.0),
-        const _ItemWeight(),
-        const SizedBox(height: 18.0),
-        const _ItemPhotos(),
-        const SizedBox(height: 25.0),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: SubmitButton(
-            caption: 'Close',
-            onPressed: () => context.router.pop(),
-          ),
-        )
-      ],
-    );
+    return Consumer<ViewItemDialogState>(builder: (_, state, __) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _Title(),
+          const SizedBox(height: 18.0),
+          const _ItemType(),
+          const SizedBox(height: 18.0),
+          Visibility(
+              visible: state.item.weight != null, child: const _ItemWeight()),
+          const SizedBox(height: 18.0),
+          const _ItemPhotos(),
+          const SizedBox(height: 25.0),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: SubmitButton(
+              caption: 'Close',
+              onPressed: () => context.router.pop(),
+            ),
+          )
+        ],
+      );
+    });
   }
 }
 
@@ -136,9 +141,11 @@ class _ItemPhotos extends StatelessWidget {
                 //     state.item.itemImages!.length > index) {
                 //   return _Placeholder(index: index);
                 // }
-                return const Padding(
-                  padding: EdgeInsets.all(2.0),
-                  child: _ImageBox(),
+                return Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: _ImageBox(
+                    imagePath: state.item.images![index],
+                  ),
                 );
               },
             ),
@@ -194,7 +201,9 @@ class _FieldTitle extends StatelessWidget {
 }
 
 class _ImageBox extends StatelessWidget {
-  const _ImageBox({Key? key}) : super(key: key);
+  const _ImageBox({required this.imagePath, Key? key}) : super(key: key);
+
+  final String imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -207,11 +216,9 @@ class _ImageBox extends StatelessWidget {
           color: const Color(0xff8492A6),
         ),
       ),
-      child: const Center(
-        child: Icon(
-          Icons.photo_camera_back,
-          color: Color(0xff8492A6),
-          size: 22,
+      child: Center(
+        child: Image.file(
+          File(imagePath),
         ),
       ),
     );
