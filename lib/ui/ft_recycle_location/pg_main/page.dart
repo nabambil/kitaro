@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/scheduler.dart';
@@ -11,7 +13,6 @@ import '../st_centre_detail/sheet.dart';
 import 'state.dart';
 
 late GoogleMapController _mapController;
-Map<MarkerId, Marker> mapMarkers = {};
 final CarouselController _carouselController = CarouselController();
 
 class RecycleLocationPage extends StatefulWidget {
@@ -22,54 +23,15 @@ class RecycleLocationPage extends StatefulWidget {
 }
 
 class _RecycleLocationPageState extends State<RecycleLocationPage> {
-  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RecycleLocationPageState>(
       create: (_) => RecycleLocationPageState(),
-      child: Scaffold(
-        body: const _Content(),
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: onTabTapped,
-          currentIndex: _currentIndex,
-          selectedItemColor: Colors.green,
-          unselectedItemColor: Colors.black26,
-          unselectedLabelStyle: const TextStyle(color: Colors.black26),
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text('Home'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              title: Text(
-                'Profile',
-              ),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code),
-              title: Text(
-                'Profile',
-              ),
-            ),
-          ],
-        ),
+      child: const Scaffold(
+        body: _Content(),
+        bottomNavigationBar: _BottomNavigator()
       ),
     );
-  }
-
-  void onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-      if (index == 1) {
-        context.router.push(const HistoryItemListPageRoute());
-        _currentIndex = 0;
-      }
-      if (index == 2) {
-        context.router.push(const AddItemListPageRoute());
-        _currentIndex = 0;
-      }
-    });
   }
 }
 
@@ -88,62 +50,148 @@ class _ContentState extends State<_Content> {
     SchedulerBinding.instance!.addPostFrameCallback((_) async {
       final state =
           Provider.of<RecycleLocationPageState>(context, listen: false);
-      // final result = await state.initialise();
+      await state.initialise();
+      state.addListener(() {
+        var _locationList = state.locations.entries.map((e) => {e.key : e.value}).toList();
+        enlargeMarker(
+          context: context,
+          markerId: MarkerId(state.locations.entries.first.key),
+        );
+        if (state.onSelectMarker != null) {
+          var _index = _locationList.indexWhere((element) {
+            return element.keys.first == state.onSelectMarker;
+          });
+          markerOnTap(
+            context: context,
+            markerId: MarkerId(state.onSelectMarker!),
+            location: state.locations[state.onSelectMarker]!,
+            index: _index,
+          );
+        }
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: _Maps(),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Spacer(),
-              Consumer<RecycleLocationPageState>(
-                builder: (_, state, __) {
-                  return CarouselSlider.builder(
-                    carouselController: _carouselController,
-                    options: CarouselOptions(
-                      enlargeCenterPage: true,
-                      enableInfiniteScroll: false,
-                      height: 140,
-                      viewportFraction: 0.4,
-                      aspectRatio: 0,
-                      onPageChanged: (index, reason) async {
-                        setState(() async {
-                          await enlargeMarker(
-                            context: context,
-                            markerId: state.positions.keys.elementAt(index),
+    return Consumer<RecycleLocationPageState>(
+      builder: (_, state, __) {
+        return Stack(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: state.latitude == null ? Container() : _Maps(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Spacer(),
+                  Consumer<RecycleLocationPageState>(
+                    builder: (_, state, __) {
+                      return CarouselSlider.builder(
+                        carouselController: _carouselController,
+                        options: CarouselOptions(
+                          enlargeCenterPage: true,
+                          enableInfiniteScroll: false,
+                          height: 140,
+                          viewportFraction: 0.6,
+                          aspectRatio: 16 / 9,
+                          onPageChanged: (index, reason) async {
+                            setState(() {
+                              enlargeMarker(
+                                  context: context,
+                                  markerId: state.mapMarkers.keys.elementAt(index),
+                              );
+                            });
+                          },
+                        ),
+                        itemCount: state.mapMarkers.length,
+                        itemBuilder: (context, itemIndex, pageViewIndex) {
+                          final _key = state.mapMarkers.keys.elementAt(itemIndex);
+                          return _CentreTile(
+                            index: itemIndex,
+                            markerId: _key,
+                            location: state.locations[_key.value]!,
                           );
-                          await enlargeMarker(
-                            context: context,
-                            markerId: state.positions.keys.elementAt(index),
-                          );
-                        });
-                      },
-                    ),
-                    itemCount: state.positions.length,
-                    itemBuilder: (context, itemIndex, pageViewIndex) {
-                      return _CentreTile(
-                          markerId: state.positions.keys.elementAt(itemIndex));
+                        },
+                      );
                     },
-                  );
-                },
+                  ),
+                  // const SizedBox(height: 28.0),
+                  // const _ProfileDetail(),
+                ],
               ),
-              // const SizedBox(height: 28.0),
-              // const _ProfileDetail(),
-            ],
-          ),
-        ),
-      ],
+            ),
+          ],
+        );
+      }
     );
+  }
+}
+
+class _BottomNavigator extends StatefulWidget {
+  const _BottomNavigator({Key? key}) : super(key: key);
+
+  @override
+  State<_BottomNavigator> createState() => _BottomNavigatorState();
+}
+
+class _BottomNavigatorState extends State<_BottomNavigator> {
+  int _currentIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<RecycleLocationPageState>(
+      builder: (_, state, __) {
+        return BottomNavigationBar(
+          onTap: onTabTapped,
+          currentIndex: _currentIndex,
+          selectedItemColor: Colors.green,
+          unselectedItemColor: Colors.black26,
+          unselectedLabelStyle: const TextStyle(color: Colors.black26),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.qr_code),
+              label: 'Recycle',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.globe),
+                label: 'About',
+            ),
+          ],
+        );
+      }
+    );
+  }
+
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+      if (index == 1) {
+        context.router.push(const HistoryItemListPageRoute());
+        _currentIndex = 0;
+      }
+      if (index == 2) {
+        final state =
+        Provider.of<RecycleLocationPageState>(context, listen: false);
+        context.router.push( AddItemListPageRoute(locationId: state.currentLocationId));
+        _currentIndex = 0;
+      }
+      if (index == 3) {
+        context.router.push(const AboutPageRoute());
+        _currentIndex = 0;
+      }
+    });
   }
 }
 
@@ -170,78 +218,19 @@ class _MapsState extends State<_Maps> {
     return Consumer<RecycleLocationPageState>(
       builder: (_, state, __) {
         return GoogleMap(
-          markers: Set.of(mapMarkers.values),
+          markers: Set.of(state.mapMarkers.values),
           initialCameraPosition: CameraPosition(
             target: LatLng(state.latitude!, state.longitude!),
             zoom: 12,
           ),
           myLocationEnabled: true,
           onMapCreated: (controller) async {
-            final state =
-                Provider.of<RecycleLocationPageState>(context, listen: false);
-            await state.initialise();
             _mapController = controller;
-            mapMarkers = mapBitmapsToMarkers();
           },
           // onMapCreated: controllerCompleter.complete,
         );
       },
     );
-  }
-
-  Map<MarkerId, Marker> mapBitmapsToMarkers() {
-    final state = Provider.of<RecycleLocationPageState>(context, listen: false);
-    int _markerId = 0;
-    BitmapDescriptor _markerIcon = state.markerIcon == null
-        ? BitmapDescriptor.defaultMarker
-        : BitmapDescriptor.fromBytes(state.markerIcon!);
-    Map<MarkerId, Marker> markersList = {};
-    markersList.clear();
-
-    markersList[MarkerId('1')] = Marker(
-        markerId: MarkerId('1'),
-        position: state.positions[MarkerId('1')]!,
-        onTap: () async => await markerOnTap(
-              context: context,
-              markerId: MarkerId('1'),
-            ),
-        icon: _markerIcon);
-    markersList[MarkerId('2')] = Marker(
-        markerId: MarkerId('2'),
-        position: state.positions[MarkerId('2')]!,
-        onTap: () async => await markerOnTap(
-              context: context,
-              markerId: MarkerId('2'),
-            ),
-        icon: _markerIcon);
-    markersList[MarkerId('3')] = Marker(
-        markerId: MarkerId('3'),
-        position: state.positions[MarkerId('3')]!,
-        onTap: () async => await markerOnTap(
-              context: context,
-              markerId: MarkerId('3'),
-            ),
-        icon: _markerIcon);
-    markersList[MarkerId('4')] = Marker(
-        markerId: MarkerId('4'),
-        position: state.positions[MarkerId('4')]!,
-        onTap: () async => await markerOnTap(
-              context: context,
-              markerId: MarkerId('4'),
-            ),
-        icon: _markerIcon);
-    // for (var i = 0; i < 4; i++) {
-    //   _markerId = _markerId + 1;
-    //   markersList[MarkerId(_markerId.toString())] = Marker(
-    //     markerId: MarkerId(_markerId.toString()),
-    //     position: state.positions[MarkerId(_markerId.toString())]!,
-    //     onTap: () async => await test(
-    //       markerId: MarkerId(_markerId.toString()),
-    //     ),
-    //     icon: _markerIcon,
-    //   );
-    // }
-    return markersList;
   }
 }
 
@@ -342,64 +331,77 @@ class _AddRecycleItemButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      child: Container(
-        height: 50,
-        width: 50,
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(33)),
-            color: Color(0xff77D353)),
-        child: const Center(
-          child: Icon(
-            Icons.qr_code,
-            color: Colors.white,
+    return Consumer<RecycleLocationPageState>(
+      builder: (_, state, __) {
+        return InkWell(
+          child: Container(
+            height: 50,
+            width: 50,
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(33)),
+                color: Color(0xff77D353)),
+            child: const Center(
+              child: Icon(
+                Icons.qr_code,
+                color: Colors.white,
+              ),
+            ),
           ),
-        ),
-      ),
-      onTap: () => context.router.push(const AddItemListPageRoute()),
+          onTap: () => context.router.push( AddItemListPageRoute(locationId: state.currentLocationId)),
+        );
+      }
     );
   }
 }
 
 class _CentreTile extends StatelessWidget {
-  const _CentreTile({Key? key, required this.markerId}) : super(key: key);
+  const _CentreTile({
+    Key? key,
+    required this.index,
+    required this.markerId,
+    required this.location,
+  }) : super(key: key);
 
+  final int index;
   final MarkerId markerId;
+  final LocationModel location;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Wrap(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(15.0),
-            width: 320,
-            height: 120,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-              color: const Color(0xFF16b04a),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
+      child: Container(
+        padding: const EdgeInsets.all(15.0),
+        // width: 400,
+        // height: 120,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          color: const Color(0xFF16b04a),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
 
-                  blurRadius: 7,
-                  offset: const Offset(4, 6), // changes position of shadow
-                ),
-              ],
+              blurRadius: 7,
+              offset: const Offset(4, 6), // changes position of shadow
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                _CentreName(),
-                _OperationHour(),
-                SizedBox(height: 14),
-                _CentreType(),
-                // SizedBox(height: 8),
-                // _Icons()
-              ],
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _CentreName(
+              name: location.name!,
             ),
-          ),
-        ],
+            const _OperationHour(),
+            Expanded(
+              child: Container(),
+            ),
+            _CentreType(
+              type: location.type!,
+            ),
+            // SizedBox(height: 8),
+            // _Icons()
+          ],
+        ),
       ),
       onTap: () => _onTap(context),
     );
@@ -407,8 +409,7 @@ class _CentreTile extends StatelessWidget {
 
   Future<void> _onTap(BuildContext context) async {
     await enlargeMarker(context: context, markerId: markerId);
-    await enlargeMarker(context: context, markerId: markerId);
-    _carouselController.animateToPage(int.parse(markerId.value) - 1);
+    _carouselController.animateToPage(index);
     await showModalBottomSheet(
       isScrollControlled: true,
       enableDrag: true,
@@ -416,18 +417,22 @@ class _CentreTile extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),
       ),
-      builder: (context) => const CentreDetailsSheet(),
+      builder: (context) => CentreDetailsSheet(
+        locationDetails: location,
+      ),
     );
   }
 }
 
 class _CentreName extends StatelessWidget {
-  const _CentreName({Key? key}) : super(key: key);
+  const _CentreName({Key? key, required this.name}) : super(key: key);
+
+  final String name;
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      "HQ of Worldwide Holdings Berhad",
+    return Text(
+      name,
       textAlign: TextAlign.center,
       style: TextStyle(
           color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
@@ -451,17 +456,23 @@ class _OperationHour extends StatelessWidget {
 }
 
 class _CentreType extends StatelessWidget {
-  const _CentreType({Key? key}) : super(key: key);
+  const _CentreType({Key? key, required this.type}) : super(key: key);
+
+  final String type;
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Kiosk',
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: 16,
-      ),
-    );
+    return StreamBuilder<DatabaseEvent>(
+        stream: Api('$kFacilities/$type').streamDataCollection(),
+        builder: (context, snapshot) {
+          return Text(
+            snapshot.data?.snapshot.value.toString() ?? 'Kiosk',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+            ),
+          );
+        });
   }
 }
 
@@ -488,7 +499,7 @@ class _Icons extends StatelessWidget {
           height: 25,
           color: const Color(0xFF16b04a),
         ),
-        SizedBox(width: 15),
+        const SizedBox(width: 15),
         Image(
           image: Assets.icons.favourite,
           height: 25,
@@ -499,15 +510,16 @@ class _Icons extends StatelessWidget {
   }
 }
 
-Future<void> markerOnTap(
-    {required BuildContext context, required MarkerId markerId}) async {
-  final state = Provider.of<RecycleLocationPageState>(context, listen: false);
-  await state.initialise();
-
+Future<void> markerOnTap({
+  required BuildContext context,
+  required int index,
+  required MarkerId markerId,
+  required LocationModel location,
+}) async {
   await enlargeMarker(context: context, markerId: markerId);
-  await enlargeMarker(context: context, markerId: markerId);
+  // await enlargeMarker(context: context, markerId: markerId);
 
-  _carouselController.animateToPage(int.parse(markerId.value) - 1);
+  _carouselController.animateToPage(index);
 
   await showModalBottomSheet(
     isScrollControlled: true,
@@ -516,26 +528,26 @@ Future<void> markerOnTap(
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(10.0)),
     ),
-    builder: (context) => const CentreDetailsSheet(),
+    builder: (context) => CentreDetailsSheet(
+      locationDetails: location,
+    ),
   );
 }
 
-Future<void> enlargeMarker(
-    {required BuildContext context, required MarkerId markerId}) async {
+Future<void> enlargeMarker({required BuildContext context, required MarkerId markerId}) async {
   final state = Provider.of<RecycleLocationPageState>(context, listen: false);
-  await state.initialise();
-
-  mapMarkers.forEach((key, value) async {
+  state.currentLocationId = markerId.value;
+  state.mapMarkers.forEach((key, value) async {
     if (markerId == value.markerId) {
-      mapMarkers[value.markerId] = mapMarkers[value.markerId]!.copyWith(
-          iconParam: BitmapDescriptor.fromBytes(await state.getBytesFromAsset(
-              path: Assets.gifs.greenPng.path, width: 120, height: 200)));
+      state.mapMarkers[value.markerId] = state.mapMarkers[value.markerId]!
+          .copyWith(
+              iconParam: BitmapDescriptor.fromBytes(state.selectedMarkerIcon!));
     } else {
-      mapMarkers[value.markerId] = mapMarkers[value.markerId]!
+      state.mapMarkers[value.markerId] = state.mapMarkers[value.markerId]!
           .copyWith(iconParam: BitmapDescriptor.fromBytes(state.markerIcon!));
     }
   });
   _mapController.animateCamera(
-    CameraUpdate.newLatLngZoom(state.positions[markerId]!, 16.0),
+    CameraUpdate.newLatLngZoom(state.mapMarkers[markerId]!.position, 16.0),
   );
 }

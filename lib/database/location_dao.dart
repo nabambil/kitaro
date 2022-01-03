@@ -7,23 +7,41 @@ class LocationDao {
   final Api _api;
   final String? id;
 
-  LocationDao(this.id) : _api = Api("$kLocation/$id");
+  LocationDao({this.id})
+      : _api = id == null ? Api(kLocation) : Api("$kLocation/$id");
 
-  Future<LocationModel> get profile async {
-    return _api.getDataCollection().then((event) => _converter(_data(event)));
+  Future<Map<String, LocationModel>> get locations async {
+    return _api.getDataCollection().then((event) {
+      return _converter(_data(event));
+    });
   }
 
-  Stream<LocationModel> get profile$ {
+  Future<LocationModel> get location async {
+    return _api.getDataCollection().then((event) {
+      print(event.snapshot);
+      return _converter2(_data(event));
+    });
+  }
+
+  Stream<Map<String, LocationModel>> get location$ {
     return _api.streamDataCollection().transform(_handler);
   }
 
-  StreamTransformer<DatabaseEvent, LocationModel> get _handler {
+  StreamTransformer<DatabaseEvent, Map<String, LocationModel>> get _handler {
     return StreamTransformer.fromHandlers(handleData: (event, sink) {
       sink.add(_converter(_data(event)));
     });
   }
 
-  LocationModel _converter(Map value) {
+  Map<String, LocationModel> _converter(Map value) {
+    final _map = <String, LocationModel>{};
+    value.forEach((key, data) {
+      _map[key] = LocationModel.fromJson(Map<String, dynamic>.from(data));
+    });
+    return _map;
+  }
+
+  LocationModel _converter2(Map value) {
     return LocationModel.fromJson(Map<String, dynamic>.from(value));
   }
 

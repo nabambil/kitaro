@@ -27,7 +27,7 @@ class _$AddressModelTearOff {
       @JsonKey(name: 'address3') String? address3,
       @JsonKey(name: 'city') String? city,
       @JsonKey(name: 'state') String? state,
-      @JsonKey(name: 'postcode') String? postcode}) {
+      @JsonKey(name: 'postcode') int? postcode}) {
     return _AddressModel(
       address1: address1,
       address2: address2,
@@ -59,7 +59,7 @@ mixin _$AddressModel {
   @JsonKey(name: 'state')
   String? get state => throw _privateConstructorUsedError;
   @JsonKey(name: 'postcode')
-  String? get postcode => throw _privateConstructorUsedError;
+  int? get postcode => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -78,7 +78,7 @@ abstract class $AddressModelCopyWith<$Res> {
       @JsonKey(name: 'address3') String? address3,
       @JsonKey(name: 'city') String? city,
       @JsonKey(name: 'state') String? state,
-      @JsonKey(name: 'postcode') String? postcode});
+      @JsonKey(name: 'postcode') int? postcode});
 }
 
 /// @nodoc
@@ -122,7 +122,7 @@ class _$AddressModelCopyWithImpl<$Res> implements $AddressModelCopyWith<$Res> {
       postcode: postcode == freezed
           ? _value.postcode
           : postcode // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
     ));
   }
 }
@@ -140,7 +140,7 @@ abstract class _$AddressModelCopyWith<$Res>
       @JsonKey(name: 'address3') String? address3,
       @JsonKey(name: 'city') String? city,
       @JsonKey(name: 'state') String? state,
-      @JsonKey(name: 'postcode') String? postcode});
+      @JsonKey(name: 'postcode') int? postcode});
 }
 
 /// @nodoc
@@ -186,7 +186,7 @@ class __$AddressModelCopyWithImpl<$Res> extends _$AddressModelCopyWithImpl<$Res>
       postcode: postcode == freezed
           ? _value.postcode
           : postcode // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
     ));
   }
 }
@@ -223,7 +223,7 @@ class _$_AddressModel implements _AddressModel {
   final String? state;
   @override
   @JsonKey(name: 'postcode')
-  final String? postcode;
+  final int? postcode;
 
   @override
   String toString() {
@@ -269,7 +269,7 @@ abstract class _AddressModel implements AddressModel {
       @JsonKey(name: 'address3') String? address3,
       @JsonKey(name: 'city') String? city,
       @JsonKey(name: 'state') String? state,
-      @JsonKey(name: 'postcode') String? postcode}) = _$_AddressModel;
+      @JsonKey(name: 'postcode') int? postcode}) = _$_AddressModel;
 
   factory _AddressModel.fromJson(Map<String, dynamic> json) =
       _$_AddressModel.fromJson;
@@ -291,7 +291,7 @@ abstract class _AddressModel implements AddressModel {
   String? get state;
   @override
   @JsonKey(name: 'postcode')
-  String? get postcode;
+  int? get postcode;
   @override
   @JsonKey(ignore: true)
   _$AddressModelCopyWith<_AddressModel> get copyWith =>

@@ -13,6 +13,9 @@ export 'routes.gr.dart';
       page: LoginPage,
     ),
     AutoRoute(
+      page: AboutPage,
+    ),
+    AutoRoute(
       page: OnBoardingPage,
     ),
     AutoRoute(

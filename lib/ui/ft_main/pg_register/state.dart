@@ -6,6 +6,8 @@ import 'package:kitaro/kitaro.dart';
 enum InvalidField {
   firstName,
   lastName,
+  idNumber,
+  phoneNumber,
   email,
   address1,
   city,
@@ -16,13 +18,6 @@ enum InvalidField {
 }
 
 class RegisterPageState extends ChangeNotifier {
-  ProfileDetailsTest? _test;
-  ProfileDetailsTest? get test => _test;
-
-  set test(ProfileDetailsTest? value) {
-    _test = value;
-    notifyListeners();
-  }
 
   bool _isBusy = false;
 
@@ -84,6 +79,68 @@ class RegisterPageState extends ChangeNotifier {
 
       if (_lastName == null || _lastName!.trim().isEmpty) {
         _lastNameError = 'last name required';
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  // ID NUMBER -----------------------------------------------------------------
+  // ID NUMBER //////////////////////////////////
+  String? _idNumber;
+  String? get idNumber => _idNumber;
+
+  set idNumber(String? value) {
+    _idNumber = value;
+    validateIdNumber();
+  }
+
+  // ID NUMBER ERROR ////////////////////////////
+  String? _idNumberError;
+
+  String? get idNumberError => _idNumberError;
+
+  bool get idNumberHasError {
+    return _idNumberError != null;
+  }
+
+  void validateIdNumber() {
+    try {
+      _idNumberError = null;
+
+      if (_idNumber == null || _idNumber!.trim().isEmpty) {
+        _idNumberError = 'id number required';
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  // PHONE NUMBER -----------------------------------------------------------------
+  // PHONE NUMBER //////////////////////////////////
+  String? _phoneNumber;
+  String? get phoneNumber => _phoneNumber;
+
+  set phoneNumber(String? value) {
+    _phoneNumber = value;
+    validatePhoneNumber();
+  }
+
+  // PHONE NUMBER ERROR ////////////////////////////
+  String? _phoneNumberError;
+
+  String? get phoneNumberError => _phoneNumberError;
+
+  bool get phoneNumberHasError {
+    return _phoneNumberError != null;
+  }
+
+  void validatePhoneNumber() {
+    try {
+      _phoneNumberError = null;
+
+      if (_phoneNumber == null || _phoneNumber!.trim().isEmpty) {
+        _phoneNumberError = 'phone number required';
       }
     } finally {
       notifyListeners();
@@ -348,6 +405,8 @@ class RegisterPageState extends ChangeNotifier {
     // ALWAYS: Validate the fields that can be focused first!
     validateFirstName();
     validateLastName();
+    validateIdNumber();
+    validatePhoneNumber();
     validateEmail();
     validateAddress1();
     validateCity();
@@ -361,6 +420,12 @@ class RegisterPageState extends ChangeNotifier {
     }
     if (lastNameHasError) {
       return InvalidField.lastName;
+    }
+    if (idNumberHasError) {
+      return InvalidField.idNumber;
+    }
+    if (phoneNumberHasError) {
+      return InvalidField.phoneNumber;
     }
     if (emailHasError) {
       return InvalidField.email;
@@ -398,38 +463,37 @@ class RegisterPageState extends ChangeNotifier {
         address3: _address3,
         city: _city,
         state: _state,
-        postcode: _postcode,
+        postcode: int.parse(_postcode!),
       );
 
       final _acc = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: _email!, password: _password!);
 
-      AddressDao().add(_address).then((value) {
-        final _user = KitaroAccount(
-          firstName: _firstName!,
-          lastName: _lastName!,
-          username: _email,
-          address: value,
-          token: _acc.user?.uid,
-          role: "user",
-        );
-
-        return _user;
-      }).then((value) => UserDao().add(value));
-
-      _test = ProfileDetailsTest(
+      final _addressId = await AddressDao().add(_address);
+      final _userValue = KitaroAccount(
         firstName: _firstName!,
         lastName: _lastName!,
-        email: _email,
-        address1: _address1,
-        address2: _address2,
-        address3: _address3,
-        city: _city,
-        state: _state,
-        postcode: _postcode,
-        password: _password,
-        passwordRecheck: _passwordRecheck,
+        username: _email,
+        address: _addressId,
+        token: _acc.user?.uid,
+        role: "user",
+        phone: phoneNumber,
+        idNo: _idNumber,
       );
+      final _user = UserDao().add(id: _acc.user!.uid, value: _userValue);
+
+      // AddressDao().add(_address).then((value) {
+      //   final _user = KitaroAccount(
+      //     firstName: _firstName!,
+      //     lastName: _lastName!,
+      //     username: _email,
+      //     address: value,
+      //     token: _acc.user?.uid,
+      //     role: "user",
+      //   );
+      //
+      //   return _user;
+      // }).then((value) => UserDao().add(value));
     } finally {
       _isBusy = false;
       notifyListeners();

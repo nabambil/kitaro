@@ -15,7 +15,7 @@ class EditItemDialog extends StatelessWidget {
   }) : super(key: key);
 
   // ---------------------------------- FIELDS ---------------------------------
-  final ItemDetails item;
+  final RecycleModel item;
   final int index;
 
   // ------------------------------- METHODS ------------------------------
@@ -37,7 +37,7 @@ class _Content extends StatefulWidget {
   }) : super(key: key);
 
   // ---------------------------------- FIELDS ---------------------------------
-  final ItemDetails item;
+  final RecycleModel item;
   final int index;
 
   // ------------------------------- METHODS ------------------------------

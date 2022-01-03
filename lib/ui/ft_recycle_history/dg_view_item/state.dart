@@ -5,6 +5,6 @@ class ViewItemDialogState extends ChangeNotifier{
 
   ViewItemDialogState({required this.item});
 
-  final ItemDetails item;
+  final RecycleModel item;
 
 }

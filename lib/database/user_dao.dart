@@ -6,10 +6,13 @@ import 'package:kitaro/kitaro.dart';
 class UserDao {
   final Api _api;
 
-  UserDao({String? id}) : _api = Api("$kUser/$id");
+  UserDao({String? id}) : _api = id == null ? Api(kUser) : Api("$kUser/$id");
 
   Future<KitaroAccount> get profile async {
-    return _api.getDataCollection().then((event) => _converter(_data(event)));
+    return _api.getDataCollection().then((event) {
+      print(event.snapshot);
+      return _converter(_data(event));
+    });
   }
 
   Stream<KitaroAccount> get profile$ {
@@ -28,7 +31,8 @@ class UserDao {
 
   Map _data(DatabaseEvent event) => event.snapshot.value as Map;
 
-  Future<void> add(KitaroAccount value) => _api.addDocument(value.toJson());
+  Future<void> add({required KitaroAccount value, required String id}) =>
+      _api.add(id, value.toJson());
 
   Future<void> update(KitaroAccount value) =>
       _api.updateDocument(value.toJson());

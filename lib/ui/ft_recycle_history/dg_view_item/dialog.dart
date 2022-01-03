@@ -10,7 +10,7 @@ class ViewItemDialog extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final ItemDetails item;
+  final RecycleModel item;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +90,7 @@ class _ItemType extends StatelessWidget {
         children: [
           const _FieldTitle(title: 'Type *'),
           const SizedBox(height: 8.0),
-          _Field(text: state.item.itemType),
+          _Field(text: state.item.type!),
         ],
       );
     });
@@ -108,7 +108,7 @@ class _ItemWeight extends StatelessWidget {
         children: [
           const _FieldTitle(title: 'Weight (KG) *'),
           const SizedBox(height: 8.0),
-          _Field(text: state.item.itemWeight),
+          _Field(text: state.item.weight!.toString()),
         ],
       );
     });
@@ -130,7 +130,7 @@ class _ItemPhotos extends StatelessWidget {
             height: MediaQuery.of(context).size.width * 0.17,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: state.item.itemImages?.length ?? 0,
+              itemCount: state.item.images?.length ?? 0,
               itemBuilder: (ctx, index) {
                 // if (state.item.itemImages != null &&
                 //     state.item.itemImages!.length > index) {

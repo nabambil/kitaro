@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:kitaro/kitaro.dart';
+import 'package:kitaro/ui/ft_recycle_location/pg_main/state.dart';
 import 'package:provider/provider.dart';
 
 import 'dg_add_item/dialog.dart';
@@ -9,8 +11,12 @@ import 'state.dart';
 class AddItemListPage extends StatelessWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const AddItemListPage({
+    required this.locationId,
     Key? key,
   }) : super(key: key);
+
+  // ---------------------------------- FIELDS ---------------------------------
+  final String locationId;
 
   // ------------------------------- METHODS ------------------------------
   @override
@@ -20,9 +26,9 @@ class AddItemListPage extends StatelessWidget {
       child: Scaffold(
         body: PageBase(
           child: Stack(
-            children: const [
-              _Content(),
-              Positioned(
+            children: [
+              _Content(locationId: locationId),
+              const Positioned(
                 bottom: 20,
                 right: 0,
                 child: _SubmitButton(),
@@ -35,13 +41,34 @@ class AddItemListPage extends StatelessWidget {
   }
 }
 
-class _Content extends StatelessWidget {
+class _Content extends StatefulWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const _Content({
+    required this.locationId,
     Key? key,
   }) : super(key: key);
 
-  // ------------------------------- METHODS ------------------------------
+  // ---------------------------------- FIELDS ---------------------------------
+  final String locationId;
+
+  // --------------------------------- METHODS ---------------------------------
+  @override
+  State<_Content> createState() => _ContentState();
+}
+
+class _ContentState extends State<_Content> {
+  // --------------------------------- METHODS ---------------------------------
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance!.addPostFrameCallback((_) async {
+      final state =
+      Provider.of<AddItemListPageState>(context, listen: false);
+      state.currentLocationId = widget.locationId;
+      await state.initialise();
+
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -64,25 +91,29 @@ class _Header extends StatelessWidget {
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 12),
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            _AppBar(),
-            SizedBox(height: 15),
-            _Text(text: 'Centre Name'),
-            _Text(text: 'Centre Phone Number'),
-            _Text(text: 'Cycle Type : Plastic, Metal, Paper'),
-            SizedBox(height: 15),
-            // _Text(text: 'Centre Address 1'),
-            // _Text(text: 'Centre Address 2'),
-            // _Text(text: 'Centre Address 3'),
-            // SizedBox(height: 10),
-          ],
-        ),
-      ),
+    return Consumer<AddItemListPageState>(
+      builder: (_, state, __) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 12),
+          child: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const _AppBar(),
+                const SizedBox(height: 15),
+                _Text(text: state.location?.name),
+                const _Text(text: 'Centre Phone Number'),
+                _Text(text: state.itemTypeList.toString()),
+                const SizedBox(height: 15),
+                // _Text(text: 'Centre Address 1'),
+                // _Text(text: 'Centre Address 2'),
+                // _Text(text: 'Centre Address 3'),
+                // SizedBox(height: 10),
+              ],
+            ),
+          ),
+        );
+      }
     );
   }
 }
@@ -316,7 +347,7 @@ class _SubmitButton extends StatelessWidget {
         onPressed: () async {
           final state =
               Provider.of<AddItemListPageState>(context, listen: false);
-          state.test();
+          state.recycle();
           await showSuccessfulDialog(
             context: context,
             title: 'ITEM RECYCLED',

@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +9,8 @@ import 'state.dart';
 // ------------------------------ VARIABLES -----------------------------
 late FocusNode _firstNameNode;
 late FocusNode _lastNameNode;
+late FocusNode _idNumberNode;
+late FocusNode _phoneNode;
 late FocusNode _emailNode;
 late FocusNode _address1Node;
 late FocusNode _address2Node;
@@ -86,6 +87,8 @@ class _ContentState extends State<_Content> {
         SizedBox(height: 60),
         _FirstNameField(),
         _LastNameField(),
+        _IdNumberField(),
+        _PhoneNumberField(),
         _EmailField(),
         _AddressLine1Field(),
         _AddressLine2Field(),
@@ -200,6 +203,94 @@ class _LastNameFieldState extends State<_LastNameField> {
           onChanged: (v) => state.lastName = v,
           onSubmitted: (v) {
             state.lastName = v;
+            _idNumberNode.requestFocus();
+          },
+        );
+      },
+    );
+  }
+}
+
+class _IdNumberField extends StatefulWidget {
+  // ---------------------------- CONSTRUCTORS ----------------------------
+  const _IdNumberField({
+    Key? key,
+  }) : super(key: key);
+
+  // ------------------------------- METHODS ------------------------------
+  @override
+  State<_IdNumberField> createState() => _IdNumberFieldState();
+}
+
+class _IdNumberFieldState extends State<_IdNumberField> {
+  // ------------------------------- METHODS ------------------------------
+  @override
+  void initState() {
+    super.initState();
+    _idNumberNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _idNumberNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<RegisterPageState>(
+      builder: (_, state, __) {
+        return KitaroTextField(
+          labelText: 'ID number *',
+          errorText: state.idNumberError,
+          focusNode: _idNumberNode,
+          onChanged: (v) => state.idNumber = v,
+          onSubmitted: (v) {
+            state.idNumber = v;
+            _phoneNode.requestFocus();
+          },
+        );
+      },
+    );
+  }
+}
+
+class _PhoneNumberField extends StatefulWidget {
+  // ---------------------------- CONSTRUCTORS ----------------------------
+  const _PhoneNumberField({
+    Key? key,
+  }) : super(key: key);
+
+  // ------------------------------- METHODS ------------------------------
+  @override
+  State<_PhoneNumberField> createState() => _PhoneNumberFieldState();
+}
+
+class _PhoneNumberFieldState extends State<_PhoneNumberField> {
+  // ------------------------------- METHODS ------------------------------
+  @override
+  void initState() {
+    super.initState();
+    _phoneNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _phoneNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<RegisterPageState>(
+      builder: (_, state, __) {
+        return KitaroTextField(
+          labelText: 'phone number *',
+          errorText: state.phoneNumberError,
+          focusNode: _phoneNode,
+          onChanged: (v) => state.phoneNumber = v,
+          onSubmitted: (v) {
+            state.phoneNumber = v;
             _emailNode.requestFocus();
           },
         );
@@ -640,6 +731,12 @@ class _SubmitButton extends StatelessWidget {
       case InvalidField.lastName:
         _lastNameNode.requestFocus();
         return;
+      case InvalidField.idNumber:
+        _idNumberNode.requestFocus();
+        return;
+      case InvalidField.phoneNumber:
+        _phoneNode.requestFocus();
+        return;
       case InvalidField.email:
         _emailNode.requestFocus();
         return;
@@ -668,6 +765,6 @@ class _SubmitButton extends StatelessWidget {
       await showWarningDialog(context, err1);
       return;
     }
-    await context.router.push(EditProfilePageRoute(test: state.test!));
+    await context.router.replaceAll([const RecycleLocationPageRoute()]);
   }
 }

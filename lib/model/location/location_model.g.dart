@@ -12,22 +12,15 @@ _$_LocationModel _$$_LocationModelFromJson(Map<String, dynamic> json) =>
       json,
       ($checkedConvert) {
         final val = _$_LocationModel(
-          address: $checkedConvert(
-              'address',
-              (v) => v == null
-                  ? null
-                  : AddressModel.fromJson(v as Map<String, dynamic>)),
+          address: $checkedConvert('address', (v) => v as String?),
           direction: $checkedConvert('direction', (v) => v as String?),
           isWeight: $checkedConvert('isWeight', (v) => v as int?),
-          lat: $checkedConvert('lat', (v) => v as int?),
-          long: $checkedConvert('long', (v) => v as int?),
-          name: $checkedConvert('name', (v) => v as int?),
-          type: $checkedConvert('type', (v) => v as int?),
-          wastes: $checkedConvert(
-              'wastes',
-              (v) => (v as List<dynamic>?)
-                  ?.map((e) => WasteModel.fromJson(e as Map<String, dynamic>))
-                  .toList()),
+          lat: $checkedConvert('lat', (v) => (v as num?)?.toDouble()),
+          long: $checkedConvert('long', (v) => (v as num?)?.toDouble()),
+          name: $checkedConvert('name', (v) => v as String?),
+          type: $checkedConvert('type', (v) => v as String?),
+          wastes: $checkedConvert('wastes',
+              (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
         );
         return val;
       },

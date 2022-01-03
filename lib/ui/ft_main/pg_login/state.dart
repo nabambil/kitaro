@@ -195,7 +195,7 @@ class LoginPageState extends ChangeNotifier {
   }
 
   Future<ErrorMessage?> _updateToken(String? token, String? id) {
-    return UserDao().profile.then((value) {
+    return UserDao(id: id).profile.then((value) {
       final _profile = value.copyWith(token: token);
       return _profile;
     }).then((value) {

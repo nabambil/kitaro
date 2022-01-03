@@ -10,6 +10,7 @@
 
 import 'package:auto_route/auto_route.dart' as _i2;
 import 'package:flutter/material.dart' as _i3;
+import 'package:flutter/widgets.dart' as _i4;
 
 import '../../kitaro.dart' as _i1;
 
@@ -27,6 +28,10 @@ class AppRouter extends _i2.RootStackRouter {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i1.LoginPage());
     },
+    AboutPageRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i1.AboutPage());
+    },
     OnBoardingPageRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i1.OnBoardingPage());
@@ -39,11 +44,15 @@ class AppRouter extends _i2.RootStackRouter {
       final args = routeData.argsAs<EditProfilePageRouteArgs>();
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i1.EditProfilePage(test: args.test, key: args.key));
+          child: _i1.EditProfilePage(
+              user: args.user, userAddress: args.userAddress, key: args.key));
     },
     AddItemListPageRoute.name: (routeData) {
+      final args = routeData.argsAs<AddItemListPageRouteArgs>();
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i1.AddItemListPage());
+          routeData: routeData,
+          child:
+              _i1.AddItemListPage(locationId: args.locationId, key: args.key));
     },
     HistoryItemListPageRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
@@ -59,6 +68,7 @@ class AppRouter extends _i2.RootStackRouter {
   List<_i2.RouteConfig> get routes => [
         _i2.RouteConfig(SplashPageRoute.name, path: '/'),
         _i2.RouteConfig(LoginPageRoute.name, path: '/login-page'),
+        _i2.RouteConfig(AboutPageRoute.name, path: '/about-page'),
         _i2.RouteConfig(OnBoardingPageRoute.name, path: '/on-boarding-page'),
         _i2.RouteConfig(RegisterPageRoute.name, path: '/register-page'),
         _i2.RouteConfig(EditProfilePageRoute.name, path: '/edit-profile-page'),
@@ -87,6 +97,14 @@ class LoginPageRoute extends _i2.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i1.AboutPage]
+class AboutPageRoute extends _i2.PageRouteInfo<void> {
+  const AboutPageRoute() : super(AboutPageRoute.name, path: '/about-page');
+
+  static const String name = 'AboutPageRoute';
+}
+
+/// generated route for
 /// [_i1.OnBoardingPage]
 class OnBoardingPageRoute extends _i2.PageRouteInfo<void> {
   const OnBoardingPageRoute()
@@ -107,34 +125,56 @@ class RegisterPageRoute extends _i2.PageRouteInfo<void> {
 /// generated route for
 /// [_i1.EditProfilePage]
 class EditProfilePageRoute extends _i2.PageRouteInfo<EditProfilePageRouteArgs> {
-  EditProfilePageRoute({required _i1.ProfileDetailsTest test, _i3.Key? key})
+  EditProfilePageRoute(
+      {required _i1.KitaroAccount user,
+      required _i1.AddressModel userAddress,
+      _i4.Key? key})
       : super(EditProfilePageRoute.name,
             path: '/edit-profile-page',
-            args: EditProfilePageRouteArgs(test: test, key: key));
+            args: EditProfilePageRouteArgs(
+                user: user, userAddress: userAddress, key: key));
 
   static const String name = 'EditProfilePageRoute';
 }
 
 class EditProfilePageRouteArgs {
-  const EditProfilePageRouteArgs({required this.test, this.key});
+  const EditProfilePageRouteArgs(
+      {required this.user, required this.userAddress, this.key});
 
-  final _i1.ProfileDetailsTest test;
+  final _i1.KitaroAccount user;
 
-  final _i3.Key? key;
+  final _i1.AddressModel userAddress;
+
+  final _i4.Key? key;
 
   @override
   String toString() {
-    return 'EditProfilePageRouteArgs{test: $test, key: $key}';
+    return 'EditProfilePageRouteArgs{user: $user, userAddress: $userAddress, key: $key}';
   }
 }
 
 /// generated route for
 /// [_i1.AddItemListPage]
-class AddItemListPageRoute extends _i2.PageRouteInfo<void> {
-  const AddItemListPageRoute()
-      : super(AddItemListPageRoute.name, path: '/add-item-list-page');
+class AddItemListPageRoute extends _i2.PageRouteInfo<AddItemListPageRouteArgs> {
+  AddItemListPageRoute({required String locationId, _i4.Key? key})
+      : super(AddItemListPageRoute.name,
+            path: '/add-item-list-page',
+            args: AddItemListPageRouteArgs(locationId: locationId, key: key));
 
   static const String name = 'AddItemListPageRoute';
+}
+
+class AddItemListPageRouteArgs {
+  const AddItemListPageRouteArgs({required this.locationId, this.key});
+
+  final String locationId;
+
+  final _i4.Key? key;
+
+  @override
+  String toString() {
+    return 'AddItemListPageRouteArgs{locationId: $locationId, key: $key}';
+  }
 }
 
 /// generated route for

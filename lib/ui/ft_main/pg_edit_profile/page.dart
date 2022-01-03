@@ -9,6 +9,8 @@ import 'state.dart';
 
 late FocusNode _firstNameNode;
 late FocusNode _lastNameNode;
+late FocusNode _idNumberNode;
+late FocusNode _phoneNumberNode;
 late FocusNode _emailNode;
 late FocusNode _address1Node;
 late FocusNode _address2Node;
@@ -21,20 +23,25 @@ late FocusNode _passwordRecheckNode;
 
 // ------------------------------- CLASSES ------------------------------
 class EditProfilePage extends StatelessWidget {
-  EditProfilePage({
-    required this.test,
+  const EditProfilePage({
+    required this.user,
+    required this.userAddress,
     Key? key,
   }) : super(key: key);
 
-  ProfileDetailsTest test;
+  final KitaroAccount user;
+  final AddressModel userAddress;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: ChangeNotifierProvider<EditProfilePageState>(
-          create: (_) => EditProfilePageState(test: test),
-          child: _Content(test: test),
+          create: (_) => EditProfilePageState(
+            user: user,
+            userAddress: userAddress,
+          ),
+          child: const _Content(),
         ),
       ),
     );
@@ -43,12 +50,9 @@ class EditProfilePage extends StatelessWidget {
 
 class _Content extends StatefulWidget {
   // ------------------------------- CONSTRUCTORS ------------------------------
-  _Content({
-    required this.test,
+  const _Content({
     Key? key,
   }) : super(key: key);
-
-  ProfileDetailsTest test;
 
   // ------------------------------- METHODS ------------------------------
   @override
@@ -66,7 +70,7 @@ class _ContentState extends State<_Content> {
       ]);
 
       final state = Provider.of<EditProfilePageState>(context, listen: false);
-      await state.initialiseEditItem(widget.test);
+      await state.initialiseEditItem();
       await Authentication.initializeFirebase();
     });
   }
@@ -94,26 +98,30 @@ class _ContentState extends State<_Content> {
         ),
         SizedBox(height: 60),
         _FirstNameField(),
-        SizedBox(height: 15),
+        SizedBox(height: 25),
         _LastNameField(),
-        SizedBox(height: 15),
+        SizedBox(height: 25),
+        _IdNumberField(),
+        SizedBox(height: 25),
+        _PhoneNumberField(),
+        SizedBox(height: 25),
         _EmailField(),
-        SizedBox(height: 15),
+        SizedBox(height: 25),
         _AddressLine1Field(),
-        SizedBox(height: 15),
+        SizedBox(height: 25),
         _AddressLine2Field(),
-        SizedBox(height: 15),
+        SizedBox(height: 25),
         _AddressLine3Field(),
-        SizedBox(height: 15),
+        SizedBox(height: 25),
         _CityField(),
-        SizedBox(height: 15),
+        SizedBox(height: 25),
         _StateField(),
-        SizedBox(height: 15),
+        SizedBox(height: 25),
         _PostcodeField(),
-        SizedBox(height: 15),
-        _PasswordField(),
-        SizedBox(height: 15),
-        _PasswordRecheckField(),
+        // SizedBox(height: 15),
+        // _PasswordField(),
+        // SizedBox(height: 15),
+        // _PasswordRecheckField(),
         SizedBox(height: 52),
         _SubmitButton(),
       ],
@@ -246,6 +254,120 @@ class _LastNameFieldState extends State<_LastNameField>
           onChanged: (v) => state.lastName = v,
           onSubmitted: (v) {
             state.lastName = v;
+            _idNumberNode.requestFocus();
+          },
+        );
+      },
+    );
+  }
+}
+
+class _IdNumberField extends StatefulWidget {
+  // ---------------------------- CONSTRUCTORS ----------------------------
+  const _IdNumberField({
+    Key? key,
+  }) : super(key: key);
+
+  // ------------------------------- METHODS ------------------------------
+  @override
+  State<_IdNumberField> createState() => _IdNumberFieldState();
+}
+
+class _IdNumberFieldState extends State<_IdNumberField>
+    with AutomaticKeepAliveClientMixin {
+  // ------------------------------- FIELDS -------------------------------
+  final _controller = TextEditingController();
+
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
+  // --------------------------------- METHODS ---------------------------------
+  @override
+  void initState() {
+    super.initState();
+    _idNumberNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _idNumberNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Consumer<EditProfilePageState>(
+      builder: (_, state, __) {
+        if (state.updateTextController) {
+          _controller.text = state.idNumber ?? "";
+        }
+        return KitaroTextBox(
+          controller: _controller,
+          labelText: 'ID number *',
+          errorText: state.idNumberError,
+          focusNode: _idNumberNode,
+          onChanged: (v) => state.idNumber = v,
+          onSubmitted: (v) {
+            state.idNumber = v;
+            _phoneNumberNode.requestFocus();
+          },
+        );
+      },
+    );
+  }
+}
+
+class _PhoneNumberField extends StatefulWidget {
+  // ---------------------------- CONSTRUCTORS ----------------------------
+  const _PhoneNumberField({
+    Key? key,
+  }) : super(key: key);
+
+  // ------------------------------- METHODS ------------------------------
+  @override
+  State<_PhoneNumberField> createState() => _PhoneNumberFieldState();
+}
+
+class _PhoneNumberFieldState extends State<_PhoneNumberField>
+    with AutomaticKeepAliveClientMixin {
+  // ------------------------------- FIELDS -------------------------------
+  final _controller = TextEditingController();
+
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
+  // --------------------------------- METHODS ---------------------------------
+  @override
+  void initState() {
+    super.initState();
+    _phoneNumberNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _phoneNumberNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Consumer<EditProfilePageState>(
+      builder: (_, state, __) {
+        if (state.updateTextController) {
+          _controller.text = state.phoneNumber ?? "";
+        }
+        return KitaroTextBox(
+          controller: _controller,
+          labelText: 'phone number *',
+          errorText: state.phoneNumberError,
+          focusNode: _phoneNumberNode,
+          onChanged: (v) => state.phoneNumber = v,
+          onSubmitted: (v) {
+            state.phoneNumber = v;
             _emailNode.requestFocus();
           },
         );
@@ -692,7 +814,7 @@ class _PasswordFieldState extends State<_PasswordField>
         if (state.updateTextController) {
           _controller.text = state.password ?? '';
         }
-        return KitaroTextBox(
+        return KitaroPasswordTextBox(
           controller: _controller,
           errorText: state.passwordError,
           labelText: 'password *',
@@ -749,7 +871,7 @@ class __PasswordRecheckFieldState extends State<_PasswordRecheckField>
         if (state.updateTextController) {
           _controller.text = state.passwordRecheck ?? '';
         }
-        return KitaroTextBox(
+        return KitaroPasswordTextBox(
           controller: _controller,
           labelText: 're-type password *',
           errorText: state.passwordRecheckError,
@@ -826,11 +948,11 @@ class _SubmitButton extends StatelessWidget {
         return;
     }
 
-    // final err1 = await state.register();
-    // if (err1 != null) {
-    //   await showWarningDialog(context, err1);
-    //   return;
-    // }
+    final err1 = await state.register();
+    if (err1 != null) {
+      await showWarningDialog(context, err1);
+      return;
+    }
     await context.router.push(const RecycleLocationPageRoute());
   }
 }

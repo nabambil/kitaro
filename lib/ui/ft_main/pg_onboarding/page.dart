@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kitaro/kitaro.dart';
 import 'package:onboarding/onboarding.dart';
-import 'package:flutter/widgets.dart';
 
 // ------------------------------- CLASSES ------------------------------
 class OnBoardingPage extends StatelessWidget {
@@ -85,7 +83,7 @@ class _Content extends StatelessWidget {
 
 class _PageModel extends StatelessWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
-  _PageModel({
+  const _PageModel({
     Key? key,
     required this.image,
     required this.title,

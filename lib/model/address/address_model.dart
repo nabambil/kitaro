@@ -13,7 +13,7 @@ class AddressModel with _$AddressModel {
     @JsonKey(name: 'address3') String? address3,
     @JsonKey(name: 'city') String? city,
     @JsonKey(name: 'state') String? state,
-    @JsonKey(name: 'postcode') String? postcode,
+    @JsonKey(name: 'postcode') int? postcode,
   }) = _AddressModel;
 
   factory AddressModel.fromJson(Map<String, dynamic> json) =>
