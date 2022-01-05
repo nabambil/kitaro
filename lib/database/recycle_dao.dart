@@ -9,7 +9,7 @@ class RecycleDao {
 
   RecycleDao(String? id) : _api = Api("$kRecycle/$id");
 
-  Future<RecycleModel> get recycle async {
+  Future<Map<String, RecycleModel>> get recycle async {
     // final _id = FirebaseAuth.instance.currentUser?.uid;
 
     //  _api.getDataCollectionBy("username", _id!).then((value) => null);
