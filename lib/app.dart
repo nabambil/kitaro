@@ -40,7 +40,7 @@ class KitaroApp extends StatelessWidget {
           return Stack(
             children: [
               Positioned.fill(child: router!),
-              // if (isInDebugMode)
+              const BusyIndicator(position: BusyIndicatorPosition.bottom),
               Positioned(
                 left: 8.0,
                 bottom: 8.0,

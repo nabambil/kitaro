@@ -948,7 +948,10 @@ class _SubmitButton extends StatelessWidget {
         return;
     }
 
-    final err1 = await state.register();
+    final err1 = await showBusyIndicator<ErrorMessage?>(
+      initialStatus: 'Loading...',
+      action: state.register,
+    );
     if (err1 != null) {
       await showWarningDialog(context, err1);
       return;

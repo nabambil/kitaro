@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -23,14 +24,24 @@ late FocusNode _passwordRecheckNode;
 
 // ------------------------------- CLASSES ------------------------------
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  const RegisterPage(
+      {required this.isFirstTimeWithGoogleSignIn,
+      this.userCredential,
+      Key? key})
+      : super(key: key);
+
+  final bool isFirstTimeWithGoogleSignIn;
+  final UserCredential? userCredential;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: ChangeNotifierProvider<RegisterPageState>(
-          create: (_) => RegisterPageState(),
+          create: (_) => RegisterPageState(
+            isFirstTimeWithGoogleSignIn: isFirstTimeWithGoogleSignIn,
+            userCredential: userCredential,
+          ),
           child: const _Content(),
         ),
       ),
@@ -59,49 +70,60 @@ class _ContentState extends State<_Content> {
         DeviceOrientation.portraitUp,
       ]);
 
+      final state = Provider.of<RegisterPageState>(context, listen: false);
       await Authentication.initializeFirebase();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      padding: const EdgeInsets.fromLTRB(
-        35.0,
-        48.0,
-        35.0,
-        16.0,
-      ),
-      children: const [
-        _Logo(),
-        SizedBox(height: 30),
-        Text(
-          'Welcome',
-          style: TextStyle(
-            color: Color(0xff47525E),
-            fontSize: 28,
-            fontWeight: FontWeight.w900,
-          ),
+    return Consumer<RegisterPageState>(builder: (_, state, __) {
+      return ListView(
+        shrinkWrap: true,
+        padding: const EdgeInsets.fromLTRB(
+          35.0,
+          48.0,
+          35.0,
+          16.0,
         ),
-        SizedBox(height: 60),
-        _FirstNameField(),
-        _LastNameField(),
-        _IdNumberField(),
-        _PhoneNumberField(),
-        _EmailField(),
-        _AddressLine1Field(),
-        _AddressLine2Field(),
-        _AddressLine3Field(),
-        _CityField(),
-        _StateField(),
-        _PostcodeField(),
-        _PasswordField(),
-        _PasswordRecheckField(),
-        SizedBox(height: 52),
-        _SubmitButton(),
-      ],
-    );
+        children: [
+          const _Logo(),
+          const SizedBox(height: 30),
+          const Text(
+            'Welcome',
+            style: TextStyle(
+              color: Color(0xff47525E),
+              fontSize: 28,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 60),
+          const _FirstNameField(),
+          const _LastNameField(),
+          const _IdNumberField(),
+          const _PhoneNumberField(),
+          Visibility(
+            visible: !state.isFirstTimeWithGoogleSignIn,
+            child: const _EmailField(),
+          ),
+          const _AddressLine1Field(),
+          const _AddressLine2Field(),
+          const _AddressLine3Field(),
+          const _CityField(),
+          const _StateField(),
+          const _PostcodeField(),
+          Visibility(
+              visible: !state.isFirstTimeWithGoogleSignIn,
+              child: const _PasswordField()),
+          Visibility(
+            visible: !state.isFirstTimeWithGoogleSignIn,
+            child: const _PasswordRecheckField(),
+          ),
+          const SizedBox(height: 52),
+          const _SubmitButton(),
+        ],
+      );
+    });
   }
 }
 
@@ -760,7 +782,8 @@ class _SubmitButton extends StatelessWidget {
         return;
     }
 
-    final err1 = await state.register();
+    final err1 = await showBusyIndicator<ErrorMessage?>(
+        initialStatus: 'loading...', action: state.register);
     if (err1 != null) {
       await showWarningDialog(context, err1);
       return;

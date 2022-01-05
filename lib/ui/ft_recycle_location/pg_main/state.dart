@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
@@ -25,7 +26,7 @@ class RecycleLocationPageState extends ChangeNotifier {
 
   String? onSelectMarker;
 
-  Future<void> initialise() async {
+  Future<ErrorMessage?> initialise() async {
     markerIcon =
         await getBytesFromAsset(path: Assets.gifs.marker.path, width: 120);
     selectedMarkerIcon = await getBytesFromAsset(
@@ -33,8 +34,7 @@ class RecycleLocationPageState extends ChangeNotifier {
       width: 120,
       height: 200,
     );
-    await getLocation();
-    notifyListeners();
+    return await getLocation();
   }
 
   Future<Uint8List> getBytesFromAsset(
@@ -62,26 +62,44 @@ class RecycleLocationPageState extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void>? getLocation() {
-    LocationDao().location$.listen((event) {
-      _mapMarkers.clear();
-      locations = event;
-      latitude = locations.entries.elementAt(0).value.lat;
-      longitude = locations.entries.elementAt(0).value.long;
-      currentLocationId = locations.entries.first.key;
-      notifyListeners();
-      event.forEach((key, data) {
-        _mapMarkers[MarkerId(key)] = Marker(
-            markerId: MarkerId(key),
-            position: LatLng(data.lat!, data.long!),
-            onTap: () {
-              onSelectMarker = key;
-              notifyListeners();
-            },
-            icon: BitmapDescriptor.fromBytes(markerIcon!));
+  Future<ErrorMessage?> getLocation() async{
+    try {
+      LocationDao().location$.listen((event) {
+        _mapMarkers.clear();
+        locations = event;
+        latitude = locations.entries.elementAt(0).value.lat;
+        longitude = locations.entries.elementAt(0).value.long;
+        notifyListeners();
+        event.forEach((key, data) {
+          _mapMarkers[MarkerId(key)] = Marker(
+              markerId: MarkerId(key),
+              position: LatLng(data.lat!, data.long!),
+              onTap: () {
+                onSelectMarker = key;
+                notifyListeners();
+              },
+              icon: BitmapDescriptor.fromBytes(markerIcon!));
+        });
       });
+    } on FirebaseAuthException catch (e) {
+      return ErrorMessage(title: e.code, message: e.message!);
+    } catch (e) {
+      return ErrorMessage(title: e.toString(), message: '');
+    } finally {
       notifyListeners();
-    });
+    }
+    return null;
+  }
+
+  Future<ErrorMessage?> checkLocation({required String locationKey}) async {
+    if (!locations.containsKey(locationKey)) {
+      return ErrorMessage(
+        title: 'Error',
+        message: 'QR code not available',
+      );
+    }
+
+    currentLocationId = locationKey;
     return null;
   }
 }

@@ -13,6 +13,7 @@ class DialogBase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      insetPadding: const EdgeInsets.all(24.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
@@ -68,8 +69,10 @@ Future<void> showSuccessfulDialog({
   required BuildContext context,
   required String title,
   required String message,
+  bool barrierDismissible = false,
 }) {
   return showRawDialog(
+    barrierDismissible: barrierDismissible,
     context: context,
     dialog: AlertDialog(
       title: title,
@@ -100,42 +103,45 @@ class AlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DialogBase(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image(
-            image: icon,
-            height: 79,
-            width: 79,
-          ),
-          const SizedBox(height: 20),
-          Text(
-            title,
-            style: TextStyle(
-              color: titleTextColor,
-              fontSize: 32,
-              fontFamily: FontFamily.norwester,
+      child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image(
+              image: icon,
+              height: 79,
+              width: 79,
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          Text(
-            message,
-            style: const TextStyle(
-              color: Color(0xff47525E),
-              fontSize: 16,
+            const SizedBox(height: 20),
+            Text(
+              title,
+              style: TextStyle(
+                color: titleTextColor,
+                fontSize: 32,
+                fontFamily: FontFamily.norwester,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 40),
-          SubmitButton(
-            caption: buttonText,
-            onPressed: () async {
-              await context.router.pop();
-            },
-          )
-        ],
+            const SizedBox(height: 20),
+            Text(
+              message,
+              style: const TextStyle(
+                color: Color(0xff47525E),
+                fontSize: 16,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 40),
+            SubmitButton(
+              caption: buttonText,
+              onPressed: () async {
+                await context.router.pop();
+              },
+            )
+          ],
+        ),
       ),
     );
   }

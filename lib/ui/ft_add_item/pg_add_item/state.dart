@@ -190,6 +190,12 @@ class AddItemListPageState extends ChangeNotifier {
     return null;
   }
 
+  Future<ErrorMessage?> validateRecycleList() async{
+    if(_itemsAdded.isEmpty){
+      return ErrorMessage(title: 'Error', message: 'Please add at least one item to recycle');
+    }
+  }
+
   void removeItemImage(int? index) {
     _itemImages.removeAt(index!);
     notifyListeners();
@@ -242,6 +248,7 @@ class AddItemListPageState extends ChangeNotifier {
       for (var element in _itemsAdded) {
         RecycleDao().add(element);
       }
+      return validateRecycleList();
     } on FirebaseAuthException catch (e) {
       return ErrorMessage(title: e.code, message: e.message!);
     } catch (e) {

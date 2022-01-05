@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../kitaro.dart';
 
@@ -11,9 +12,8 @@ class CentreDetailsSheet extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final LocationModel locationDetails;
-
   // ------------------------------- FIELDS -------------------------------
+  final LocationModel locationDetails;
 
   // ------------------------------- METHODS ------------------------------
   @override
@@ -51,7 +51,16 @@ class _Content extends StatelessWidget {
             locationDetail: locationDetail,
           ),
           const SizedBox(height: 25),
-          const _OperationHoursInfo(),
+          _OperationHoursInfo(
+            locationDetail: locationDetail,
+          ),
+          const Spacer(),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: _NavigateButton(
+              locationDetails: locationDetail,
+            ),
+          ),
         ],
       ),
     );
@@ -72,7 +81,6 @@ class _CentreInfo extends StatelessWidget {
           locationDetail: locationDetail,
         ),
         const SizedBox(height: 15),
-        _Text(text: locationDetail.name),
         _Text(text: locationDetail.name),
         _CentreWasteType(
           types: locationDetail.wastes!,
@@ -100,54 +108,13 @@ class _CentreInfoTitle extends StatelessWidget {
         stream:
             Api('$kFacilities/${locationDetail.type}').streamDataCollection(),
         builder: (context, snapshot) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      text: 'Recycle Centre Info ',
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Color(0xff4D627B),
-                        fontWeight: FontWeight.w600,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: snapshot.data?.snapshot.value.toString() ?? 'Kiosk',
-                          style: const TextStyle(
-                              fontSize: 15,
-                              color: Color(0xb347525E),
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8.0),
-                  Container(
-                    height: 1.0,
-                    width: 30,
-                    color: const Color(0xff4D627B),
-                  )
-                ],
-              ),
-              const Spacer(),
-              Image(
-                image: Assets.icons.plasticBottle,
-                height: 25,
-              ),
-              Image(
-                image: Assets.icons.paper,
-                height: 25,
-              ),
-              Image(
-                image: Assets.icons.can,
-                height: 25,
-              ),
-            ],
+          return const Text(
+            'Recycle Centre Info ',
+            style: TextStyle(
+              fontSize: 15,
+              color: Color(0xff4D627B),
+              fontWeight: FontWeight.w600,
+            ),
           );
         });
   }
@@ -206,12 +173,22 @@ class _CentreAddressState extends State<_CentreAddress> {
   _CentreAddressState({required String address}) {
     AddressDao(id: address).address.then((value) {
       setState(() {
-        _address1 = value.address1;
-        _address2 = value.address2;
-        _address3 = value.address3;
-        _city = value.city;
-        _postcode = value.postcode.toString();
-        _state = value.state;
+        _address1 = value.address1 == null || value.address1!.trim().isEmpty
+            ? null
+            : value.address1;
+        _address2 = value.address2 == null || value.address2!.trim().isEmpty
+            ? null
+            : value.address2;
+        _address3 = value.address3 == null || value.address3!.trim().isEmpty
+            ? null
+            : value.address3;
+        _city = value.city == null || value.city!.trim().isEmpty
+            ? null
+            : value.city;
+        _postcode = value.postcode == null ? null : value.postcode.toString();
+        _state = value.state == null || value.state!.trim().isEmpty
+            ? null
+            : value.state;
       });
     });
   }
@@ -229,30 +206,73 @@ class _CentreAddressState extends State<_CentreAddress> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _Text(text: _address1),
-        _Text(text: _address2),
-        _Text(text: _address3),
-        _Text(text: _city),
-        _Text(text: _postcode),
-        _Text(text: _state),
+        Visibility(visible: _address1 != null, child: _Text(text: _address1)),
+        Visibility(
+          visible: _address2 != null,
+          child: _Text(text: _address2),
+        ),
+        Visibility(visible: _address3 != null, child: _Text(text: _address3)),
+        Visibility(
+          visible: _city != null,
+          child: _Text(text: _city),
+        ),
+        Visibility(
+          visible: _postcode != null,
+          child: _Text(text: _postcode.toString()),
+        ),
+        Visibility(
+          visible: _state != null,
+          child: _Text(text: _state),
+        ),
       ],
     );
   }
 }
 
 class _OperationHoursInfo extends StatelessWidget {
-  const _OperationHoursInfo({Key? key}) : super(key: key);
+  // ---------------------------- CONSTRUCTORS ----------------------------
+  const _OperationHoursInfo({
+    required this.locationDetail,
+    Key? key,
+  }) : super(key: key);
+
+  final LocationModel locationDetail;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        _OperationHoursTitle(),
-        SizedBox(height: 15),
-        _Text(text: 'Monday - Friday : 10 am - 5 pm'),
-        _Text(text: 'Monday - Friday : 10 am - 5 pm'),
-        _Text(text: 'Sunday / Public Holiday : Closed'),
+      children: [
+        const _OperationHoursTitle(),
+        const SizedBox(height: 15),
+        // kiosk
+        Visibility(
+          visible:
+              locationDetail.type == "5b48ec8b-0b8b-4d18-967e-19bd22e3fd57",
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              _Text(text: 'Monday - Friday : 8 am - 6 pm'),
+              _Text(text: 'Saturday - Sunday : 8 am - 4 pm'),
+              _Text(text: 'Public Holiday : 8 am - 4 pm'),
+            ],
+          ),
+        ),
+
+        // recycle center
+        Visibility(
+          visible:
+              locationDetail.type == "ed6f506a-91ad-4c16-a87c-36ab5cf885b1",
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              _Text(text: 'Monday - Friday : 7 am - 7 pm'),
+              _Text(text: 'Saturday : 8 am - 4 pm'),
+              _Text(text: 'Sunday : 7 am - 7 pm'),
+              _Text(text: 'Public Holiday : 8 am - 4 pm'),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -267,24 +287,13 @@ class _OperationHoursTitle extends StatelessWidget {
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Operation Hours',
-          style: TextStyle(
-            fontSize: 15,
-            color: Color(0xff4D627B),
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 8.0),
-        Container(
-          height: 1.0,
-          width: 30,
-          color: const Color(0xff4D627B),
-        )
-      ],
+    return const Text(
+      'Operation Hours',
+      style: TextStyle(
+        fontSize: 15,
+        color: Color(0xff4D627B),
+        fontWeight: FontWeight.w600,
+      ),
     );
   }
 }
@@ -311,6 +320,30 @@ class _Text extends StatelessWidget {
           fontSize: 14,
         ),
       ),
+    );
+  }
+}
+
+class _NavigateButton extends StatelessWidget {
+  // ---------------------------- CONSTRUCTORS ----------------------------
+  const _NavigateButton({
+    required this.locationDetails,
+    Key? key,
+  }) : super(key: key);
+
+  // ------------------------------- FIELDS -------------------------------
+  final LocationModel locationDetails;
+
+  // ------------------------------- METHODS ------------------------------
+  @override
+  Widget build(BuildContext context) {
+    return SubmitButton(
+      caption: 'Navigate',
+      onPressed: () async {
+        if (!await launch(locationDetails.direction!)) {
+          throw 'Could not launch ${locationDetails.direction}';
+        }
+      },
     );
   }
 }

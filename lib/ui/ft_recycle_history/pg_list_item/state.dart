@@ -27,21 +27,35 @@ class HistoryItemListPageState extends ChangeNotifier {
 
   AddressModel? get address => _address;
 
-  Future<void> getUserProfile() async {
-    final _uid = FirebaseAuth.instance.currentUser?.uid;
-    _userProfile = await UserDao(id: _uid).profile;
-    _address = await AddressDao(id: _userProfile?.address).address;
-    notifyListeners();
-    return;
+  Future<ErrorMessage?> getUserProfile() async {
+    try {
+      final _uid = FirebaseAuth.instance.currentUser?.uid;
+      _userProfile = await UserDao(id: _uid).profile;
+      _address = await AddressDao(id: _userProfile?.address).address;
+    } on FirebaseAuthException catch (e) {
+      return ErrorMessage(title: e.code, message: e.message!);
+    } catch (e) {
+      return ErrorMessage(title: e.toString(), message: '');
+    } finally {
+      notifyListeners();
+    }
   }
 
-  Future<void> initialise() async {
-    var _recycles = await RecycleDao()
-        .getRecycles(key: 'username', value: _userProfile!.username!);
-    _recycles.forEach((key, value) {
-      _itemsAdded.add(value);
+  Future<ErrorMessage?> initialise() async {
+    try {
+      var _recycles = await RecycleDao()
+          .getRecycles(key: 'username', value: _userProfile!.username!);
+      _recycles.forEach((key, value) {
+        _itemsAdded.add(value);
+        notifyListeners();
+      });
+    } on FirebaseAuthException catch (e) {
+      return ErrorMessage(title: e.code, message: e.message!);
+    } catch (e) {
+      return ErrorMessage(title: e.toString(), message: '');
+    } finally {
       notifyListeners();
-    });
-    return;
+    }
+    return null;
   }
 }

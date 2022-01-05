@@ -30,10 +30,10 @@
 	<string>Main</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>test</string>
-	<key>NSCameraUsageDescription</key>
-    <string>test</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>test</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Camera permission is required for barcode scanning.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

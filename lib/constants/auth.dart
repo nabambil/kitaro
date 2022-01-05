@@ -43,38 +43,38 @@ class Authentication {
     return null;
   }
 
-  static Future<ErrorMessage?> signInWithGoogle() async {
-    User? user;
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-
-    final GoogleSignInAccount? googleSignInAccount =
-        await GoogleSignIn().signIn();
-
-    if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
-
-      try {
-        final UserCredential userCredential =
-            await auth.signInWithCredential(credential);
-
-        user = userCredential.user;
-      } on FirebaseAuthException catch (e) {
-        return ErrorMessage(title: e.code, message: e.message!);
-      } catch (e) {
-        return ErrorMessage(title: e.toString(), message: '');
-      }
-    }
-
-    return null;
-  }
+  // static Future<ErrorMessage?> signInWithGoogle() async {
+  //   User? user;
+  //   FirebaseAuth auth = FirebaseAuth.instance;
+  //
+  //   final GoogleSignIn googleSignIn = GoogleSignIn();
+  //
+  //   final GoogleSignInAccount? googleSignInAccount =
+  //       await GoogleSignIn().signIn();
+  //
+  //   if (googleSignInAccount != null) {
+  //     final GoogleSignInAuthentication googleSignInAuthentication =
+  //         await googleSignInAccount.authentication;
+  //
+  //     final AuthCredential credential = GoogleAuthProvider.credential(
+  //       accessToken: googleSignInAuthentication.accessToken,
+  //       idToken: googleSignInAuthentication.idToken,
+  //     );
+  //
+  //     try {
+  //       final UserCredential userCredential =
+  //           await auth.signInWithCredential(credential);
+  //
+  //       user = userCredential.user;
+  //     } on FirebaseAuthException catch (e) {
+  //       return ErrorMessage(title: e.code, message: e.message!);
+  //     } catch (e) {
+  //       return ErrorMessage(title: e.toString(), message: '');
+  //     }
+  //   }
+  //
+  //   return null;
+  // }
 
   static Future<ErrorMessage?> signOutWithGoogle() async {
     try {

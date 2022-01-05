@@ -18,6 +18,12 @@ enum InvalidField {
 }
 
 class RegisterPageState extends ChangeNotifier {
+  RegisterPageState(
+      {required this.isFirstTimeWithGoogleSignIn,
+      required this.userCredential});
+
+  final bool isFirstTimeWithGoogleSignIn;
+  final UserCredential? userCredential;
 
   bool _isBusy = false;
 
@@ -170,6 +176,9 @@ class RegisterPageState extends ChangeNotifier {
     try {
       _emailError = null;
 
+      if(isFirstTimeWithGoogleSignIn){
+        return;
+      }
       if (_email == null || _email!.trim().isEmpty) {
         _emailError = 'email required';
       } else if (!EmailValidator.validate(_email!)) {
@@ -355,6 +364,10 @@ class RegisterPageState extends ChangeNotifier {
     try {
       _passwordError = null;
 
+      if(isFirstTimeWithGoogleSignIn){
+        return;
+      }
+
       if (_password == null || _password!.trim().isEmpty) {
         _passwordError = 'password required';
       } else if (_password!.length < 8) {
@@ -389,6 +402,10 @@ class RegisterPageState extends ChangeNotifier {
   void validatePasswordRecheck() {
     try {
       _passwordRecheckError = null;
+
+      if(isFirstTimeWithGoogleSignIn){
+        return;
+      }
 
       if (_passwordRecheck == null || _passwordRecheck!.trim().isEmpty) {
         _passwordRecheckError = 'password required';
@@ -466,8 +483,14 @@ class RegisterPageState extends ChangeNotifier {
         postcode: int.parse(_postcode!),
       );
 
-      final _acc = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: _email!, password: _password!);
+      UserCredential _acc;
+      if (isFirstTimeWithGoogleSignIn) {
+        _acc = userCredential!;
+        _email = _acc.user?.email;
+      } else {
+        _acc = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: _email!, password: _password!);
+      }
 
       final _addressId = await AddressDao().add(_address);
       final _userValue = KitaroAccount(

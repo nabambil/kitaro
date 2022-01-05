@@ -21,6 +21,8 @@ class LoginPageState extends ChangeNotifier {
     _isFirstTime = value;
   }
 
+  UserCredential? userCredential;
+
   // USER NAME -----------------------------------------------------------------
   // USER NAME //////////////////////////////////
   String? _userName;
@@ -144,11 +146,13 @@ class LoginPageState extends ChangeNotifier {
       );
 
       try {
-        final UserCredential userCredential =
-            await auth.signInWithCredential(credential);
+        userCredential = await auth.signInWithCredential(credential);
 
-        user = userCredential.user;
-        await _checkFirstTimeUser(userCredential);
+        user = userCredential!.user;
+        await _checkFirstTimeUser(userCredential!);
+        if (_isFirstTime) {
+          return null;
+        }
 
         final _token = await FirebaseAuth.instance.currentUser?.getIdToken();
 
@@ -160,7 +164,7 @@ class LoginPageState extends ChangeNotifier {
       }
     }
 
-    return null;
+    return ErrorMessage(title: 'Failed', message: 'Sign in failed');
   }
 
   Future<ErrorMessage?> signInWithFacebook() async {
@@ -188,10 +192,11 @@ class LoginPageState extends ChangeNotifier {
 
   Future<void>? _checkFirstTimeUser(UserCredential userCredential) {
     if (userCredential.additionalUserInfo!.isNewUser) {
-      print('firstTimer');
+      _isFirstTime = true;
     } else {
-      print('not-firstTimer');
+      _isFirstTime = false;
     }
+    notifyListeners();
   }
 
   Future<ErrorMessage?> _updateToken(String? token, String? id) {
@@ -204,5 +209,19 @@ class LoginPageState extends ChangeNotifier {
 
       return;
     });
+  }
+
+  Future<ErrorMessage?> forgotPassword() async {
+    try {
+      validateUserName();
+      if (userNameHasError) {
+        return ErrorMessage(title: 'Email required');
+      }
+      var _instance = FirebaseAuth.instance;
+      await _instance.sendPasswordResetEmail(email: _userName!);
+      return null;
+    } catch (e) {
+      return ErrorMessage(title: 'Error', message: 'email not found');
+    }
   }
 }
