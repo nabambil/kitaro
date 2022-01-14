@@ -21,6 +21,13 @@ class LoginPageState extends ChangeNotifier {
     _isFirstTime = value;
   }
 
+  bool _isLocator = false;
+
+  bool get isLocator => _isLocator;
+  set isLocator(bool value) {
+    _isLocator = value;
+  }
+
   UserCredential? userCredential;
 
   // USER NAME -----------------------------------------------------------------
@@ -201,6 +208,10 @@ class LoginPageState extends ChangeNotifier {
 
   Future<ErrorMessage?> _updateToken(String? token, String? id) {
     return UserDao(id: id).profile.then((value) {
+      if (value.role == 'locator') {
+        _isLocator = true;
+        notifyListeners();
+      }
       final _profile = value.copyWith(token: token);
       return _profile;
     }).then((value) {

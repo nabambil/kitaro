@@ -33,6 +33,14 @@ export 'routes.gr.dart';
     AutoRoute(
       page: RecycleLocationPage,
     ),
+
+    //LOCATOR
+    AutoRoute(
+      page: LocatorMapPage,
+    ),
+    AutoRoute(
+      page: AddLocationPage,
+    ),
   ],
 )
 class $AppRouter {}

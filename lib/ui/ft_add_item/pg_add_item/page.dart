@@ -200,6 +200,7 @@ class _Body extends StatelessWidget {
             ),
           ),
           child: ListView(
+            physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             children: [
               const _BodyTitle(),

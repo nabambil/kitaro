@@ -56,6 +56,7 @@ class _ContentState extends State<_Content> {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      physics: const BouncingScrollPhysics(),
       shrinkWrap: true,
       padding: const EdgeInsets.fromLTRB(
         35.0,
@@ -331,6 +332,12 @@ class _SubmitButton extends StatelessWidget {
       await showWarningDialog(context, err1);
       return;
     }
+    if (state.isLocator) {
+      await context.router.push(
+        const LocatorMapPageRoute(),
+      );
+      return;
+    }
     await context.router.replace(const RecycleLocationPageRoute());
   }
 }
@@ -406,6 +413,11 @@ class _SignInWithGoogle extends StatelessWidget {
     if (err1 != null) {
       await showWarningDialog(context, err1);
       return;
+    }
+    if (state.isLocator) {
+      await context.router.push(
+        LocatorMapPageRoute(),
+      );
     }
     if (state.isFirstTime) {
       await context.router.push(

@@ -78,49 +78,59 @@ class _ContentState extends State<_Content> {
   @override
   Widget build(BuildContext context) {
     return Consumer<RegisterPageState>(builder: (_, state, __) {
-      return ListView(
-        shrinkWrap: true,
-        padding: const EdgeInsets.fromLTRB(
-          35.0,
-          48.0,
-          35.0,
-          16.0,
-        ),
+      return Column(
         children: [
-          const _Logo(),
-          const SizedBox(height: 30),
-          const Text(
-            'Welcome',
-            style: TextStyle(
-              color: Color(0xff47525E),
-              fontSize: 28,
-              fontWeight: FontWeight.w900,
+          const PageBackButton(
+            colorOverride: Color(0xff8190A5),
+          ),
+          Expanded(
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              padding: const EdgeInsets.fromLTRB(
+                35.0,
+                20.0,
+                35.0,
+                16.0,
+              ),
+              children: [
+                const _Logo(),
+                const SizedBox(height: 30),
+                const Text(
+                  'Welcome',
+                  style: TextStyle(
+                    color: Color(0xff47525E),
+                    fontSize: 28,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const _FirstNameField(),
+                const _LastNameField(),
+                const _IdNumberField(),
+                const _PhoneNumberField(),
+                Visibility(
+                  visible: !state.isFirstTimeWithGoogleSignIn,
+                  child: const _EmailField(),
+                ),
+                const _AddressLine1Field(),
+                const _AddressLine2Field(),
+                const _AddressLine3Field(),
+                const _CityField(),
+                const _StateField(),
+                const _PostcodeField(),
+                Visibility(
+                    visible: !state.isFirstTimeWithGoogleSignIn,
+                    child: const _PasswordField()),
+                Visibility(
+                  visible: !state.isFirstTimeWithGoogleSignIn,
+                  child: const _PasswordRecheckField(),
+                ),
+                const SizedBox(height: 52),
+                const _SubmitButton(),
+              ],
             ),
           ),
-          const SizedBox(height: 60),
-          const _FirstNameField(),
-          const _LastNameField(),
-          const _IdNumberField(),
-          const _PhoneNumberField(),
-          Visibility(
-            visible: !state.isFirstTimeWithGoogleSignIn,
-            child: const _EmailField(),
-          ),
-          const _AddressLine1Field(),
-          const _AddressLine2Field(),
-          const _AddressLine3Field(),
-          const _CityField(),
-          const _StateField(),
-          const _PostcodeField(),
-          Visibility(
-              visible: !state.isFirstTimeWithGoogleSignIn,
-              child: const _PasswordField()),
-          Visibility(
-            visible: !state.isFirstTimeWithGoogleSignIn,
-            child: const _PasswordRecheckField(),
-          ),
-          const SizedBox(height: 52),
-          const _SubmitButton(),
         ],
       );
     });

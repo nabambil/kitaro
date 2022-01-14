@@ -1,46 +1,41 @@
-// ------------------------------ VARIABLES -----------------------------
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kitaro/kitaro.dart';
+import 'package:kitaro/ui/ft_locator/pg_main/state.dart';
+import 'package:kitaro/ui/ft_locator/pg_main/state.dart';
+import 'package:kitaro/ui/ft_locator/pg_main/state.dart';
+import 'package:kitaro/ui/ft_locator/pg_main/state.dart';
+import 'package:kitaro/ui/ft_locator/pg_main/state.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
+
 import 'state.dart';
 
-late FocusNode _firstNameNode;
-late FocusNode _lastNameNode;
-late FocusNode _idNumberNode;
-late FocusNode _phoneNumberNode;
-late FocusNode _emailNode;
+// ------------------------------ VARIABLES -----------------------------
+late FocusNode _locationNameNode;
 late FocusNode _address1Node;
 late FocusNode _address2Node;
 late FocusNode _address3Node;
 late FocusNode _cityNode;
 late FocusNode _stateNode;
 late FocusNode _postcodeNode;
-late FocusNode _passwordNode;
-late FocusNode _passwordRecheckNode;
+late FocusNode _addressLinkNode;
 
 // ------------------------------- CLASSES ------------------------------
-class EditProfilePage extends StatelessWidget {
-  const EditProfilePage({
-    required this.user,
-    required this.userAddress,
-    Key? key,
-  }) : super(key: key);
-
-  final KitaroAccount user;
-  final AddressModel userAddress;
+class AddLocationPage extends StatelessWidget {
+  const AddLocationPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ChangeNotifierProvider<EditProfilePageState>(
-          create: (_) => EditProfilePageState(
-            user: user,
-            userAddress: userAddress,
-          ),
+        child: ChangeNotifierProvider<AddLocationPageState>(
+          create: (_) => AddLocationPageState(),
           child: const _Content(),
         ),
       ),
@@ -68,64 +63,69 @@ class _ContentState extends State<_Content> {
       await SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]);
-
-      final state = Provider.of<EditProfilePageState>(context, listen: false);
-      await state.initialiseEditItem();
-      await Authentication.initializeFirebase();
+      final state = Provider.of<AddLocationPageState>(context, listen: false);
+      await state.initialise();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics: const BouncingScrollPhysics(),
-      shrinkWrap: true,
-      padding: const EdgeInsets.fromLTRB(
-        35.0,
-        48.0,
-        35.0,
-        16.0,
-      ),
-      children: const [
-        _Logo(),
-        // SizedBox(height: 30),
-        Text(
-          'Edit Profile Details',
-          style: TextStyle(
-            color: Color(0xff47525E),
-            fontSize: 28,
-            fontWeight: FontWeight.w900,
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: Column(
+        children: [
+          const PageBackButton(
+            colorOverride: Color(0xff8190A5),
           ),
-        ),
-        SizedBox(height: 60),
-        _FirstNameField(),
-        SizedBox(height: 25),
-        _LastNameField(),
-        SizedBox(height: 25),
-        _IdNumberField(),
-        SizedBox(height: 25),
-        _PhoneNumberField(),
-        SizedBox(height: 25),
-        _EmailField(),
-        SizedBox(height: 25),
-        _AddressLine1Field(),
-        SizedBox(height: 25),
-        _AddressLine2Field(),
-        SizedBox(height: 25),
-        _AddressLine3Field(),
-        SizedBox(height: 25),
-        _CityField(),
-        SizedBox(height: 25),
-        _StateField(),
-        SizedBox(height: 25),
-        _PostcodeField(),
-        // SizedBox(height: 15),
-        // _PasswordField(),
-        // SizedBox(height: 15),
-        // _PasswordRecheckField(),
-        SizedBox(height: 52),
-        _SubmitButton(),
-      ],
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                35.0,
+                0.0,
+                35.0,
+                16.0,
+              ),
+              child: ListView(
+                physics: const BouncingScrollPhysics(),
+                children: const [
+                  _Logo(),
+                  SizedBox(height: 50),
+                  _LocationNameField(),
+                  SizedBox(height: 25),
+                  _AddressLine1Field(),
+                  SizedBox(height: 25),
+                  _AddressLine2Field(),
+                  SizedBox(height: 25),
+                  _AddressLine3Field(),
+                  SizedBox(height: 25),
+                  _CityField(),
+                  SizedBox(height: 25),
+                  _StateField(),
+                  SizedBox(height: 25),
+                  _PostcodeField(),
+                  SizedBox(height: 25),
+                  _AddressGoogleLinkField(),
+                  SizedBox(height: 25),
+                  _FacilityField(),
+                  SizedBox(height: 25),
+                  _ItemTypeField(),
+                  SizedBox(height: 25),
+                  _IsWeightField(),
+                  SizedBox(height: 25),
+                  _SubmitButton(),
+                  SizedBox(height: 30),
+                  Center(
+                    child: Text(
+                      'kitaro @2022',
+                      style: TextStyle(color: Colors.black26, fontSize: 12),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -140,27 +140,26 @@ class _Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image(
-      image: Assets.logos.kitaroLogo,
-      height: 120,
-      width: 120,
-      color: kThemeColor,
+      image: Assets.logos.logo,
+      height: 56,
+      width: 57,
       alignment: Alignment.topLeft,
     );
   }
 }
 
-class _FirstNameField extends StatefulWidget {
+class _LocationNameField extends StatefulWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
-  const _FirstNameField({
+  const _LocationNameField({
     Key? key,
   }) : super(key: key);
 
   // ------------------------------- METHODS ------------------------------
   @override
-  State<_FirstNameField> createState() => _FirstNameFieldState();
+  State<_LocationNameField> createState() => _LocationNameFieldState();
 }
 
-class _FirstNameFieldState extends State<_FirstNameField>
+class _LocationNameFieldState extends State<_LocationNameField>
     with AutomaticKeepAliveClientMixin {
   // ------------------------------- FIELDS -------------------------------
   final _controller = TextEditingController();
@@ -173,259 +172,31 @@ class _FirstNameFieldState extends State<_FirstNameField>
   @override
   void initState() {
     super.initState();
-    _firstNameNode = FocusNode();
+    _locationNameNode = FocusNode();
   }
 
   @override
   void dispose() {
-    _firstNameNode.dispose();
+    _locationNameNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Consumer<EditProfilePageState>(
+    return Consumer<AddLocationPageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
-          _controller.text = state.firstName ?? "";
+          _controller.text = state.locationName ?? "";
         }
         return KitaroTextBox(
           controller: _controller,
-          labelText: 'first name *',
-          errorText: state.firstNameError,
-          focusNode: _firstNameNode,
-          onChanged: (v) => state.firstName = v,
+          labelText: 'location name *',
+          errorText: state.locationNameError,
+          focusNode: _locationNameNode,
+          onChanged: (v) => state.locationName = v,
           onSubmitted: (v) {
-            state.firstName = v;
-            _lastNameNode.requestFocus();
-          },
-        );
-      },
-    );
-  }
-}
-
-class _LastNameField extends StatefulWidget {
-  // ---------------------------- CONSTRUCTORS ----------------------------
-  const _LastNameField({
-    Key? key,
-  }) : super(key: key);
-
-  // ------------------------------- METHODS ------------------------------
-  @override
-  State<_LastNameField> createState() => _LastNameFieldState();
-}
-
-class _LastNameFieldState extends State<_LastNameField>
-    with AutomaticKeepAliveClientMixin {
-  // ------------------------------- FIELDS -------------------------------
-  final _controller = TextEditingController();
-
-  // -------------------------------- PROPERTIES -------------------------------
-  @override
-  bool get wantKeepAlive => true;
-
-  // --------------------------------- METHODS ---------------------------------
-  @override
-  void initState() {
-    super.initState();
-    _lastNameNode = FocusNode();
-  }
-
-  @override
-  void dispose() {
-    _lastNameNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return Consumer<EditProfilePageState>(
-      builder: (_, state, __) {
-        if (state.updateTextController) {
-          _controller.text = state.lastName ?? "";
-        }
-        return KitaroTextBox(
-          controller: _controller,
-          labelText: 'last name *',
-          errorText: state.lastNameError,
-          focusNode: _lastNameNode,
-          onChanged: (v) => state.lastName = v,
-          onSubmitted: (v) {
-            state.lastName = v;
-            _idNumberNode.requestFocus();
-          },
-        );
-      },
-    );
-  }
-}
-
-class _IdNumberField extends StatefulWidget {
-  // ---------------------------- CONSTRUCTORS ----------------------------
-  const _IdNumberField({
-    Key? key,
-  }) : super(key: key);
-
-  // ------------------------------- METHODS ------------------------------
-  @override
-  State<_IdNumberField> createState() => _IdNumberFieldState();
-}
-
-class _IdNumberFieldState extends State<_IdNumberField>
-    with AutomaticKeepAliveClientMixin {
-  // ------------------------------- FIELDS -------------------------------
-  final _controller = TextEditingController();
-
-  // -------------------------------- PROPERTIES -------------------------------
-  @override
-  bool get wantKeepAlive => true;
-
-  // --------------------------------- METHODS ---------------------------------
-  @override
-  void initState() {
-    super.initState();
-    _idNumberNode = FocusNode();
-  }
-
-  @override
-  void dispose() {
-    _idNumberNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return Consumer<EditProfilePageState>(
-      builder: (_, state, __) {
-        if (state.updateTextController) {
-          _controller.text = state.idNumber ?? "";
-        }
-        return KitaroTextBox(
-          controller: _controller,
-          labelText: 'ID number *',
-          errorText: state.idNumberError,
-          focusNode: _idNumberNode,
-          onChanged: (v) => state.idNumber = v,
-          onSubmitted: (v) {
-            state.idNumber = v;
-            _phoneNumberNode.requestFocus();
-          },
-        );
-      },
-    );
-  }
-}
-
-class _PhoneNumberField extends StatefulWidget {
-  // ---------------------------- CONSTRUCTORS ----------------------------
-  const _PhoneNumberField({
-    Key? key,
-  }) : super(key: key);
-
-  // ------------------------------- METHODS ------------------------------
-  @override
-  State<_PhoneNumberField> createState() => _PhoneNumberFieldState();
-}
-
-class _PhoneNumberFieldState extends State<_PhoneNumberField>
-    with AutomaticKeepAliveClientMixin {
-  // ------------------------------- FIELDS -------------------------------
-  final _controller = TextEditingController();
-
-  // -------------------------------- PROPERTIES -------------------------------
-  @override
-  bool get wantKeepAlive => true;
-
-  // --------------------------------- METHODS ---------------------------------
-  @override
-  void initState() {
-    super.initState();
-    _phoneNumberNode = FocusNode();
-  }
-
-  @override
-  void dispose() {
-    _phoneNumberNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return Consumer<EditProfilePageState>(
-      builder: (_, state, __) {
-        if (state.updateTextController) {
-          _controller.text = state.phoneNumber ?? "";
-        }
-        return KitaroTextBox(
-          controller: _controller,
-          labelText: 'phone number *',
-          errorText: state.phoneNumberError,
-          focusNode: _phoneNumberNode,
-          onChanged: (v) => state.phoneNumber = v,
-          onSubmitted: (v) {
-            state.phoneNumber = v;
-            _emailNode.requestFocus();
-          },
-        );
-      },
-    );
-  }
-}
-
-class _EmailField extends StatefulWidget {
-  // ---------------------------- CONSTRUCTORS ----------------------------
-  const _EmailField({
-    Key? key,
-  }) : super(key: key);
-
-  // ------------------------------- METHODS ------------------------------
-  @override
-  State<_EmailField> createState() => _EmailFieldState();
-}
-
-class _EmailFieldState extends State<_EmailField>
-    with AutomaticKeepAliveClientMixin {
-  // ------------------------------- FIELDS -------------------------------
-  final _controller = TextEditingController();
-
-  // -------------------------------- PROPERTIES -------------------------------
-  @override
-  bool get wantKeepAlive => true;
-
-  // --------------------------------- METHODS ---------------------------------
-  @override
-  void initState() {
-    super.initState();
-    _emailNode = FocusNode();
-  }
-
-  @override
-  void dispose() {
-    _emailNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return Consumer<EditProfilePageState>(
-      builder: (_, state, __) {
-        if (state.updateTextController) {
-          _controller.text = state.email ?? "";
-        }
-        return KitaroTextBox(
-          controller: _controller,
-          labelText: 'email *',
-          errorText: state.emailError,
-          focusNode: _emailNode,
-          onChanged: (v) => state.email = v,
-          onSubmitted: (v) {
-            state.email = v;
+            state.locationName = v;
             _address1Node.requestFocus();
           },
         );
@@ -470,7 +241,7 @@ class _AddressLine1FieldState extends State<_AddressLine1Field>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Consumer<EditProfilePageState>(
+    return Consumer<AddLocationPageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
           _controller.text = state.address1 ?? "";
@@ -527,7 +298,7 @@ class _AddressLine2FieldState extends State<_AddressLine2Field>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Consumer<EditProfilePageState>(
+    return Consumer<AddLocationPageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
           _controller.text = state.address2 ?? '';
@@ -583,7 +354,7 @@ class _AddressLine3FieldState extends State<_AddressLine3Field>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Consumer<EditProfilePageState>(
+    return Consumer<AddLocationPageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
           _controller.text = state.address3 ?? '';
@@ -639,7 +410,7 @@ class _CityFieldState extends State<_CityField>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Consumer<EditProfilePageState>(
+    return Consumer<AddLocationPageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
           _controller.text = state.city ?? "";
@@ -696,7 +467,7 @@ class _StateFieldState extends State<_StateField>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Consumer<EditProfilePageState>(
+    return Consumer<AddLocationPageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
           _controller.text = state.state ?? "";
@@ -753,7 +524,7 @@ class _PostcodeFieldState extends State<_PostcodeField>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Consumer<EditProfilePageState>(
+    return Consumer<AddLocationPageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
           _controller.text = state.postcode ?? "";
@@ -763,10 +534,11 @@ class _PostcodeFieldState extends State<_PostcodeField>
           labelText: 'postcode *',
           focusNode: _postcodeNode,
           errorText: state.postcodeError,
+          keyboardType: TextInputType.number,
           onChanged: (v) => state.postcode = v,
           onSubmitted: (v) {
             state.postcode = v;
-            _passwordNode.requestFocus();
+            // _passwordNode.requestFocus();
           },
         );
       },
@@ -774,18 +546,19 @@ class _PostcodeFieldState extends State<_PostcodeField>
   }
 }
 
-class _PasswordField extends StatefulWidget {
+class _AddressGoogleLinkField extends StatefulWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
-  const _PasswordField({
+  const _AddressGoogleLinkField({
     Key? key,
   }) : super(key: key);
 
   // ------------------------------- METHODS ------------------------------
   @override
-  State<_PasswordField> createState() => _PasswordFieldState();
+  State<_AddressGoogleLinkField> createState() =>
+      _AddressGoogleLinkFieldState();
 }
 
-class _PasswordFieldState extends State<_PasswordField>
+class _AddressGoogleLinkFieldState extends State<_AddressGoogleLinkField>
     with AutomaticKeepAliveClientMixin {
   // ------------------------------- FIELDS -------------------------------
   final _controller = TextEditingController();
@@ -798,32 +571,32 @@ class _PasswordFieldState extends State<_PasswordField>
   @override
   void initState() {
     super.initState();
-    _passwordNode = FocusNode();
+    _addressLinkNode = FocusNode();
   }
 
   @override
   void dispose() {
-    _passwordNode.dispose();
+    _addressLinkNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Consumer<EditProfilePageState>(
+    return Consumer<AddLocationPageState>(
       builder: (_, state, __) {
         if (state.updateTextController) {
-          _controller.text = state.password ?? '';
+          _controller.text = state.addressLink ?? "";
         }
-        return KitaroPasswordTextBox(
+        return KitaroTextBox(
           controller: _controller,
-          errorText: state.passwordError,
-          labelText: 'password *',
-          focusNode: _passwordNode,
-          onChanged: (v) => state.password = v,
+          labelText: 'address direction *',
+          errorText: state.addressLinkError,
+          focusNode: _addressLinkNode,
+          onChanged: (v) => state.addressLink = v,
           onSubmitted: (v) {
-            state.password = v;
-            _passwordRecheckNode.requestFocus();
+            state.addressLink = v;
+            // _address2Node.requestFocus();
           },
         );
       },
@@ -831,65 +604,176 @@ class _PasswordFieldState extends State<_PasswordField>
   }
 }
 
-class _PasswordRecheckField extends StatefulWidget {
-  // ---------------------------- CONSTRUCTORS ----------------------------
-  const _PasswordRecheckField({
-    Key? key,
-  }) : super(key: key);
 
-  // ------------------------------- METHODS ------------------------------
-  @override
-  State<_PasswordRecheckField> createState() => __PasswordRecheckFieldState();
-}
-
-class __PasswordRecheckFieldState extends State<_PasswordRecheckField>
-    with AutomaticKeepAliveClientMixin {
-  // ------------------------------- FIELDS -------------------------------
-  final _controller = TextEditingController();
-
-  // -------------------------------- PROPERTIES -------------------------------
-  @override
-  bool get wantKeepAlive => true;
-
-  // --------------------------------- METHODS ---------------------------------
-  @override
-  void initState() {
-    super.initState();
-    _passwordRecheckNode = FocusNode();
-  }
-
-  @override
-  void dispose() {
-    _passwordRecheckNode.dispose();
-    super.dispose();
-  }
+class _FacilityField extends StatelessWidget {
+  const _FacilityField({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    return Consumer<EditProfilePageState>(
+    return Consumer<AddLocationPageState>(builder: (_, state, __) {
+      return CustomDropdown(
+        labelText: 'select facility *',
+        labelTextColor: const Color(0xff969FAA),
+        value: state.facility,
+        errorText: state.facilityError,
+        items: state.facilities.values.toList(),
+        onSelected: (t) => state.facility = t,
+      );
+    });
+  }
+}
+
+class _ItemTypeField extends StatelessWidget {
+  const _ItemTypeField({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<AddLocationPageState>(builder: (_, state, __) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+           Text(
+            'select type below *',
+            style: TextStyle(
+                fontSize: 14.0,
+                color: state.itemTypeHasError ? Colors.red.shade900 : const Color(0xff969FAA),
+                fontWeight: state.itemTypeHasError ? FontWeight.normal : FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 8.0, // gap between adjacent chips
+            runSpacing: 4.0, // gap between lines
+            children: <Widget>[...generateTags(context)],
+          ),
+          if (state.itemTypeHasError)
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+              child: Text(
+                state.itemTypeError!,
+                style: TextStyle(
+                  color: Colors.red.shade900,
+                  fontSize: 12.0,
+                ),
+              ),
+            ),
+        ],
+      );
+    });
+  }
+
+  generateTags(BuildContext context) {
+    final state = Provider.of<AddLocationPageState>(context, listen: false);
+    return state.itemTypeList.values
+        .map((tag) => _SelectedItemType(item: tag))
+        .toList();
+  }
+}
+
+class _SelectedItemType extends StatelessWidget {
+  const _SelectedItemType({required this.item, Key? key}) : super(key: key);
+
+  final WasteModel item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<AddLocationPageState>(builder: (_, state, __) {
+      final _list = state.selectedItemTypes.values.toList();
+      return FilterChip(
+        backgroundColor: Colors.black12,
+        label: Text(
+          item.name!,
+        ),
+        selected: _list.contains(item),
+        selectedColor: const Color(0x8016b04a),
+        onSelected: (bool selected) {
+          if (selected) {
+            state.addType(item: item);
+          } else {
+            print(selected);
+            state.removeType(item: item);
+          }
+        },
+      );
+    });
+  }
+}
+
+class _IsWeightField extends StatelessWidget {
+  const _IsWeightField({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<AddLocationPageState>(
       builder: (_, state, __) {
-        if (state.updateTextController) {
-          _controller.text = state.passwordRecheck ?? '';
-        }
-        return KitaroPasswordTextBox(
-          controller: _controller,
-          labelText: 're-type password *',
-          errorText: state.passwordRecheckError,
-          focusNode: _passwordRecheckNode,
-          onChanged: (v) => state.password = v,
-          onSubmitted: (v) {
-            state.passwordRecheck = v;
-            final focusScope = FocusScope.of(context);
-            if (focusScope.hasFocus) {
-              focusScope.unfocus();
-            }
-            if (focusScope.hasPrimaryFocus) {
-              focusScope.unfocus();
-            }
-          },
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Is weight needed?',
+              style: TextStyle(
+                  fontSize: 14.0,
+                  color: Color(0xff969FAA),
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                _Box(
+                  boxText: 'Yes',
+                  onTap: () => state.isWeight = true,
+                  value: state.isWeight,
+                ),
+                const SizedBox(width: 12),
+                _Box(
+                  boxText: 'No',
+                  onTap: () => state.isWeight = false,
+                  value: !state.isWeight,
+                )
+              ],
+            )
+          ],
         );
       },
+    );
+  }
+}
+
+class _Box extends StatelessWidget {
+  const _Box(
+      {required this.value,
+      required this.boxText,
+      required this.onTap,
+      Key? key})
+      : super(key: key);
+
+  final String boxText;
+  final bool value;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: Wrap(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                color: value ? const Color(0x8016b04a) : Colors.black12,
+                // shape: BoxShape.circle,
+                borderRadius: const BorderRadius.all(Radius.circular(8.0))),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
+              child: Text(
+                boxText,
+                style: const TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+      onTap: onTap,
     );
   }
 }
@@ -903,31 +787,28 @@ class _SubmitButton extends StatelessWidget {
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
-    return Consumer<EditProfilePageState>(
+    return Consumer<AddLocationPageState>(
       builder: (_, state, __) {
-        return LoginButton(
-          caption: 'Edit',
-          isBusy: state.isBusy,
-          enabled: !state.isBusy,
-          onPressed: () => _onSubmitted(context),
+        return SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: LoginButton(
+            caption: 'Submit',
+            isBusy: state.isBusy,
+            enabled: !state.isBusy,
+            onPressed: () => _onSubmitted(context),
+          ),
         );
       },
     );
   }
 
   Future<void> _onSubmitted(BuildContext context) async {
-    final state = Provider.of<EditProfilePageState>(context, listen: false);
+    final state = Provider.of<AddLocationPageState>(context, listen: false);
     switch (state.validateAll()) {
       case null:
         break;
-      case InvalidField.firstName:
-        _firstNameNode.requestFocus();
-        return;
-      case InvalidField.lastName:
-        _lastNameNode.requestFocus();
-        return;
-      case InvalidField.email:
-        _emailNode.requestFocus();
+      case InvalidField.locationName:
+        _locationNameNode.requestFocus();
         return;
       case InvalidField.address1:
         _address1Node.requestFocus();
@@ -941,22 +822,16 @@ class _SubmitButton extends StatelessWidget {
       case InvalidField.postcode:
         _postcodeNode.requestFocus();
         return;
-      case InvalidField.password:
-        _passwordNode.requestFocus();
-        return;
-      case InvalidField.recheckPassword:
-        _passwordRecheckNode.requestFocus();
+      case InvalidField.addressLink:
+        _addressLinkNode.requestFocus();
         return;
     }
 
-    final err1 = await showBusyIndicator<ErrorMessage?>(
-      initialStatus: 'Loading...',
-      action: state.register,
-    );
+    final err1 = await state.submit();
     if (err1 != null) {
       await showWarningDialog(context, err1);
       return;
     }
-    await context.router.push(const RecycleLocationPageRoute());
+    // await context.router.replace(const RecycleLocationPageRoute());
   }
 }

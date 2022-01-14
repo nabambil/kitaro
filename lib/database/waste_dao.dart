@@ -13,6 +13,14 @@ class WasteDao {
     return _api.getDataCollection().then((event) => _converter(_data(event)));
   }
 
+  Future<Map<String, WasteModel>> get wastes async {
+    return _api.getDataCollection().then((event) {
+      final _res = _data(event);
+      final _res1 = _converter2(_res);
+      return _res1;
+    });
+  }
+
   Stream<WasteModel> get waste$ {
     return _api.streamDataCollection().transform(_handler);
   }
@@ -31,6 +39,16 @@ class WasteDao {
     // });
 
     return WasteModel.fromJson(Map<String, dynamic>.from(value));
+  }
+
+  Map<String, WasteModel> _converter2(Map value) {
+    final _map = <String, WasteModel>{};
+
+    value.forEach((key, data) {
+      _map[key] = WasteModel.fromJson(Map<String, dynamic>.from(data));
+    });
+
+    return _map;
   }
 
   Map _data(DatabaseEvent event) => event.snapshot.value as Map;
