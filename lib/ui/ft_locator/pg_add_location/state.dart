@@ -273,18 +273,18 @@ class AddLocationPageState extends ChangeNotifier
       }
     });
 
-    // final _addressId = await AddressDao().add(_address);
-    // await LocationDao().add(
-    //   LocationModel(
-    //     address: _addressId,
-    //     direction: _addressLink,
-    //     isWeight: !_isWeight ? 0 : 1,
-    //     lat: _latitude,
-    //     long: _longitude,
-    //     name: _locationName,
-    //     type: _facilityKey,
-    //     wastes: _waste
-    //   )
-    // );
+    final _addressId = await AddressDao().add(_address);
+    await LocationDao().add(
+      LocationModel(
+        address: _addressId,
+        direction: _addressLink,
+        isWeight: !_isWeight ? 0 : 1,
+        lat: _latitude,
+        long: _longitude,
+        name: _locationName,
+        type: _facilityKey,
+        wastes: _waste
+      )
+    );
   }
 }
