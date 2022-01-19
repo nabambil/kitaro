@@ -832,6 +832,6 @@ class _SubmitButton extends StatelessWidget {
       await showWarningDialog(context, err1);
       return;
     }
-    // await context.router.replace(const RecycleLocationPageRoute());
+    await context.router.replaceAll([const LocatorMapPageRoute()]);
   }
 }
