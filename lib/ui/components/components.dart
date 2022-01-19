@@ -5,3 +5,4 @@ export 'image_picker.dart';
 export 'item_tile.dart';
 export 'page_base.dart';
 export 'text_field.dart';
+export 'wave.dart';

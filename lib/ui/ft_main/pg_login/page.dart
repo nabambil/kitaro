@@ -55,45 +55,67 @@ class _ContentState extends State<_Content> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      padding: const EdgeInsets.fromLTRB(
-        35.0,
-        48.0,
-        35.0,
-        16.0,
-      ),
-      children: const [
-        _Logo(),
-        SizedBox(height: 30),
-        Text(
-          'Welcome Back !',
-          style: TextStyle(
-            color: Color(0xff47525E),
-            fontSize: 28,
-            fontWeight: FontWeight.w900,
+    return Stack(
+      children: [
+        ClipPath(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 150,
+            // color: kThemeColor,
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.3, 2],
+              colors: [
+                kThemeColor,
+                kThemeColorDarker,
+              ],
+            )),
           ),
+          clipper: CustomClipPath(),
         ),
-        SizedBox(height: 8),
-        Text(
-          'Please, sign in to continue',
-          style: TextStyle(
-            color: Color(0xff969FAA),
-            fontSize: 14,
+        ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.fromLTRB(
+            35.0,
+            30.0,
+            35.0,
+            16.0,
           ),
+          children: const [
+            _Logo(),
+            SizedBox(height: 80),
+            Text(
+              'Welcome Back !',
+              style: TextStyle(
+                color: Color(0xff47525E),
+                fontSize: 28,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Please, sign in to continue',
+              style: TextStyle(
+                color: Color(0xff969FAA),
+                fontSize: 14,
+              ),
+            ),
+            SizedBox(height: 12),
+            _Username(),
+            _Password(),
+            SizedBox(height: 20),
+            _ForgotPassword(),
+            SizedBox(height: 52),
+            _SubmitButton(),
+            SizedBox(height: 24),
+            _SignInWithGoogle(),
+            _SignInWithFacebook(),
+            SizedBox(height: 30),
+            _SignUp(),
+          ],
         ),
-        SizedBox(height: 60),
-        _Username(),
-        _Password(),
-        SizedBox(height: 20),
-        _ForgotPassword(),
-        SizedBox(height: 52),
-        _SubmitButton(),
-        SizedBox(height: 5),
-        _SignInWithGoogle(),
-        _SignInWithFacebook(),
-        SizedBox(height: 10),
-        _SignUp(),
       ],
     );
   }
@@ -109,9 +131,8 @@ class _Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image(
-      image: Assets.logos.logo,
-      height: 56,
-      width: 57,
+      image: Assets.logos.kitaroLogoMain,
+      height: 60,
       alignment: Alignment.topLeft,
     );
   }
@@ -265,7 +286,7 @@ class _SignUp extends StatelessWidget {
                       fontSize: 12,
                       fontWeight: FontWeight.bold),
                   recognizer: TapGestureRecognizer()
-                    ..onTap = () async{
+                    ..onTap = () async {
                       await context.router.push(const RegisterPageRoute());
                     },
                 ),

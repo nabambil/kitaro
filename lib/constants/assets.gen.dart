@@ -71,6 +71,10 @@ class $AssetsLogosGen {
   AssetGenImage get kitaroLogo =>
       const AssetGenImage('assets/logos/kitaro_logo.png');
 
+  /// File path: assets/logos/kitaro_logo_main.png
+  AssetGenImage get kitaroLogoMain =>
+      const AssetGenImage('assets/logos/kitaro_logo_main.png');
+
   /// File path: assets/logos/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/logos/logo.png');
 }

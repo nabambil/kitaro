@@ -8,11 +8,7 @@ class OnBoardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: _Content(),
-      ),
-    );
+    return Scaffold(backgroundColor: kThemeColor, body: _Content());
   }
 }
 
@@ -46,11 +42,11 @@ class _Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Onboarding(
-      skipButtonStyle:
-          const SkipButtonStyle(skipButtonColor: Color(0xff13CE66)),
+      pagesContentPadding: const EdgeInsets.all(20),
+      skipButtonStyle: const SkipButtonStyle(skipButtonColor: kThemeColor),
       background: Colors.white,
       proceedButtonStyle: ProceedButtonStyle(
-        proceedButtonColor: const Color(0xff13CE66),
+        proceedButtonColor: kThemeColor,
         proceedpButtonText: const Text(
           'Finish',
           style: TextStyle(
@@ -59,8 +55,7 @@ class _Content extends StatelessWidget {
           ),
         ),
         proceedButtonRoute: (context) {
-          MySharedPreferences.instance
-              .setBooleanValue(isFirstRun, false);
+          MySharedPreferences.instance.setBooleanValue(isFirstRun, false);
           return context.router.replace(const LoginPageRoute());
         },
       ),
@@ -98,21 +93,22 @@ class _PageModel extends StatelessWidget {
     return Column(
       children: [
         Container(
-            padding: const EdgeInsets.only(bottom: 45.0),
+            // padding: const EdgeInsets.only(bottom: .0),
             child: Image(
-              image: image,
-              height: MediaQuery.of(context).size.height * 0.6,
-            )),
+          image: image,
+          height: MediaQuery.of(context).size.height * 0.6,
+        )),
         SizedBox(
           width: double.infinity,
           child: Text(
             title,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 23.0,
               wordSpacing: 1,
               letterSpacing: 1.2,
               fontWeight: FontWeight.bold,
-              color: Colors.grey,
+              color: kThemeColor,
             ),
           ),
         ),

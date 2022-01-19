@@ -62,13 +62,12 @@ class _ContentState extends State<_Content> {
   void initState() {
     super.initState();
     SchedulerBinding.instance!.addPostFrameCallback((_) async {
-      final state =
-      Provider.of<AddItemListPageState>(context, listen: false);
+      final state = Provider.of<AddItemListPageState>(context, listen: false);
       state.currentLocationId = widget.locationId;
       await state.initialise();
-
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -91,30 +90,28 @@ class _Header extends StatelessWidget {
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
-    return Consumer<AddItemListPageState>(
-      builder: (_, state, __) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 12),
-          child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const _AppBar(),
-                const SizedBox(height: 15),
-                _Text(text: state.location?.name ?? ''),
-                const _Text(text: 'Centre Phone Number'),
-                _Text(text: state.itemTypeList.toString()),
-                const SizedBox(height: 15),
-                // _Text(text: 'Centre Address 1'),
-                // _Text(text: 'Centre Address 2'),
-                // _Text(text: 'Centre Address 3'),
-                // SizedBox(height: 10),
-              ],
-            ),
+    return Consumer<AddItemListPageState>(builder: (_, state, __) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 8.0, right: 12),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const _AppBar(),
+              const SizedBox(height: 15),
+              _Text(text: state.location?.name ?? ''),
+              const _Text(text: 'Centre Phone Number'),
+              _Text(text: state.itemTypeList.toString()),
+              const SizedBox(height: 15),
+              // _Text(text: 'Centre Address 1'),
+              // _Text(text: 'Centre Address 2'),
+              // _Text(text: 'Centre Address 3'),
+              // SizedBox(height: 10),
+            ],
           ),
-        );
-      }
-    );
+        ),
+      );
+    });
   }
 }
 

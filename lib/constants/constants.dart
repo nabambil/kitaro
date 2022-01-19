@@ -29,6 +29,7 @@ const kDefaultTextLightColor = Color(0xff666666);
 const kDefaultSearchPageThreshold = 10;
 const kDefaultEmptyFlagColor = Color(0xffffffff);
 const kThemeColor = Color(0xFF16b04a);
+const kThemeColorDarker = Color(0xFF16883c);
 const kWhiteColor = Colors.white;
 const kImageExtensions = ['jpg', 'jpeg', 'png'];
 
