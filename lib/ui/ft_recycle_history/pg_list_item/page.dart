@@ -46,8 +46,17 @@ class _ContentState extends State<_Content> {
     SchedulerBinding.instance!.addPostFrameCallback((_) async {
       final state =
           Provider.of<HistoryItemListPageState>(context, listen: false);
-      await state.getUserProfile();
-      await state.initialise();
+      final err1 = await showBusyIndicator<ErrorMessage?>(
+        initialStatus: 'Loading...',
+        action: () async {
+          await state.getUserProfile();
+          await state.initialise();
+        },
+      );
+
+      if (err1 != null) {
+        return await showWarningDialog(context, err1);
+      }
     });
   }
 
@@ -266,6 +275,7 @@ class _Body extends StatelessWidget {
         ),
       ),
       child: ListView(
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         children: const [
           _BodyTitle(),

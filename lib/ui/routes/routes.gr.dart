@@ -9,6 +9,7 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i2;
+import 'package:firebase_auth/firebase_auth.dart' as _i4;
 import 'package:flutter/material.dart' as _i3;
 import 'package:flutter/widgets.dart' as _i4;
 
@@ -37,8 +38,13 @@ class AppRouter extends _i2.RootStackRouter {
           routeData: routeData, child: const _i1.OnBoardingPage());
     },
     RegisterPageRoute.name: (routeData) {
+      final args = routeData.argsAs<RegisterPageRouteArgs>();
       return _i2.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i1.RegisterPage());
+          routeData: routeData,
+          child: _i1.RegisterPage(
+              isFirstTimeWithGoogleSignIn: args.isFirstTimeWithGoogleSignIn,
+              userCredential: args.userCredential,
+              key: args.key));
     },
     EditProfilePageRoute.name: (routeData) {
       final args = routeData.argsAs<EditProfilePageRouteArgs>();
@@ -61,6 +67,14 @@ class AppRouter extends _i2.RootStackRouter {
     RecycleLocationPageRoute.name: (routeData) {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i1.RecycleLocationPage());
+    },
+    LocatorMapPageRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i1.LocatorMapPage());
+    },
+    AddLocationPageRoute.name: (routeData) {
+      return _i2.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i1.AddLocationPage());
     }
   };
 
@@ -76,7 +90,9 @@ class AppRouter extends _i2.RootStackRouter {
         _i2.RouteConfig(HistoryItemListPageRoute.name,
             path: '/history-item-list-page'),
         _i2.RouteConfig(RecycleLocationPageRoute.name,
-            path: '/recycle-location-page')
+            path: '/recycle-location-page'),
+        _i2.RouteConfig(LocatorMapPageRoute.name, path: '/locator-map-page'),
+        _i2.RouteConfig(AddLocationPageRoute.name, path: '/add-location-page')
       ];
 }
 
@@ -115,11 +131,37 @@ class OnBoardingPageRoute extends _i2.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.RegisterPage]
-class RegisterPageRoute extends _i2.PageRouteInfo<void> {
-  const RegisterPageRoute()
-      : super(RegisterPageRoute.name, path: '/register-page');
+class RegisterPageRoute extends _i2.PageRouteInfo<RegisterPageRouteArgs> {
+  RegisterPageRoute(
+      {required bool isFirstTimeWithGoogleSignIn,
+      _i4.UserCredential? userCredential,
+      _i3.Key? key})
+      : super(RegisterPageRoute.name,
+            path: '/register-page',
+            args: RegisterPageRouteArgs(
+                isFirstTimeWithGoogleSignIn: isFirstTimeWithGoogleSignIn,
+                userCredential: userCredential,
+                key: key));
 
   static const String name = 'RegisterPageRoute';
+}
+
+class RegisterPageRouteArgs {
+  const RegisterPageRouteArgs(
+      {required this.isFirstTimeWithGoogleSignIn,
+      this.userCredential,
+      this.key});
+
+  final bool isFirstTimeWithGoogleSignIn;
+
+  final _i4.UserCredential? userCredential;
+
+  final _i3.Key? key;
+
+  @override
+  String toString() {
+    return 'RegisterPageRouteArgs{isFirstTimeWithGoogleSignIn: $isFirstTimeWithGoogleSignIn, userCredential: $userCredential, key: $key}';
+  }
 }
 
 /// generated route for
@@ -128,7 +170,7 @@ class EditProfilePageRoute extends _i2.PageRouteInfo<EditProfilePageRouteArgs> {
   EditProfilePageRoute(
       {required _i1.KitaroAccount user,
       required _i1.AddressModel userAddress,
-      _i4.Key? key})
+      _i3.Key? key})
       : super(EditProfilePageRoute.name,
             path: '/edit-profile-page',
             args: EditProfilePageRouteArgs(
@@ -156,7 +198,7 @@ class EditProfilePageRouteArgs {
 /// generated route for
 /// [_i1.AddItemListPage]
 class AddItemListPageRoute extends _i2.PageRouteInfo<AddItemListPageRouteArgs> {
-  AddItemListPageRoute({required String locationId, _i4.Key? key})
+  AddItemListPageRoute({required String locationId, _i3.Key? key})
       : super(AddItemListPageRoute.name,
             path: '/add-item-list-page',
             args: AddItemListPageRouteArgs(locationId: locationId, key: key));
@@ -169,7 +211,7 @@ class AddItemListPageRouteArgs {
 
   final String locationId;
 
-  final _i4.Key? key;
+  final _i3.Key? key;
 
   @override
   String toString() {
@@ -193,4 +235,22 @@ class RecycleLocationPageRoute extends _i2.PageRouteInfo<void> {
       : super(RecycleLocationPageRoute.name, path: '/recycle-location-page');
 
   static const String name = 'RecycleLocationPageRoute';
+}
+
+/// generated route for
+/// [_i1.LocatorMapPage]
+class LocatorMapPageRoute extends _i2.PageRouteInfo<void> {
+  const LocatorMapPageRoute()
+      : super(LocatorMapPageRoute.name, path: '/locator-map-page');
+
+  static const String name = 'LocatorMapPageRoute';
+}
+
+/// generated route for
+/// [_i1.AddLocationPage]
+class AddLocationPageRoute extends _i2.PageRouteInfo<void> {
+  const AddLocationPageRoute()
+      : super(AddLocationPageRoute.name, path: '/add-location-page');
+
+  static const String name = 'AddLocationPageRoute';
 }

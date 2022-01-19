@@ -7,10 +7,12 @@ class CustomDropdown extends StatefulWidget {
     required this.value,
     required this.items,
     this.onSelected,
+    this.labelTextColor = const Color(0x424D627B),
     Key? key,
   }) : super(key: key);
 
   final String? labelText;
+  final Color? labelTextColor;
   final String? errorText;
   final String? value;
   final List<String> items;
@@ -23,7 +25,7 @@ class CustomDropdown extends StatefulWidget {
 class _CustomDropdownState extends State<CustomDropdown> {
   @override
   Widget build(BuildContext context) {
-  String? _textValue = widget.value;
+    String? _textValue = widget.value;
     return FormField<String>(
       builder: (FormFieldState<String> state) {
         return Column(
@@ -56,9 +58,10 @@ class _CustomDropdownState extends State<CustomDropdown> {
                       child: DropdownButton<String>(
                         hint: Text(
                           widget.labelText!,
-                          style: const TextStyle(
-                            color: Color(0x424D627B),
-                            fontSize: 14.0,
+                          style: TextStyle(
+                              fontSize: 14.0,
+                              color: widget.errorText != null ? Colors.red.shade900 : widget.labelTextColor,
+                              fontWeight: widget.errorText != null ? FontWeight.normal : FontWeight.bold
                           ),
                         ),
                         value: widget.value,

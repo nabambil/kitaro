@@ -1,3 +1,4 @@
+export 'busy_indicator.dart';
 export 'button.dart';
 export 'dialog.dart';
 export 'dropdown.dart';

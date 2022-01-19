@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,9 +29,7 @@ class _RecycleLocationPageState extends State<RecycleLocationPage> {
     return ChangeNotifierProvider<RecycleLocationPageState>(
       create: (_) => RecycleLocationPageState(),
       child: const Scaffold(
-        body: _Content(),
-        bottomNavigationBar: _BottomNavigator()
-      ),
+          body: _Content(), bottomNavigationBar: _BottomNavigator()),
     );
   }
 }
@@ -50,9 +49,16 @@ class _ContentState extends State<_Content> {
     SchedulerBinding.instance!.addPostFrameCallback((_) async {
       final state =
           Provider.of<RecycleLocationPageState>(context, listen: false);
-      await state.initialise();
+      final err1 = await showBusyIndicator<ErrorMessage?>(
+        initialStatus: 'Loading...',
+        action: state.initialise,
+      );
+      if (err1 != null) {
+        return await showWarningDialog(context, err1);
+      }
       state.addListener(() {
-        var _locationList = state.locations.entries.map((e) => {e.key : e.value}).toList();
+        var _locationList =
+            state.locations.entries.map((e) => {e.key: e.value}).toList();
         enlargeMarker(
           context: context,
           markerId: MarkerId(state.locations.entries.first.key),
@@ -74,60 +80,58 @@ class _ContentState extends State<_Content> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RecycleLocationPageState>(
-      builder: (_, state, __) {
-        return Stack(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: state.latitude == null ? Container() : _Maps(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Spacer(),
-                  Consumer<RecycleLocationPageState>(
-                    builder: (_, state, __) {
-                      return CarouselSlider.builder(
-                        carouselController: _carouselController,
-                        options: CarouselOptions(
-                          enlargeCenterPage: true,
-                          enableInfiniteScroll: false,
-                          height: 140,
-                          viewportFraction: 0.6,
-                          aspectRatio: 16 / 9,
-                          onPageChanged: (index, reason) async {
-                            setState(() {
-                              enlargeMarker(
-                                  context: context,
-                                  markerId: state.mapMarkers.keys.elementAt(index),
-                              );
-                            });
-                          },
-                        ),
-                        itemCount: state.mapMarkers.length,
-                        itemBuilder: (context, itemIndex, pageViewIndex) {
-                          final _key = state.mapMarkers.keys.elementAt(itemIndex);
-                          return _CentreTile(
-                            index: itemIndex,
-                            markerId: _key,
-                            location: state.locations[_key.value]!,
-                          );
+    return Consumer<RecycleLocationPageState>(builder: (_, state, __) {
+      return Stack(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: state.latitude == null ? Container() : _Maps(),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Spacer(),
+                Consumer<RecycleLocationPageState>(
+                  builder: (_, state, __) {
+                    return CarouselSlider.builder(
+                      carouselController: _carouselController,
+                      options: CarouselOptions(
+                        enlargeCenterPage: true,
+                        enableInfiniteScroll: false,
+                        height: 140,
+                        viewportFraction: 0.6,
+                        aspectRatio: 16 / 9,
+                        onPageChanged: (index, reason) async {
+                          setState(() {
+                            enlargeMarker(
+                              context: context,
+                              markerId: state.mapMarkers.keys.elementAt(index),
+                            );
+                          });
                         },
-                      );
-                    },
-                  ),
-                  // const SizedBox(height: 28.0),
-                  // const _ProfileDetail(),
-                ],
-              ),
+                      ),
+                      itemCount: state.mapMarkers.length,
+                      itemBuilder: (context, itemIndex, pageViewIndex) {
+                        final _key = state.mapMarkers.keys.elementAt(itemIndex);
+                        return _CentreTile(
+                          index: itemIndex,
+                          markerId: _key,
+                          location: state.locations[_key.value]!,
+                        );
+                      },
+                    );
+                  },
+                ),
+                // const SizedBox(height: 28.0),
+                // const _ProfileDetail(),
+              ],
             ),
-          ],
-        );
-      }
-    );
+          ),
+        ],
+      );
+    });
   }
 }
 
@@ -143,39 +147,37 @@ class _BottomNavigatorState extends State<_BottomNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RecycleLocationPageState>(
-      builder: (_, state, __) {
-        return BottomNavigationBar(
-          onTap: onTabTapped,
-          currentIndex: _currentIndex,
-          selectedItemColor: Colors.green,
-          unselectedItemColor: Colors.black26,
-          unselectedLabelStyle: const TextStyle(color: Colors.black26),
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code),
-              label: 'Recycle',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.globe),
-                label: 'About',
-            ),
-          ],
-        );
-      }
-    );
+    return Consumer<RecycleLocationPageState>(builder: (_, state, __) {
+      return BottomNavigationBar(
+        onTap: onTabTapped,
+        currentIndex: _currentIndex,
+        selectedItemColor: Colors.green,
+        unselectedItemColor: Colors.black26,
+        unselectedLabelStyle: const TextStyle(color: Colors.black26),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.qr_code),
+            label: 'Recycle',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.globe),
+            label: 'About',
+          ),
+        ],
+      );
+    });
   }
 
   void onTabTapped(int index) {
-    setState(() {
+    setState(() async {
       _currentIndex = index;
       if (index == 1) {
         context.router.push(const HistoryItemListPageRoute());
@@ -183,9 +185,24 @@ class _BottomNavigatorState extends State<_BottomNavigator> {
       }
       if (index == 2) {
         final state =
-        Provider.of<RecycleLocationPageState>(context, listen: false);
-        context.router.push( AddItemListPageRoute(locationId: state.currentLocationId));
+            Provider.of<RecycleLocationPageState>(context, listen: false);
+        var result = await BarcodeScanner.scan();
         _currentIndex = 0;
+        if (result.type == ResultType.Cancelled ||
+            result.type == ResultType.Error) {
+          return;
+        }
+        final _err = await showBusyIndicator<ErrorMessage?>(
+            initialStatus: 'Loading...',
+            action: () async {
+              await state.checkLocation(locationKey: result.rawContent);
+            });
+        if (_err != null) {
+          await showWarningDialog(context, _err);
+          return;
+        }
+        context.router
+            .push(AddItemListPageRoute(locationId: state.currentLocationId));
       }
       if (index == 3) {
         context.router.push(const AboutPageRoute());
@@ -331,26 +348,25 @@ class _AddRecycleItemButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RecycleLocationPageState>(
-      builder: (_, state, __) {
-        return InkWell(
-          child: Container(
-            height: 50,
-            width: 50,
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(33)),
-                color: Color(0xff77D353)),
-            child: const Center(
-              child: Icon(
-                Icons.qr_code,
-                color: Colors.white,
-              ),
+    return Consumer<RecycleLocationPageState>(builder: (_, state, __) {
+      return InkWell(
+        child: Container(
+          height: 50,
+          width: 50,
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(33)),
+              color: Color(0xff77D353)),
+          child: const Center(
+            child: Icon(
+              Icons.qr_code,
+              color: Colors.white,
             ),
           ),
-          onTap: () => context.router.push( AddItemListPageRoute(locationId: state.currentLocationId)),
-        );
-      }
-    );
+        ),
+        onTap: () => context.router
+            .push(AddItemListPageRoute(locationId: state.currentLocationId)),
+      );
+    });
   }
 }
 
@@ -534,9 +550,9 @@ Future<void> markerOnTap({
   );
 }
 
-Future<void> enlargeMarker({required BuildContext context, required MarkerId markerId}) async {
+Future<void> enlargeMarker(
+    {required BuildContext context, required MarkerId markerId}) async {
   final state = Provider.of<RecycleLocationPageState>(context, listen: false);
-  state.currentLocationId = markerId.value;
   state.mapMarkers.forEach((key, value) async {
     if (markerId == value.markerId) {
       state.mapMarkers[value.markerId] = state.mapMarkers[value.markerId]!

@@ -252,7 +252,17 @@ class _ForgotPassword extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          onTap: () {},
+          onTap: () async {
+            final err = await state.forgotPassword();
+            if (err != null) {
+              await showWarningDialog(context, err);
+              return;
+            }
+            await showSuccessfulDialog(
+                context: context,
+                title: 'Successful',
+                message: 'Request has been sent to your email');
+          },
         );
       },
     );
@@ -287,7 +297,8 @@ class _SignUp extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () async {
-                      await context.router.push(const RegisterPageRoute());
+                      await context.router.push(RegisterPageRoute(
+                          isFirstTimeWithGoogleSignIn: false));
                     },
                 ),
               ],
@@ -333,9 +344,18 @@ class _SubmitButton extends StatelessWidget {
         return;
     }
 
-    final err1 = await state.logIn();
+    final err1 = await showBusyIndicator<ErrorMessage?>(
+      initialStatus: 'Logging in...',
+      action: state.logIn,
+    );
     if (err1 != null) {
       await showWarningDialog(context, err1);
+      return;
+    }
+    if (state.isLocator) {
+      await context.router.push(
+        const LocatorMapPageRoute(),
+      );
       return;
     }
     await context.router.replace(const RecycleLocationPageRoute());
@@ -403,11 +423,29 @@ class _SignInWithGoogle extends StatelessWidget {
   }
 
   Future<void> _onSubmitted(BuildContext context) async {
-    final err1 = await Authentication.signInWithGoogle();
+    final state = Provider.of<LoginPageState>(context, listen: false);
+
+    final err1 = await showBusyIndicator<ErrorMessage?>(
+      initialStatus: 'Logging in...',
+      action: state.signInWithGoogle,
+    );
 
     if (err1 != null) {
       await showWarningDialog(context, err1);
       return;
+    }
+    if (state.isLocator) {
+      await context.router.push(
+        LocatorMapPageRoute(),
+      );
+    }
+    if (state.isFirstTime) {
+      await context.router.push(
+        RegisterPageRoute(
+          isFirstTimeWithGoogleSignIn: true,
+          userCredential: state.userCredential,
+        ),
+      );
     }
     await context.router.replace(const RecycleLocationPageRoute());
   }
@@ -474,7 +512,11 @@ class _SignInWithFacebook extends StatelessWidget {
   }
 
   Future<void> _onSubmitted(BuildContext context) async {
-    final err1 = await Authentication.signInWithFacebook();
+    final state = Provider.of<LoginPageState>(context, listen: false);
+    final err1 = await showBusyIndicator<ErrorMessage?>(
+      initialStatus: 'Logging in...',
+      action: state.signInWithFacebook,
+    );
 
     if (err1 != null) {
       await showWarningDialog(context, err1);

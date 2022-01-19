@@ -200,6 +200,7 @@ class _Body extends StatelessWidget {
             ),
           ),
           child: ListView(
+            physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             children: [
               const _BodyTitle(),
@@ -344,8 +345,15 @@ class _SubmitButton extends StatelessWidget {
         onPressed: () async {
           final state =
               Provider.of<AddItemListPageState>(context, listen: false);
-          state.recycle();
+          final err = await showBusyIndicator<ErrorMessage?>(
+              initialStatus: 'Loading...', action: state.recycle);
+
+          if (err != null) {
+            await showWarningDialog(context, err);
+            return;
+          }
           await showSuccessfulDialog(
+            barrierDismissible: false,
             context: context,
             title: 'ITEM RECYCLED',
             message: 'You have saved the earth, You\'re our Hero !',

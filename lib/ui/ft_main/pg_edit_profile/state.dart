@@ -17,7 +17,8 @@ enum InvalidField {
   recheckPassword,
 }
 
-class EditProfilePageState extends ChangeNotifier {
+class EditProfilePageState extends ChangeNotifier
+    with TextControllerMixin, AddressStateMixin {
   EditProfilePageState({required this.user, required this.userAddress});
 
   final KitaroAccount user;
@@ -26,11 +27,6 @@ class EditProfilePageState extends ChangeNotifier {
   bool _isBusy = false;
 
   bool get isBusy => _isBusy;
-
-  // UPDATE TEXT CONTROLLER /////////////////////
-  bool _updateTextController = false;
-
-  bool get updateTextController => _updateTextController;
 
   // FIRST NAME -----------------------------------------------------------------
   // FIRST NAME //////////////////////////////////
@@ -52,16 +48,17 @@ class EditProfilePageState extends ChangeNotifier {
   }
 
   void validateFirstName() {
-    _updateTextController = false;
-    try {
-      _firstNameError = null;
+    validateText(() {
+      try {
+        _firstNameError = null;
 
-      if (_firstName == null || _firstName!.trim().isEmpty) {
-        _firstNameError = 'first name required';
+        if (_firstName == null || _firstName!.trim().isEmpty) {
+          _firstNameError = 'first name required';
+        }
+      } finally {
+        notifyListeners();
       }
-    } finally {
-      notifyListeners();
-    }
+    });
   }
 
   // LAST NAME -----------------------------------------------------------------
@@ -84,16 +81,17 @@ class EditProfilePageState extends ChangeNotifier {
   }
 
   void validateLastName() {
-    _updateTextController = false;
-    try {
-      _lastNameError = null;
+    validateText(() {
+      try {
+        _lastNameError = null;
 
-      if (_lastName == null || _lastName!.trim().isEmpty) {
-        _lastNameError = 'last name required';
+        if (_lastName == null || _lastName!.trim().isEmpty) {
+          _lastNameError = 'last name required';
+        }
+      } finally {
+        notifyListeners();
       }
-    } finally {
-      notifyListeners();
-    }
+    });
   }
 
   // ID NUMBER -----------------------------------------------------------------
@@ -116,15 +114,17 @@ class EditProfilePageState extends ChangeNotifier {
   }
 
   void validateIdNumber() {
-    try {
-      _idNumberError = null;
+    validateText(() {
+      try {
+        _idNumberError = null;
 
-      if (_idNumber == null || _idNumber!.trim().isEmpty) {
-        _idNumberError = 'id number required';
+        if (_idNumber == null || _idNumber!.trim().isEmpty) {
+          _idNumberError = 'id number required';
+        }
+      } finally {
+        notifyListeners();
       }
-    } finally {
-      notifyListeners();
-    }
+    });
   }
 
   // PHONE NUMBER -----------------------------------------------------------------
@@ -147,15 +147,17 @@ class EditProfilePageState extends ChangeNotifier {
   }
 
   void validatePhoneNumber() {
-    try {
-      _phoneNumberError = null;
+    validateText(() {
+      try {
+        _phoneNumberError = null;
 
-      if (_phoneNumber == null || _phoneNumber!.trim().isEmpty) {
-        _phoneNumberError = 'phone number required';
+        if (_phoneNumber == null || _phoneNumber!.trim().isEmpty) {
+          _phoneNumberError = 'phone number required';
+        }
+      } finally {
+        notifyListeners();
       }
-    } finally {
-      notifyListeners();
-    }
+    });
   }
 
   // EMAIL -----------------------------------------------------------------
@@ -178,174 +180,19 @@ class EditProfilePageState extends ChangeNotifier {
   }
 
   void validateEmail() {
-    _updateTextController = false;
-    try {
-      _emailError = null;
+    validateText(() {
+      try {
+        _emailError = null;
 
-      if (_email == null || _email!.trim().isEmpty) {
-        _emailError = 'email required';
-      } else if (!EmailValidator.validate(_email!)) {
-        _emailError = 'email invalid';
+        if (_email == null || _email!.trim().isEmpty) {
+          _emailError = 'email required';
+        } else if (!EmailValidator.validate(_email!)) {
+          _emailError = 'email invalid';
+        }
+      } finally {
+        notifyListeners();
       }
-    } finally {
-      notifyListeners();
-    }
-  }
-
-  // ADDRESS 1 -----------------------------------------------------------------
-  // ADDRESS 1 //////////////////////////////////
-  String? _address1;
-  String? get address1 => _address1;
-
-  set address1(String? value) {
-    _address1 = value;
-    validateAddress1();
-  }
-
-  // ADDRESS 1 ERROR ////////////////////////////
-  String? _address1Error;
-
-  String? get address1Error => _address1Error;
-
-  bool get address1HasError {
-    return _address1Error != null;
-  }
-
-  void validateAddress1() {
-    _updateTextController = false;
-    try {
-      _address1Error = null;
-
-      if (_address1 == null || _address1!.trim().isEmpty) {
-        _address1Error = 'address required';
-      }
-    } finally {
-      notifyListeners();
-    }
-  }
-
-  // ADDRESS 2 -----------------------------------------------------------------
-  // ADDRESS 2 //////////////////////////////////
-  String? _address2;
-  String? get address2 => _address2;
-
-  set address2(String? value) {
-    _address2 = value;
-    _updateTextController = false;
-    notifyListeners();
-  }
-
-  // ADDRESS 3 -----------------------------------------------------------------
-  // ADDRESS 3 //////////////////////////////////
-  String? _address3;
-  String? get address3 => _address3;
-
-  set address3(String? value) {
-    _address3 = value;
-    _updateTextController = false;
-    notifyListeners();
-  }
-
-  // CITY ------------------------------------------------------------------
-  // CITY ///////////////////////////////////
-  String? _city;
-
-  String? get city => _city;
-
-  set city(String? value) {
-    _city = value;
-    validateCity();
-  }
-
-  // CITY ERROR /////////////////////////////
-  String? _cityError;
-
-  String? get cityError => _cityError;
-
-  bool get cityHasError {
-    return _cityError != null;
-  }
-
-  @protected
-  void validateCity() {
-    _updateTextController = false;
-    try {
-      _cityError = null;
-
-      if (_city == null || _city!.trim().isEmpty) {
-        _cityError = 'city required';
-      }
-    } finally {
-      notifyListeners();
-    }
-  }
-
-  // STATE ------------------------------------------------------------------
-  // STATE ///////////////////////////////////
-  String? _state;
-
-  String? get state => _state;
-
-  set state(String? value) {
-    _state = value;
-    validateState();
-  }
-
-  // STATE ERROR /////////////////////////////
-  String? _stateError;
-
-  String? get stateError => _stateError;
-
-  bool get stateHasError {
-    return _stateError != null;
-  }
-
-  @protected
-  void validateState() {
-    _updateTextController = false;
-    try {
-      _stateError = null;
-
-      if (_state == null || _state!.trim().isEmpty) {
-        _stateError = 'state required';
-      }
-    } finally {
-      notifyListeners();
-    }
-  }
-
-  // POSTCODE ------------------------------------------------------------------
-  // POSTCODE ///////////////////////////////////
-  String? _postcode;
-
-  String? get postcode => _postcode;
-
-  set postcode(String? value) {
-    _postcode = value;
-    validatePostcode();
-  }
-
-  // POSTCODE ERROR /////////////////////////////
-  String? _postcodeError;
-
-  String? get postcodeError => _postcodeError;
-
-  bool get postcodeHasError {
-    return _postcodeError != null;
-  }
-
-  @protected
-  void validatePostcode() {
-    _updateTextController = false;
-    try {
-      _postcodeError = null;
-
-      if (_postcode == null || _postcode!.trim().isEmpty) {
-        _postcodeError = 'postcode required';
-      }
-    } finally {
-      notifyListeners();
-    }
+    });
   }
 
   // PASSWORD ------------------------------------------------------------------
@@ -370,18 +217,19 @@ class EditProfilePageState extends ChangeNotifier {
 
   @protected
   void validatePassword() {
-    _updateTextController = false;
-    try {
-      _passwordError = null;
+    validateText(() {
+      try {
+        _passwordError = null;
 
-      if (_password == null || _password!.trim().isEmpty) {
-        _passwordError = 'password required';
-      } else if (_password!.length < 8) {
-        _passwordError = 'password minimum 8 characters';
+        if (_password == null || _password!.trim().isEmpty) {
+          _passwordError = 'password required';
+        } else if (_password!.length < 8) {
+          _passwordError = 'password minimum 8 characters';
+        }
+      } finally {
+        notifyListeners();
       }
-    } finally {
-      notifyListeners();
-    }
+    });
   }
 
   // RE-TYPE PASSWORD ------------------------------------------------------------------
@@ -406,36 +254,38 @@ class EditProfilePageState extends ChangeNotifier {
 
   @protected
   void validatePasswordRecheck() {
-    _updateTextController = false;
-    try {
-      _passwordRecheckError = null;
+    validateText(() {
+      try {
+        _passwordRecheckError = null;
 
-      if (_passwordRecheck == null || _passwordRecheck!.trim().isEmpty) {
-        _passwordRecheckError = 'password required';
-      } else if (_passwordRecheck! != _password) {
-        _passwordRecheckError = 'password invalid';
+        if (_passwordRecheck == null || _passwordRecheck!.trim().isEmpty) {
+          _passwordRecheckError = 'password required';
+        } else if (_passwordRecheck! != _password) {
+          _passwordRecheckError = 'password invalid';
+        }
+      } finally {
+        notifyListeners();
       }
-    } finally {
-      notifyListeners();
-    }
+    });
   }
 
   // ------------------------------- METHODS ------------------------------
   Future<void> initialiseEditItem() async {
     try {
-      _firstName = user.firstName;
-      _lastName = user.lastName;
-      _idNumber = user.idNo;
-      _phoneNumber = user.phone;
-      _email = user.username;
-      _address1 = userAddress.address1;
-      _address2 = userAddress.address2;
-      _address3 = userAddress.address3;
-      _city = userAddress.city;
-      _state = userAddress.state;
-      _postcode = userAddress.postcode.toString();
+      updateText(() {
+        _firstName = user.firstName;
+        _lastName = user.lastName;
+        _idNumber = user.idNo;
+        _phoneNumber = user.phone;
+        _email = user.username;
+        address1 = userAddress.address1;
+        address2 = userAddress.address2;
+        address3 = userAddress.address3;
+        city = userAddress.city;
+        state = userAddress.state;
+        postcode = userAddress.postcode.toString();
+      });
     } finally {
-      _updateTextController = true;
       notifyListeners();
     }
   }
@@ -498,12 +348,12 @@ class EditProfilePageState extends ChangeNotifier {
 
       final _uid = FirebaseAuth.instance.currentUser?.uid;
       await AddressDao(id: user.address).update(AddressModel(
-        address1: _address1,
-        address2: _address2,
-        address3: _address3,
-        city: _city,
-        state: _state,
-        postcode: int.parse(_postcode!),
+        address1: address1,
+        address2: address2,
+        address3: address3,
+        city: city,
+        state: state,
+        postcode: int.parse(postcode!),
       ));
       await UserDao(id: _uid).update(KitaroAccount(
         username: _email,

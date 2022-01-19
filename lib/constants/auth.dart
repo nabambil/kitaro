@@ -6,6 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kitaro/constants/constants.dart';
 
+import '../kitaro.dart';
+
 class Authentication {
   static Future<FirebaseApp> initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
@@ -22,6 +24,17 @@ class Authentication {
     } else {
       return true;
     }
+  }
+
+  static Future<bool> handleLocatorState() async{
+    var user = FirebaseAuth.instance.currentUser;
+    bool _isLocator = false;
+    await UserDao(id: user?.uid).profile.then((value) {
+      if(value.role == 'locator'){
+        _isLocator = true;
+      }
+    });
+    return _isLocator;
   }
 
   static Future<ErrorMessage?> register(
@@ -43,38 +56,38 @@ class Authentication {
     return null;
   }
 
-  static Future<ErrorMessage?> signInWithGoogle() async {
-    User? user;
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-
-    final GoogleSignInAccount? googleSignInAccount =
-        await GoogleSignIn().signIn();
-
-    if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
-
-      try {
-        final UserCredential userCredential =
-            await auth.signInWithCredential(credential);
-
-        user = userCredential.user;
-      } on FirebaseAuthException catch (e) {
-        return ErrorMessage(title: e.code, message: e.message!);
-      } catch (e) {
-        return ErrorMessage(title: e.toString(), message: '');
-      }
-    }
-
-    return null;
-  }
+  // static Future<ErrorMessage?> signInWithGoogle() async {
+  //   User? user;
+  //   FirebaseAuth auth = FirebaseAuth.instance;
+  //
+  //   final GoogleSignIn googleSignIn = GoogleSignIn();
+  //
+  //   final GoogleSignInAccount? googleSignInAccount =
+  //       await GoogleSignIn().signIn();
+  //
+  //   if (googleSignInAccount != null) {
+  //     final GoogleSignInAuthentication googleSignInAuthentication =
+  //         await googleSignInAccount.authentication;
+  //
+  //     final AuthCredential credential = GoogleAuthProvider.credential(
+  //       accessToken: googleSignInAuthentication.accessToken,
+  //       idToken: googleSignInAuthentication.idToken,
+  //     );
+  //
+  //     try {
+  //       final UserCredential userCredential =
+  //           await auth.signInWithCredential(credential);
+  //
+  //       user = userCredential.user;
+  //     } on FirebaseAuthException catch (e) {
+  //       return ErrorMessage(title: e.code, message: e.message!);
+  //     } catch (e) {
+  //       return ErrorMessage(title: e.toString(), message: '');
+  //     }
+  //   }
+  //
+  //   return null;
+  // }
 
   static Future<ErrorMessage?> signOutWithGoogle() async {
     try {

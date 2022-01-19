@@ -53,6 +53,11 @@ class _ContentState extends State<_Content> {
         await context.router.replace(const LoginPageRoute());
         return;
       }
+      final isLocator = await Authentication.handleLocatorState();
+      if (isLocator){
+        await context.router.replace(const LocatorMapPageRoute());
+        return;
+      }
       await context.router.replace(const RecycleLocationPageRoute());
     });
   }

@@ -157,7 +157,8 @@ class AddItemListPageState extends ChangeNotifier {
           notifyListeners();
         });
         notifyListeners();
-      }});
+      }
+    });
   }
 
   Future<void> initialiseEditItem(RecycleModel item) async {
@@ -190,13 +191,19 @@ class AddItemListPageState extends ChangeNotifier {
     return null;
   }
 
+  Future<ErrorMessage?> validateRecycleList() async {
+    if (_itemsAdded.isEmpty) {
+      return ErrorMessage(
+          title: 'Error', message: 'Please add at least one item to recycle');
+    }
+  }
+
   void removeItemImage(int? index) {
     _itemImages.removeAt(index!);
     notifyListeners();
   }
 
   Future<void> addItem() async {
-
     _dateSubmitted = DateFormat('dd MMM yyyy  hh:mm a').format(DateTime.now());
 
     var _id = FirebaseAuth.instance.currentUser?.uid;
@@ -211,12 +218,12 @@ class AddItemListPageState extends ChangeNotifier {
     }
 
     _itemsAdded.add(RecycleModel(
-        type: _itemType!,
-        weight: _itemWeight == null ? null : int.parse(_itemWeight!),
-        datetime: _dateSubmitted,
-        images: _images,
-        location: currentLocationId,
-        username: _username,
+      type: _itemType!,
+      weight: _itemWeight == null ? null : int.parse(_itemWeight!),
+      datetime: _dateSubmitted,
+      images: _images,
+      location: currentLocationId,
+      username: _username,
     ));
 
     _itemType = null;
@@ -237,16 +244,17 @@ class AddItemListPageState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<ErrorMessage?> recycle() async{
-    try{
+  Future<ErrorMessage?> recycle() async {
+    try {
       for (var element in _itemsAdded) {
         RecycleDao().add(element);
       }
+      return validateRecycleList();
     } on FirebaseAuthException catch (e) {
       return ErrorMessage(title: e.code, message: e.message!);
     } catch (e) {
       return ErrorMessage(title: e.toString(), message: '');
-    } finally{
+    } finally {
       _itemsAdded.clear();
       _itemType = null;
       _itemWeight = null;
