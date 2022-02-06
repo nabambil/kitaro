@@ -1,18 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kitaro/kitaro.dart';
-import 'package:kitaro/ui/ft_locator/pg_main/state.dart';
-import 'package:kitaro/ui/ft_locator/pg_main/state.dart';
-import 'package:kitaro/ui/ft_locator/pg_main/state.dart';
-import 'package:kitaro/ui/ft_locator/pg_main/state.dart';
-import 'package:kitaro/ui/ft_locator/pg_main/state.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 import 'state.dart';
 
@@ -604,7 +596,6 @@ class _AddressGoogleLinkFieldState extends State<_AddressGoogleLinkField>
   }
 }
 
-
 class _FacilityField extends StatelessWidget {
   const _FacilityField({Key? key}) : super(key: key);
 
@@ -632,12 +623,16 @@ class _ItemTypeField extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           Text(
+          Text(
             'select type below *',
             style: TextStyle(
                 fontSize: 14.0,
-                color: state.itemTypeHasError ? Colors.red.shade900 : const Color(0xff969FAA),
-                fontWeight: state.itemTypeHasError ? FontWeight.normal : FontWeight.bold),
+                color: state.itemTypeHasError
+                    ? Colors.red.shade900
+                    : const Color(0xff969FAA),
+                fontWeight: state.itemTypeHasError
+                    ? FontWeight.normal
+                    : FontWeight.bold),
           ),
           const SizedBox(height: 10),
           Wrap(

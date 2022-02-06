@@ -56,7 +56,7 @@ Future<void> showWarningDialog(BuildContext context, ErrorMessage message) {
     context: context,
     barrierDismissible: false,
     dialog: AlertDialog(
-      title: message.title,
+      title: message.title.toUpperCase(),
       message: message.message!,
       buttonText: 'RETURN',
       titleTextColor: Colors.red,
@@ -79,7 +79,8 @@ Future<void> showSuccessfulDialog({
       message: message,
       buttonText: 'THANK YOU',
       titleTextColor: const Color(0xff77D353),
-      icon: Assets.icons.balloon,
+      iconColor: const Color(0xff77D353),
+      icon: Assets.icons.leave,
     ),
   );
 }
@@ -89,6 +90,7 @@ class AlertDialog extends StatelessWidget {
   final String message;
   final String buttonText;
   final Color titleTextColor;
+  final Color? iconColor;
   final ImageProvider icon;
 
   const AlertDialog({
@@ -97,6 +99,7 @@ class AlertDialog extends StatelessWidget {
     required this.buttonText,
     required this.titleTextColor,
     required this.icon,
+    this.iconColor,
     Key? key,
   }) : super(key: key);
 
@@ -111,6 +114,7 @@ class AlertDialog extends StatelessWidget {
           children: [
             Image(
               image: icon,
+              color: iconColor,
               height: 79,
               width: 79,
             ),
@@ -119,8 +123,8 @@ class AlertDialog extends StatelessWidget {
               title,
               style: TextStyle(
                 color: titleTextColor,
-                fontSize: 32,
-                fontFamily: FontFamily.norwester,
+                fontSize: 24,
+                // fontFamily: FontFamily.lato,
               ),
               textAlign: TextAlign.center,
             ),
@@ -146,4 +150,3 @@ class AlertDialog extends StatelessWidget {
     );
   }
 }
-

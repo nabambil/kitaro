@@ -16,6 +16,9 @@ class $AssetsGifsGen {
   /// File path: assets/gifs/green.png
   AssetGenImage get greenPng => const AssetGenImage('assets/gifs/green.png');
 
+  /// File path: assets/gifs/location.png
+  AssetGenImage get location => const AssetGenImage('assets/gifs/location.png');
+
   /// File path: assets/gifs/marker.png
   AssetGenImage get marker => const AssetGenImage('assets/gifs/marker.png');
 

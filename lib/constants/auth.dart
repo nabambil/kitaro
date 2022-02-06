@@ -3,8 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 // import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:kitaro/constants/constants.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:kitaro/constants/constants.dart';
 
 import '../kitaro.dart';
 
@@ -26,11 +26,11 @@ class Authentication {
     }
   }
 
-  static Future<bool> handleLocatorState() async{
+  static Future<bool> handleLocatorState() async {
     var user = FirebaseAuth.instance.currentUser;
     bool _isLocator = false;
     await UserDao(id: user?.uid).profile.then((value) {
-      if(value.role == 'locator'){
+      if (value.role == 'locator') {
         _isLocator = true;
       }
     });

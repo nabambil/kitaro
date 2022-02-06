@@ -100,7 +100,7 @@ class _ContentState extends State<_Content> {
                       options: CarouselOptions(
                         enlargeCenterPage: true,
                         enableInfiniteScroll: false,
-                        height: 140,
+                        height: 130,
                         viewportFraction: 0.6,
                         aspectRatio: 16 / 9,
                         onPageChanged: (index, reason) async {

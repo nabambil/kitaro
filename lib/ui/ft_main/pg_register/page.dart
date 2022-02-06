@@ -36,14 +36,12 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: ChangeNotifierProvider<RegisterPageState>(
-          create: (_) => RegisterPageState(
-            isFirstTimeWithGoogleSignIn: isFirstTimeWithGoogleSignIn,
-            userCredential: userCredential,
-          ),
-          child: const _Content(),
+      body: ChangeNotifierProvider<RegisterPageState>(
+        create: (_) => RegisterPageState(
+          isFirstTimeWithGoogleSignIn: isFirstTimeWithGoogleSignIn,
+          userCredential: userCredential,
         ),
+        child: const _Content(),
       ),
     );
   }
@@ -80,22 +78,18 @@ class _ContentState extends State<_Content> {
     return Consumer<RegisterPageState>(builder: (_, state, __) {
       return Column(
         children: [
-          const PageBackButton(
-            colorOverride: Color(0xff8190A5),
-          ),
+          const _Logo(),
           Expanded(
             child: ListView(
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
               padding: const EdgeInsets.fromLTRB(
-                35.0,
                 20.0,
-                35.0,
+                0.0,
+                20.0,
                 16.0,
               ),
               children: [
-                const _Logo(),
-                const SizedBox(height: 30),
                 const Text(
                   'Welcome',
                   style: TextStyle(
@@ -146,11 +140,36 @@ class _Logo extends StatelessWidget {
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
-    return Image(
-      image: Assets.logos.logo,
-      height: 56,
-      width: 57,
-      alignment: Alignment.topLeft,
+    return Stack(
+      children: [
+        ClipPath(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 150,
+            // color: kThemeColor,
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.3, 2],
+              colors: [
+                kThemeColor,
+                kThemeColorDarker,
+              ],
+            )),
+          ),
+          clipper: CustomClipPath(),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 20.0, top: 50),
+          child: Image(
+            image: Assets.logos.kitaroLogoMain,
+            height: 120,
+            width: 120,
+            alignment: Alignment.topLeft,
+          ),
+        ),
+      ],
     );
   }
 }

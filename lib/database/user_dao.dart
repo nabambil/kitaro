@@ -10,10 +10,6 @@ class UserDao {
 
   Future<KitaroAccount> get profile async {
     return _api.getDataCollection().then((event) {
-<<<<<<< HEAD
-      print(event.snapshot);
-=======
->>>>>>> cb710ade6759d8bad6e7459b9e6608c227ae458a
       return _converter(_data(event));
     });
   }

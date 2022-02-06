@@ -22,7 +22,7 @@ class _Content extends StatelessWidget {
   final onboardingPagesList = [
     PageModel(
       widget: _PageModel(
-        image: Assets.gifs.marker,
+        image: Assets.gifs.location,
         title: 'Check Nearest Location',
       ),
     ),

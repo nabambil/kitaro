@@ -18,11 +18,9 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: ChangeNotifierProvider<LoginPageState>(
-          create: (_) => LoginPageState(),
-          child: const _Content(),
-        ),
+      body: ChangeNotifierProvider<LoginPageState>(
+        create: (_) => LoginPageState(),
+        child: const _Content(),
       ),
     );
   }
@@ -78,9 +76,9 @@ class _ContentState extends State<_Content> {
         ListView(
           shrinkWrap: true,
           padding: const EdgeInsets.fromLTRB(
-            35.0,
-            30.0,
-            35.0,
+            20.0,
+            40.0,
+            20.0,
             16.0,
           ),
           children: const [
@@ -435,6 +433,11 @@ class _SignInWithGoogle extends StatelessWidget {
       return;
     }
     if (state.isLocator) {
+      await context.router.push(
+        LocatorMapPageRoute(),
+      );
+    }
+    if (state.isAdmin) {
       await context.router.push(
         LocatorMapPageRoute(),
       );

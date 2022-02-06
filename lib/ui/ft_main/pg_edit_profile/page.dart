@@ -41,7 +41,9 @@ class EditProfilePage extends StatelessWidget {
             user: user,
             userAddress: userAddress,
           ),
-          child: const _Content(),
+          child: Column(
+            children: const [_Logo(), Expanded(child: _Content())],
+          ),
         ),
       ),
     );
@@ -81,14 +83,12 @@ class _ContentState extends State<_Content> {
       physics: const BouncingScrollPhysics(),
       shrinkWrap: true,
       padding: const EdgeInsets.fromLTRB(
-        35.0,
-        48.0,
-        35.0,
+        20.0,
+        0.0,
+        20.0,
         16.0,
       ),
       children: const [
-        _Logo(),
-        // SizedBox(height: 30),
         Text(
           'Edit Profile Details',
           style: TextStyle(
@@ -97,7 +97,7 @@ class _ContentState extends State<_Content> {
             fontWeight: FontWeight.w900,
           ),
         ),
-        SizedBox(height: 60),
+        SizedBox(height: 40),
         _FirstNameField(),
         SizedBox(height: 25),
         _LastNameField(),
@@ -139,12 +139,36 @@ class _Logo extends StatelessWidget {
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
-    return Image(
-      image: Assets.logos.kitaroLogo,
-      height: 120,
-      width: 120,
-      color: kThemeColor,
-      alignment: Alignment.topLeft,
+    return Stack(
+      children: [
+        ClipPath(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 130,
+            // color: kThemeColor,
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.3, 2],
+              colors: [
+                kThemeColor,
+                kThemeColorDarker,
+              ],
+            )),
+          ),
+          clipper: CustomClipPath(),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 20.0, top: 32),
+          child: Image(
+            image: Assets.logos.kitaroLogoMain,
+            height: 120,
+            width: 120,
+            alignment: Alignment.topLeft,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -947,6 +971,12 @@ class _SubmitButton extends StatelessWidget {
       case InvalidField.recheckPassword:
         _passwordRecheckNode.requestFocus();
         return;
+      case InvalidField.idNumber:
+        // TODO: Handle this case.
+        break;
+      case InvalidField.phoneNumber:
+        // TODO: Handle this case.
+        break;
     }
 
     final err1 = await showBusyIndicator<ErrorMessage?>(

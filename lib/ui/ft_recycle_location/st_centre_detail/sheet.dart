@@ -81,7 +81,7 @@ class _CentreInfo extends StatelessWidget {
           locationDetail: locationDetail,
         ),
         const SizedBox(height: 15),
-        _Text(text: locationDetail.name),
+        _Text(text: locationDetail.name, color: kThemeColor),
         _CentreWasteType(
           types: locationDetail.wastes!,
         ),
@@ -112,7 +112,7 @@ class _CentreInfoTitle extends StatelessWidget {
             'Recycle Centre Info ',
             style: TextStyle(
               fontSize: 15,
-              color: Color(0xff4D627B),
+              color: kThemeColor,
               fontWeight: FontWeight.w600,
             ),
           );
@@ -291,7 +291,7 @@ class _OperationHoursTitle extends StatelessWidget {
       'Operation Hours',
       style: TextStyle(
         fontSize: 15,
-        color: Color(0xff4D627B),
+        color: kThemeColor,
         fontWeight: FontWeight.w600,
       ),
     );
@@ -302,11 +302,13 @@ class _Text extends StatelessWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const _Text({
     required this.text,
+    this.color = const Color(0xff4D627B),
     Key? key,
   }) : super(key: key);
 
   // ---------------------------------- FIELDS ---------------------------------
   final String? text;
+  final Color? color;
 
   // ------------------------------- METHODS ------------------------------
   @override
@@ -315,8 +317,8 @@ class _Text extends StatelessWidget {
       padding: const EdgeInsets.only(left: 20.0),
       child: Text(
         text ?? '',
-        style: const TextStyle(
-          color: Color(0xff4D627B),
+        style: TextStyle(
+          color: color,
           fontSize: 14,
         ),
       ),

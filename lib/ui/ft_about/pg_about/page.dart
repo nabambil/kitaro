@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:kitaro/kitaro.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'state.dart';
 
@@ -17,11 +18,9 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: ChangeNotifierProvider<AboutPageState>(
-          create: (_) => AboutPageState(),
-          child: const _Content(),
-        ),
+      body: ChangeNotifierProvider<AboutPageState>(
+        create: (_) => AboutPageState(),
+        child: const _Content(),
       ),
     );
   }
@@ -58,26 +57,37 @@ class _ContentState extends State<_Content> {
       height: MediaQuery.of(context).size.height,
       child: Column(
         children: [
-          const PageBackButton(
-            colorOverride: Color(0xff8190A5),
-          ),
+          // const PageBackButton(
+          //   colorOverride: Color(0xff8190A5),
+          // ),
+          const _Logo(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(
-                35.0,
-                48.0,
-                35.0,
+                0.0,
+                0.0,
+                0.0,
                 16.0,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
-                  _Logo(),
-                  SizedBox(height: 90),
-                  _Username(),
-                  _Password(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      'Contact Us',
+                      style: TextStyle(
+                        color: Color(0xff47525E),
+                        fontSize: 28,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  _ListTile(),
+                  _emailTile(),
                   Spacer(),
-                  _SubmitButton(),
+                  // _SubmitButton(),
                   SizedBox(height: 30),
                   Center(
                     child: Text(
@@ -95,6 +105,24 @@ class _ContentState extends State<_Content> {
   }
 }
 
+// class _Logo extends StatelessWidget {
+//   // ---------------------------- CONSTRUCTORS ----------------------------
+//   const _Logo({
+//     Key? key,
+//   }) : super(key: key);
+
+//   // ------------------------------- METHODS ------------------------------
+//   @override
+//   Widget build(BuildContext context) {
+//     return Image(
+//       image: Assets.logos.logo,
+//       height: 56,
+//       width: 57,
+//       alignment: Alignment.topLeft,
+//     );
+//   }
+// }
+
 class _Logo extends StatelessWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const _Logo({
@@ -104,12 +132,89 @@ class _Logo extends StatelessWidget {
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
-    return Image(
-      image: Assets.logos.logo,
-      height: 56,
-      width: 57,
-      alignment: Alignment.topLeft,
+    return Stack(
+      children: [
+        ClipPath(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 150,
+            // color: kThemeColor,
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.3, 2],
+              colors: [
+                kThemeColor,
+                kThemeColorDarker,
+              ],
+            )),
+          ),
+          clipper: CustomClipPath(),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 20.0, top: 50),
+          child: Image(
+            image: Assets.logos.kitaroLogoMain,
+            height: 120,
+            width: 120,
+            alignment: Alignment.topLeft,
+          ),
+        ),
+      ],
     );
+  }
+}
+
+class _ListTile extends StatelessWidget {
+  const _ListTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      leading: const Icon(Icons.phone),
+      title: const Text("Hotline Number"),
+      expandedAlignment: Alignment.topLeft,
+      childrenPadding: const EdgeInsets.symmetric(horizontal: 12),
+      children: [
+        TextButton(
+          onPressed: () => _call("03-5526 2525"),
+          child: const Text("03-5526 2525"),
+        ),
+        TextButton(
+          onPressed: () => _call("012-690 3526"),
+          child: const Text("012-690 3526"),
+        ),
+      ],
+    );
+  }
+
+  void _call(String text) {
+    launch("tel://" + text);
+  }
+}
+
+class _emailTile extends StatelessWidget {
+  const _emailTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.email),
+      title: const Text("info.environment@whb.com.my"),
+      onTap: () => email("info.environment@whb.com.my"),
+    );
+  }
+
+  void email(String value) {
+    final Uri params = Uri(
+      scheme: 'mailto',
+      path: value,
+      query: 'subject=Kitaro App Feedback',
+    );
+
+    var url = params.toString();
+    launch(url);
   }
 }
 

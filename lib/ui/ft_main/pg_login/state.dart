@@ -28,6 +28,20 @@ class LoginPageState extends ChangeNotifier {
     _isLocator = value;
   }
 
+  bool _isAdmin = false;
+
+  bool get isAdmin => _isAdmin;
+  set isAdmin(bool value) {
+    _isAdmin = value;
+  }
+
+  bool _isSuper = false;
+
+  bool get isSuper => _isSuper;
+  set isSuper(bool value) {
+    _isSuper = value;
+  }
+
   UserCredential? userCredential;
 
   // USER NAME -----------------------------------------------------------------
@@ -209,7 +223,15 @@ class LoginPageState extends ChangeNotifier {
   Future<ErrorMessage?> _updateToken(String? token, String? id) {
     return UserDao(id: id).profile.then((value) {
       if (value.role == 'locator') {
-        _isLocator = true;
+        isLocator = true;
+        notifyListeners();
+      }
+      if (value.role == 'admin') {
+        isAdmin = true;
+        notifyListeners();
+      }
+      if (value.role == 'super') {
+        isSuper = true;
         notifyListeners();
       }
       final _profile = value.copyWith(token: token);
