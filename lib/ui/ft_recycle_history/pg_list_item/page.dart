@@ -266,7 +266,7 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -276,7 +276,7 @@ class _Body extends StatelessWidget {
       ),
       child: ListView(
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 20.0),
         children: const [
           _BodyTitle(),
           _ItemList(),
@@ -310,7 +310,6 @@ class _BodyTitle extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            SizedBox(height: 8.0),
             // Container(
             //   height: 1.0,
             //   width: 30,

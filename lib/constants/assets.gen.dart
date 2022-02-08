@@ -58,6 +58,10 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/warning.png
   AssetGenImage get warning => const AssetGenImage('assets/icons/warning.png');
+
+  /// File path: assets/icons/whatsapp.png
+  AssetGenImage get whatsapp =>
+      const AssetGenImage('assets/icons/whatsapp.png');
 }
 
 class $AssetsLogosGen {

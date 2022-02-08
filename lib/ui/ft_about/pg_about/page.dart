@@ -86,6 +86,7 @@ class _ContentState extends State<_Content> {
                   SizedBox(height: 30),
                   _ListTile(),
                   _emailTile(),
+                  _wsTile(),
                   Spacer(),
                   // _SubmitButton(),
                   SizedBox(height: 30),
@@ -214,6 +215,29 @@ class _emailTile extends StatelessWidget {
     );
 
     var url = params.toString();
+    launch(url);
+  }
+}
+
+class _wsTile extends StatelessWidget {
+  const _wsTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Image(
+        image: Assets.icons.whatsapp,
+        height: 26,
+        width: 26,
+        color: Colors.grey,
+      ),
+      title: const Text("info.environment@whb.com.my"),
+      onTap: () => ws("0197992590"),
+    );
+  }
+
+  void ws(String value) {
+    var url = "https://wa.me/$value?text=Kitaro App Feedback";
     launch(url);
   }
 }

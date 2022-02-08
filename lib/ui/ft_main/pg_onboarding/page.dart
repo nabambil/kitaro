@@ -36,6 +36,8 @@ class _Content extends StatelessWidget {
       widget: _PageModel(
         image: Assets.gifs.recycle,
         title: 'Together Help Earth be Better Place',
+        subtitle:
+            "Disclaimer: Our Carbon Emission calculation just average amount",
       ),
     ),
   ];
@@ -82,10 +84,12 @@ class _PageModel extends StatelessWidget {
     Key? key,
     required this.image,
     required this.title,
+    this.subtitle,
   }) : super(key: key);
 
   final ImageProvider image;
   final String title;
+  final String? subtitle;
 
   // --------------------------------- METHODS ---------------------------------
   @override
@@ -93,11 +97,11 @@ class _PageModel extends StatelessWidget {
     return Column(
       children: [
         Container(
-            // padding: const EdgeInsets.only(bottom: .0),
+            padding: const EdgeInsets.only(bottom: 12.0),
             child: Image(
-          image: image,
-          height: MediaQuery.of(context).size.height * 0.6,
-        )),
+              image: image,
+              height: MediaQuery.of(context).size.height * 0.6,
+            )),
         SizedBox(
           width: double.infinity,
           child: Text(
@@ -112,6 +116,22 @@ class _PageModel extends StatelessWidget {
             ),
           ),
         ),
+        Spacer(),
+        if (subtitle != null)
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              subtitle ?? "",
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 14.0,
+                wordSpacing: 1,
+                letterSpacing: 1.2,
+                fontWeight: FontWeight.bold,
+                color: kDefaultTextLightColor,
+              ),
+            ),
+          ),
       ],
     );
   }

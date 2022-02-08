@@ -11,7 +11,6 @@
 import 'package:auto_route/auto_route.dart' as _i2;
 import 'package:firebase_auth/firebase_auth.dart' as _i4;
 import 'package:flutter/material.dart' as _i3;
-import 'package:flutter/widgets.dart' as _i4;
 
 import '../../kitaro.dart' as _i1;
 
@@ -187,7 +186,7 @@ class EditProfilePageRouteArgs {
 
   final _i1.AddressModel userAddress;
 
-  final _i4.Key? key;
+  final _i3.Key? key;
 
   @override
   String toString() {

@@ -19,7 +19,7 @@ class CentreDetailsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.6,
+      height: MediaQuery.of(context).size.height * 0.75,
       child: _Content(
         locationDetail: locationDetails,
       ),
@@ -212,18 +212,22 @@ class _CentreAddressState extends State<_CentreAddress> {
           child: _Text(text: _address2),
         ),
         Visibility(visible: _address3 != null, child: _Text(text: _address3)),
-        Visibility(
-          visible: _city != null,
-          child: _Text(text: _city),
-        ),
-        Visibility(
-          visible: _postcode != null,
-          child: _Text(text: _postcode.toString()),
-        ),
-        Visibility(
-          visible: _state != null,
-          child: _Text(text: _state),
-        ),
+        Row(
+          children: [
+            Visibility(
+              visible: _city != null,
+              child: _Text(text: _city),
+            ),
+            Visibility(
+              visible: _postcode != null,
+              child: _Text(text: _postcode.toString(), smallGap: true),
+            ),
+            Visibility(
+              visible: _state != null,
+              child: _Text(text: _state, smallGap: true),
+            ),
+          ],
+        )
       ],
     );
   }
@@ -303,24 +307,23 @@ class _Text extends StatelessWidget {
   const _Text({
     required this.text,
     this.color = const Color(0xff4D627B),
+    this.smallGap = false,
     Key? key,
   }) : super(key: key);
 
   // ---------------------------------- FIELDS ---------------------------------
   final String? text;
   final Color? color;
+  final bool smallGap;
 
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20.0),
+      padding: EdgeInsets.only(left: smallGap ? 4.0 : 16.0),
       child: Text(
         text ?? '',
-        style: TextStyle(
-          color: color,
-          fontSize: 14,
-        ),
+        style: TextStyle(color: color, fontSize: 14, height: 1.5),
       ),
     );
   }
