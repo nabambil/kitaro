@@ -23,9 +23,11 @@ class _$WasteModelTearOff {
 
   _WasteModel call(
       {@JsonKey(name: 'name') String? name,
+      @JsonKey(name: 'emission') double? emission,
       @JsonKey(name: 'description') String? desc}) {
     return _WasteModel(
       name: name,
+      emission: emission,
       desc: desc,
     );
   }
@@ -42,6 +44,8 @@ const $WasteModel = _$WasteModelTearOff();
 mixin _$WasteModel {
   @JsonKey(name: 'name')
   String? get name => throw _privateConstructorUsedError;
+  @JsonKey(name: 'emission')
+  double? get emission => throw _privateConstructorUsedError;
   @JsonKey(name: 'description')
   String? get desc => throw _privateConstructorUsedError;
 
@@ -58,6 +62,7 @@ abstract class $WasteModelCopyWith<$Res> {
       _$WasteModelCopyWithImpl<$Res>;
   $Res call(
       {@JsonKey(name: 'name') String? name,
+      @JsonKey(name: 'emission') double? emission,
       @JsonKey(name: 'description') String? desc});
 }
 
@@ -72,6 +77,7 @@ class _$WasteModelCopyWithImpl<$Res> implements $WasteModelCopyWith<$Res> {
   @override
   $Res call({
     Object? name = freezed,
+    Object? emission = freezed,
     Object? desc = freezed,
   }) {
     return _then(_value.copyWith(
@@ -79,6 +85,10 @@ class _$WasteModelCopyWithImpl<$Res> implements $WasteModelCopyWith<$Res> {
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
+      emission: emission == freezed
+          ? _value.emission
+          : emission // ignore: cast_nullable_to_non_nullable
+              as double?,
       desc: desc == freezed
           ? _value.desc
           : desc // ignore: cast_nullable_to_non_nullable
@@ -95,6 +105,7 @@ abstract class _$WasteModelCopyWith<$Res> implements $WasteModelCopyWith<$Res> {
   @override
   $Res call(
       {@JsonKey(name: 'name') String? name,
+      @JsonKey(name: 'emission') double? emission,
       @JsonKey(name: 'description') String? desc});
 }
 
@@ -111,6 +122,7 @@ class __$WasteModelCopyWithImpl<$Res> extends _$WasteModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? name = freezed,
+    Object? emission = freezed,
     Object? desc = freezed,
   }) {
     return _then(_WasteModel(
@@ -118,6 +130,10 @@ class __$WasteModelCopyWithImpl<$Res> extends _$WasteModelCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
+      emission: emission == freezed
+          ? _value.emission
+          : emission // ignore: cast_nullable_to_non_nullable
+              as double?,
       desc: desc == freezed
           ? _value.desc
           : desc // ignore: cast_nullable_to_non_nullable
@@ -132,6 +148,7 @@ class __$WasteModelCopyWithImpl<$Res> extends _$WasteModelCopyWithImpl<$Res>
 class _$_WasteModel implements _WasteModel {
   const _$_WasteModel(
       {@JsonKey(name: 'name') this.name,
+      @JsonKey(name: 'emission') this.emission,
       @JsonKey(name: 'description') this.desc});
 
   factory _$_WasteModel.fromJson(Map<String, dynamic> json) =>
@@ -141,12 +158,15 @@ class _$_WasteModel implements _WasteModel {
   @JsonKey(name: 'name')
   final String? name;
   @override
+  @JsonKey(name: 'emission')
+  final double? emission;
+  @override
   @JsonKey(name: 'description')
   final String? desc;
 
   @override
   String toString() {
-    return 'WasteModel(name: $name, desc: $desc)';
+    return 'WasteModel(name: $name, emission: $emission, desc: $desc)';
   }
 
   @override
@@ -155,11 +175,13 @@ class _$_WasteModel implements _WasteModel {
         (other.runtimeType == runtimeType &&
             other is _WasteModel &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.emission, emission) ||
+                other.emission == emission) &&
             (identical(other.desc, desc) || other.desc == desc));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, name, desc);
+  int get hashCode => Object.hash(runtimeType, name, emission, desc);
 
   @JsonKey(ignore: true)
   @override
@@ -175,6 +197,7 @@ class _$_WasteModel implements _WasteModel {
 abstract class _WasteModel implements WasteModel {
   const factory _WasteModel(
       {@JsonKey(name: 'name') String? name,
+      @JsonKey(name: 'emission') double? emission,
       @JsonKey(name: 'description') String? desc}) = _$_WasteModel;
 
   factory _WasteModel.fromJson(Map<String, dynamic> json) =
@@ -183,6 +206,9 @@ abstract class _WasteModel implements WasteModel {
   @override
   @JsonKey(name: 'name')
   String? get name;
+  @override
+  @JsonKey(name: 'emission')
+  double? get emission;
   @override
   @JsonKey(name: 'description')
   String? get desc;

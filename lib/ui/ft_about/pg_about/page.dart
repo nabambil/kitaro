@@ -231,8 +231,8 @@ class _wsTile extends StatelessWidget {
         width: 26,
         color: Colors.grey,
       ),
-      title: const Text("info.environment@whb.com.my"),
-      onTap: () => ws("0197992590"),
+      title: const Text("012-6903526"),
+      onTap: () => ws("+60126903526"),
     );
   }
 

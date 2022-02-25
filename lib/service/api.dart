@@ -25,11 +25,13 @@ class Api {
     return ref.orderByChild(key).equalTo(value).onValue;
   }
 
-  Future<void> removeDocument(String id, ) {
+  Future<void> removeDocument(
+    String id,
+  ) {
     return ref.child(id).remove();
   }
 
-  Future<String?> add(String id, Map data) async{
+  Future<String?> add(String id, Map data) async {
     final _action = ref.child(id);
     await _action.set(data);
 

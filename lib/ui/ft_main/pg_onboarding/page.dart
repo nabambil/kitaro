@@ -23,7 +23,7 @@ class _Content extends StatelessWidget {
     PageModel(
       widget: _PageModel(
         image: Assets.gifs.location,
-        title: 'Check Nearest Location',
+        title: 'Locate Nearest Recycling Centre or Kiosk',
       ),
     ),
     PageModel(
@@ -35,9 +35,9 @@ class _Content extends StatelessWidget {
     PageModel(
       widget: _PageModel(
         image: Assets.gifs.recycle,
-        title: 'Together Help Earth be Better Place',
+        title: 'Together Help Earth to be a Better Place',
         subtitle:
-            "Disclaimer: Our Carbon Emission calculation just average amount",
+            "Disclaimer: The carbon emission savings calculation is based on approximation only",
       ),
     ),
   ];
@@ -113,6 +113,7 @@ class _PageModel extends StatelessWidget {
               letterSpacing: 1.2,
               fontWeight: FontWeight.bold,
               color: kThemeColor,
+              fontFamily: FontFamily.lato,
             ),
           ),
         ),

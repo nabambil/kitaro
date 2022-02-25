@@ -65,7 +65,9 @@ class _Content extends StatelessWidget {
             child: const _ItemWeight(),
           ),
           const SizedBox(height: 18.0),
-          _ItemPhotos(isEdit: isEdit,),
+          _ItemPhotos(
+            isEdit: isEdit,
+          ),
           const SizedBox(height: 25.0),
           Align(
             alignment: Alignment.bottomRight,
@@ -132,7 +134,7 @@ class _ItemTypeDropdown extends StatelessWidget {
         labelText: 'Select Type',
         value: state.itemType,
         errorText: state.itemTypeError,
-        items: state.itemTypeList,
+        items: state.itemTypeList.map<String>((e) => e.name ?? "").toList(),
         onSelected: (t) => state.itemType = t,
       );
     });
@@ -227,13 +229,16 @@ class _ItemPhotos extends StatelessWidget {
               height: MediaQuery.of(context).size.width * 0.17,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: isEdit ? state.imagePath.length : state.itemImages.isEmpty
-                    ? 1
-                    : state.itemImages.length == 3
-                        ? 3
-                        : state.itemImages.length + 1,
+                itemCount: isEdit
+                    ? state.imagePath.length
+                    : state.itemImages.isEmpty
+                        ? 1
+                        : state.itemImages.length == 3
+                            ? 3
+                            : state.itemImages.length + 1,
                 itemBuilder: (ctx, index) {
-                  if (!isEdit && state.itemImages.isNotEmpty &&
+                  if (!isEdit &&
+                      state.itemImages.isNotEmpty &&
                       state.itemImages.length > index) {
                     return _Placeholder(index: index);
                   }
@@ -432,7 +437,7 @@ class __ImageBoxState extends State<_ImageBox> {
             );
 
             if (file != null) {
-              if(widget.isEdit){
+              if (widget.isEdit) {
                 state.imagePath[widget.index] = file.path;
               }
               state.itemImage = file;

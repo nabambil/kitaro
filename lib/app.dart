@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart'  hide Router;
+import 'package:flutter/material.dart' hide Router;
 import 'package:provider/provider.dart';
 
 import 'app_state.dart';
@@ -26,6 +26,7 @@ class KitaroApp extends StatelessWidget {
           fontFamily: FontFamily.lato,
           splashColor: Colors.white.withOpacity(0.5),
         ),
+        debugShowCheckedModeBanner: false,
         darkTheme: ThemeData(
           brightness: Brightness.dark,
           fontFamily: FontFamily.lato,

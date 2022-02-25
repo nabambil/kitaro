@@ -69,6 +69,7 @@ Future<void> showSuccessfulDialog({
   required BuildContext context,
   required String title,
   required String message,
+  String? carbon,
   bool barrierDismissible = false,
 }) {
   return showRawDialog(
@@ -81,6 +82,7 @@ Future<void> showSuccessfulDialog({
       titleTextColor: const Color(0xff77D353),
       iconColor: const Color(0xff77D353),
       icon: Assets.icons.leave,
+      carbon: carbon,
     ),
   );
 }
@@ -89,6 +91,7 @@ class AlertDialog extends StatelessWidget {
   final String title;
   final String message;
   final String buttonText;
+  final String? carbon;
   final Color titleTextColor;
   final Color? iconColor;
   final ImageProvider icon;
@@ -99,6 +102,7 @@ class AlertDialog extends StatelessWidget {
     required this.buttonText,
     required this.titleTextColor,
     required this.icon,
+    this.carbon,
     this.iconColor,
     Key? key,
   }) : super(key: key);
@@ -128,6 +132,13 @@ class AlertDialog extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
+            const SizedBox(height: 20),
+            if (carbon != null)
+              Text(
+                "Carbon Emission Save : ${carbon ?? ''} KG CO²",
+                style: const TextStyle(fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
             const SizedBox(height: 20),
             Text(
               message,

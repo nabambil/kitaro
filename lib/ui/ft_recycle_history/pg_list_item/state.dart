@@ -45,10 +45,13 @@ class HistoryItemListPageState extends ChangeNotifier {
     try {
       var _recycles = await RecycleDao()
           .getRecycles(key: 'username', value: _userProfile!.username!);
-      _recycles.forEach((key, value) {
-        _itemsAdded.add(value);
+      final values = _recycles.values.toList();
+      // values.sort((a, b) => DateTime.parse(a.datetime ?? "")
+      //     .compareTo(DateTime.parse(b.datetime ?? "")));
+      for (var item in values) {
+        _itemsAdded.add(item);
         notifyListeners();
-      });
+      }
     } on FirebaseAuthException catch (e) {
       return ErrorMessage(title: e.code, message: e.message!);
     } catch (e) {

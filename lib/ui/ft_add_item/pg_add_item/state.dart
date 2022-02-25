@@ -29,7 +29,7 @@ class AddItemListPageState extends ChangeNotifier {
   List<String> imagePath = [];
 
   // ITEM TYPE -----------------------------------------------------------------
-  List<String> itemTypeList = [];
+  List<WasteModel> itemTypeList = [];
   // ITEM TYPE //////////////////////////////////
   String? _itemType;
   String? get itemType => _itemType;
@@ -128,9 +128,9 @@ class AddItemListPageState extends ChangeNotifier {
     try {
       _itemImageError = null;
 
-      if (_itemImages.isEmpty) {
-        _itemImageError = 'item image required';
-      }
+      // if (_itemImages.isEmpty) {
+      //   _itemImageError = 'item image required';
+      // }
     } finally {
       notifyListeners();
     }
@@ -153,7 +153,7 @@ class AddItemListPageState extends ChangeNotifier {
       itemTypeList.clear();
       for (var element in value.wastes!) {
         WasteDao(id: element).waste.then((value) {
-          itemTypeList.add(value.name!);
+          itemTypeList.add(value);
           notifyListeners();
         });
         notifyListeners();
@@ -192,10 +192,11 @@ class AddItemListPageState extends ChangeNotifier {
   }
 
   Future<ErrorMessage?> validateRecycleList() async {
-    if (_itemsAdded.isEmpty) {
-      return ErrorMessage(
-          title: 'Error', message: 'Please add at least one item to recycle');
-    }
+    // if (_itemsAdded.isEmpty) {
+    //   return ErrorMessage(
+    //       title: 'Error', message: 'Please add at least one item to recycle');
+    // }
+    return null;
   }
 
   void removeItemImage(int? index) {
@@ -255,11 +256,27 @@ class AddItemListPageState extends ChangeNotifier {
     } catch (e) {
       return ErrorMessage(title: e.toString(), message: '');
     } finally {
-      _itemsAdded.clear();
       _itemType = null;
       _itemWeight = null;
       _itemImages = [];
       notifyListeners();
     }
+  }
+
+  String calculateTotalCarbon() {
+    double carbon = 0.0;
+    for (var element in _itemsAdded) {
+      final WasteModel waste =
+          itemTypeList.firstWhere((v) => v.name == element.type);
+      carbon += (element.weight ?? 0) * (waste.emission ?? 1);
+    }
+
+    _itemsAdded.clear();
+
+    return carbon.toStringAsFixed(2);
+  }
+
+  List<String> get typeNames {
+    return itemTypeList.map<String>((e) => e.name ?? "").toList();
   }
 }

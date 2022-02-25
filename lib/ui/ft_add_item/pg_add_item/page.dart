@@ -99,9 +99,10 @@ class _Header extends StatelessWidget {
             children: [
               const _AppBar(),
               const SizedBox(height: 15),
-              _Text(text: state.location?.name ?? ''),
-              const _Text(text: 'Centre Phone Number'),
-              _Text(text: state.itemTypeList.toString()),
+              _Text(text: state.location?.name ?? '', bold: true),
+              // const _Text(text: 'Centre Phone Number'),
+              const _Text(text: "Material Types:", bold: true),
+              _Text(text: state.typeNames.toString()),
               const SizedBox(height: 15),
               // _Text(text: 'Centre Address 1'),
               // _Text(text: 'Centre Address 2'),
@@ -157,11 +158,13 @@ class _Text extends StatelessWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const _Text({
     required this.text,
+    this.bold = false,
     Key? key,
   }) : super(key: key);
 
   // ---------------------------------- FIELDS ---------------------------------
   final String? text;
+  final bool bold;
 
   // ------------------------------- METHODS ------------------------------
   @override
@@ -170,10 +173,11 @@ class _Text extends StatelessWidget {
       padding: const EdgeInsets.only(left: 20.0, top: 4),
       child: Text(
         text!,
-        style: const TextStyle(
-          color: kWhiteColor, //Color(0xff4D627B),
-          fontSize: 14,
-        ),
+        style: TextStyle(
+            color: kWhiteColor, //Color(0xff4D627B),
+            fontSize: bold ? 16 : 14,
+            height: 1.5,
+            fontWeight: bold ? FontWeight.bold : FontWeight.normal),
       ),
     );
   }
@@ -356,7 +360,8 @@ class _SubmitButton extends StatelessWidget {
             barrierDismissible: false,
             context: context,
             title: 'ITEM RECYCLED',
-            message: 'You have saved the earth, You\'re our Hero !',
+            message: 'You have saved the Earth,\n You\'re our Hero !',
+            carbon: state.calculateTotalCarbon(),
           );
           await context.router.replace(const HistoryItemListPageRoute());
         },

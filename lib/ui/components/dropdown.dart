@@ -56,13 +56,17 @@ class _CustomDropdownState extends State<CustomDropdown> {
                       width: double.infinity,
                       height: double.infinity,
                       child: DropdownButton<String>(
+                        isExpanded: true,
                         hint: Text(
                           widget.labelText!,
                           style: TextStyle(
                               fontSize: 14.0,
-                              color: widget.errorText != null ? Colors.red.shade900 : widget.labelTextColor,
-                              fontWeight: widget.errorText != null ? FontWeight.normal : FontWeight.bold
-                          ),
+                              color: widget.errorText != null
+                                  ? Colors.red.shade900
+                                  : widget.labelTextColor,
+                              fontWeight: widget.errorText != null
+                                  ? FontWeight.normal
+                                  : FontWeight.bold),
                         ),
                         value: widget.value,
                         isDense: true,
@@ -75,7 +79,11 @@ class _CustomDropdownState extends State<CustomDropdown> {
                         items: widget.items.map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value),
+                            child: Text(
+                              value,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
                           );
                         }).toList(),
                       ),

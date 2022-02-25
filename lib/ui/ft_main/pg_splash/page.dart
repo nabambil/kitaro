@@ -37,14 +37,14 @@ class _ContentState extends State<_Content> {
       print('Message clicked!');
     });
     SchedulerBinding.instance!.addPostFrameCallback((_) async {
-      bool _isFirstTime = true;
-      MySharedPreferences.instance
-          .getBooleanValue(isFirstRun)
-          .then((value) => setState(() {
-                _isFirstTime = value;
-              }));
+      // bool _isFirstTime = true;
+      // MySharedPreferences.instance
+      //     .getBooleanValue(isFirstRun)
+      //     .then((value) => setState(() {
+      //           _isFirstTime = value;
+      //         }));
       await Future.delayed(const Duration(seconds: 1));
-      if (_isFirstTime) {
+      if (true) {
         await context.router.replace(const OnBoardingPageRoute());
         return;
       }
@@ -54,7 +54,7 @@ class _ContentState extends State<_Content> {
         return;
       }
       final isLocator = await Authentication.handleLocatorState();
-      if (isLocator){
+      if (isLocator) {
         await context.router.replace(const LocatorMapPageRoute());
         return;
       }

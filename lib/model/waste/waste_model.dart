@@ -9,6 +9,7 @@ class WasteModel with _$WasteModel {
   @JsonSerializable(checked: true)
   const factory WasteModel({
     @JsonKey(name: 'name') String? name,
+    @JsonKey(name: 'emission') double? emission,
     @JsonKey(name: 'description') String? desc,
   }) = _WasteModel;
 
