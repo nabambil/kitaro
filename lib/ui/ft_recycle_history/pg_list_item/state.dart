@@ -50,8 +50,12 @@ class HistoryItemListPageState extends ChangeNotifier {
       //     .compareTo(DateTime.parse(b.datetime ?? "")));
       for (var item in values) {
         _itemsAdded.add(item);
-        notifyListeners();
       }
+      _itemsAdded.sort((a, b) {
+        return int.parse(b.datetime.toString())
+            .compareTo(int.parse(a.datetime.toString()));
+      });
+      notifyListeners();
     } on FirebaseAuthException catch (e) {
       return ErrorMessage(title: e.code, message: e.message!);
     } catch (e) {

@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kitaro/kitaro.dart';
 
@@ -189,26 +190,70 @@ class LoginPageState extends ChangeNotifier {
   }
 
   Future<ErrorMessage?> signInWithFacebook() async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    // try {
-    //   final LoginResult result = await FacebookAuth.instance.login();
-    //   switch (result.status) {
-    //     case LoginStatus.success:
-    //       final AuthCredential facebookCredential =
-    //       FacebookAuthProvider.credential(result.accessToken!.token);
-    //       final userCredential =
-    //       await _auth.signInWithCredential(facebookCredential);
-    //       return null;
-    //     case LoginStatus.cancelled:
-    //       return ErrorMessage(title: 'Cancelled', message: 'Login Cancelled');
-    //     case LoginStatus.failed:
-    //       return ErrorMessage(title: 'Failed', message: result.message!);
-    //     default:
-    //       return null;
-    //   }
-    // } on FirebaseAuthException catch (e) {
-    //   throw e;
-    // }
+    try {
+      final fb = FacebookLogin();
+      FirebaseAuth auth = FirebaseAuth.instance;
+      User? user;
+
+      final res = await fb.logIn(permissions: [
+        FacebookPermission.publicProfile,
+        FacebookPermission.email,
+      ]);
+
+      switch (res.status) {
+        case FacebookLoginStatus.success:
+          // Logged in
+
+          // Send access token to server for validation and auth
+          final FacebookAccessToken? accessToken = res.accessToken;
+          print('Access token: ${accessToken?.token}');
+
+          // Get profile data
+          final profile = await fb.getUserProfile();
+          print('Hello, ${profile?.name}! You ID: ${profile?.userId}');
+
+          // Get user profile image url
+          final imageUrl = await fb.getProfileImageUrl(width: 100);
+          print('Your profile image: $imageUrl');
+
+          // Get email (since we request email permission)
+          final email = await fb.getUserEmail();
+          // But user can decline permission
+          if (email != null) print('And your email is $email');
+
+          break;
+        case FacebookLoginStatus.cancel:
+          return ErrorMessage(title: 'Failed', message: ' Sign in failed');
+        case FacebookLoginStatus.error:
+          return ErrorMessage(
+              title: 'Error', message: 'Error while log in: ${res.error}');
+      }
+
+      final AuthCredential credential = FacebookAuthProvider.credential(
+        res.accessToken!.token,
+      );
+
+      try {
+        userCredential = await auth.signInWithCredential(credential);
+
+        user = userCredential!.user;
+        await _checkFirstTimeUser(userCredential!);
+        if (_isFirstTime) {
+          return null;
+        }
+
+        final _token = await FirebaseAuth.instance.currentUser?.getIdToken();
+
+        return _updateToken(_token, user?.uid);
+      } on FirebaseAuthException catch (e) {
+        return ErrorMessage(title: e.code, message: e.message!);
+      } catch (e) {
+        return ErrorMessage(title: e.toString(), message: '');
+      }
+
+    } on FirebaseAuthException catch (e) {
+      throw e;
+    }
   }
 
   Future<void>? _checkFirstTimeUser(UserCredential userCredential) {

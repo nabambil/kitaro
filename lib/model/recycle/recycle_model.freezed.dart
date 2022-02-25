@@ -22,12 +22,19 @@ class _$RecycleModelTearOff {
   const _$RecycleModelTearOff();
 
   _RecycleModel call(
-      {@JsonKey(name: 'datetime') String? datetime,
-      @JsonKey(name: 'images') List<String>? images,
-      @JsonKey(name: 'location') String? location,
-      @JsonKey(name: 'type') String? type,
-      @JsonKey(name: 'username') String? username,
-      @JsonKey(name: 'weight') int? weight}) {
+      {@NullableDateTimeJsonConverter()
+      @JsonKey(name: 'datetime')
+          required Object datetime,
+      @JsonKey(name: 'images')
+          List<String>? images,
+      @JsonKey(name: 'location')
+          String? location,
+      @JsonKey(name: 'type')
+          String? type,
+      @JsonKey(name: 'username')
+          String? username,
+      @JsonKey(name: 'weight')
+          num? weight}) {
     return _RecycleModel(
       datetime: datetime,
       images: images,
@@ -48,8 +55,9 @@ const $RecycleModel = _$RecycleModelTearOff();
 
 /// @nodoc
 mixin _$RecycleModel {
+  @NullableDateTimeJsonConverter()
   @JsonKey(name: 'datetime')
-  String? get datetime => throw _privateConstructorUsedError;
+  Object get datetime => throw _privateConstructorUsedError;
   @JsonKey(name: 'images')
   List<String>? get images => throw _privateConstructorUsedError;
   @JsonKey(name: 'location')
@@ -59,7 +67,7 @@ mixin _$RecycleModel {
   @JsonKey(name: 'username')
   String? get username => throw _privateConstructorUsedError;
   @JsonKey(name: 'weight')
-  int? get weight => throw _privateConstructorUsedError;
+  num? get weight => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -73,12 +81,19 @@ abstract class $RecycleModelCopyWith<$Res> {
           RecycleModel value, $Res Function(RecycleModel) then) =
       _$RecycleModelCopyWithImpl<$Res>;
   $Res call(
-      {@JsonKey(name: 'datetime') String? datetime,
-      @JsonKey(name: 'images') List<String>? images,
-      @JsonKey(name: 'location') String? location,
-      @JsonKey(name: 'type') String? type,
-      @JsonKey(name: 'username') String? username,
-      @JsonKey(name: 'weight') int? weight});
+      {@NullableDateTimeJsonConverter()
+      @JsonKey(name: 'datetime')
+          Object datetime,
+      @JsonKey(name: 'images')
+          List<String>? images,
+      @JsonKey(name: 'location')
+          String? location,
+      @JsonKey(name: 'type')
+          String? type,
+      @JsonKey(name: 'username')
+          String? username,
+      @JsonKey(name: 'weight')
+          num? weight});
 }
 
 /// @nodoc
@@ -102,7 +117,7 @@ class _$RecycleModelCopyWithImpl<$Res> implements $RecycleModelCopyWith<$Res> {
       datetime: datetime == freezed
           ? _value.datetime
           : datetime // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Object,
       images: images == freezed
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
@@ -122,7 +137,7 @@ class _$RecycleModelCopyWithImpl<$Res> implements $RecycleModelCopyWith<$Res> {
       weight: weight == freezed
           ? _value.weight
           : weight // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as num?,
     ));
   }
 }
@@ -135,12 +150,19 @@ abstract class _$RecycleModelCopyWith<$Res>
       __$RecycleModelCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@JsonKey(name: 'datetime') String? datetime,
-      @JsonKey(name: 'images') List<String>? images,
-      @JsonKey(name: 'location') String? location,
-      @JsonKey(name: 'type') String? type,
-      @JsonKey(name: 'username') String? username,
-      @JsonKey(name: 'weight') int? weight});
+      {@NullableDateTimeJsonConverter()
+      @JsonKey(name: 'datetime')
+          Object datetime,
+      @JsonKey(name: 'images')
+          List<String>? images,
+      @JsonKey(name: 'location')
+          String? location,
+      @JsonKey(name: 'type')
+          String? type,
+      @JsonKey(name: 'username')
+          String? username,
+      @JsonKey(name: 'weight')
+          num? weight});
 }
 
 /// @nodoc
@@ -166,7 +188,7 @@ class __$RecycleModelCopyWithImpl<$Res> extends _$RecycleModelCopyWithImpl<$Res>
       datetime: datetime == freezed
           ? _value.datetime
           : datetime // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as Object,
       images: images == freezed
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
@@ -186,7 +208,7 @@ class __$RecycleModelCopyWithImpl<$Res> extends _$RecycleModelCopyWithImpl<$Res>
       weight: weight == freezed
           ? _value.weight
           : weight // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as num?,
     ));
   }
 }
@@ -196,19 +218,27 @@ class __$RecycleModelCopyWithImpl<$Res> extends _$RecycleModelCopyWithImpl<$Res>
 @JsonSerializable(checked: true)
 class _$_RecycleModel implements _RecycleModel {
   const _$_RecycleModel(
-      {@JsonKey(name: 'datetime') this.datetime,
-      @JsonKey(name: 'images') this.images,
-      @JsonKey(name: 'location') this.location,
-      @JsonKey(name: 'type') this.type,
-      @JsonKey(name: 'username') this.username,
-      @JsonKey(name: 'weight') this.weight});
+      {@NullableDateTimeJsonConverter()
+      @JsonKey(name: 'datetime')
+          required this.datetime,
+      @JsonKey(name: 'images')
+          this.images,
+      @JsonKey(name: 'location')
+          this.location,
+      @JsonKey(name: 'type')
+          this.type,
+      @JsonKey(name: 'username')
+          this.username,
+      @JsonKey(name: 'weight')
+          this.weight});
 
   factory _$_RecycleModel.fromJson(Map<String, dynamic> json) =>
       _$$_RecycleModelFromJson(json);
 
   @override
+  @NullableDateTimeJsonConverter()
   @JsonKey(name: 'datetime')
-  final String? datetime;
+  final Object datetime;
   @override
   @JsonKey(name: 'images')
   final List<String>? images;
@@ -223,7 +253,7 @@ class _$_RecycleModel implements _RecycleModel {
   final String? username;
   @override
   @JsonKey(name: 'weight')
-  final int? weight;
+  final num? weight;
 
   @override
   String toString() {
@@ -235,8 +265,7 @@ class _$_RecycleModel implements _RecycleModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _RecycleModel &&
-            (identical(other.datetime, datetime) ||
-                other.datetime == datetime) &&
+            const DeepCollectionEquality().equals(other.datetime, datetime) &&
             const DeepCollectionEquality().equals(other.images, images) &&
             (identical(other.location, location) ||
                 other.location == location) &&
@@ -249,7 +278,7 @@ class _$_RecycleModel implements _RecycleModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      datetime,
+      const DeepCollectionEquality().hash(datetime),
       const DeepCollectionEquality().hash(images),
       location,
       type,
@@ -269,19 +298,27 @@ class _$_RecycleModel implements _RecycleModel {
 
 abstract class _RecycleModel implements RecycleModel {
   const factory _RecycleModel(
-      {@JsonKey(name: 'datetime') String? datetime,
-      @JsonKey(name: 'images') List<String>? images,
-      @JsonKey(name: 'location') String? location,
-      @JsonKey(name: 'type') String? type,
-      @JsonKey(name: 'username') String? username,
-      @JsonKey(name: 'weight') int? weight}) = _$_RecycleModel;
+      {@NullableDateTimeJsonConverter()
+      @JsonKey(name: 'datetime')
+          required Object datetime,
+      @JsonKey(name: 'images')
+          List<String>? images,
+      @JsonKey(name: 'location')
+          String? location,
+      @JsonKey(name: 'type')
+          String? type,
+      @JsonKey(name: 'username')
+          String? username,
+      @JsonKey(name: 'weight')
+          num? weight}) = _$_RecycleModel;
 
   factory _RecycleModel.fromJson(Map<String, dynamic> json) =
       _$_RecycleModel.fromJson;
 
   @override
+  @NullableDateTimeJsonConverter()
   @JsonKey(name: 'datetime')
-  String? get datetime;
+  Object get datetime;
   @override
   @JsonKey(name: 'images')
   List<String>? get images;
@@ -296,7 +333,7 @@ abstract class _RecycleModel implements RecycleModel {
   String? get username;
   @override
   @JsonKey(name: 'weight')
-  int? get weight;
+  num? get weight;
   @override
   @JsonKey(ignore: true)
   _$RecycleModelCopyWith<_RecycleModel> get copyWith =>

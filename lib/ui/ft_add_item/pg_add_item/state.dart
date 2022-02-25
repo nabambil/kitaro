@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:intl/intl.dart';
@@ -25,7 +27,7 @@ class AddItemListPageState extends ChangeNotifier {
   String currentLocationId = '';
   LocationModel? location;
   String _username = '';
-  String _dateSubmitted = '';
+  Map<String,String>? _dateSubmitted;
   List<String> imagePath = [];
 
   // ITEM TYPE -----------------------------------------------------------------
@@ -205,7 +207,7 @@ class AddItemListPageState extends ChangeNotifier {
   }
 
   Future<void> addItem() async {
-    _dateSubmitted = DateFormat('dd MMM yyyy  hh:mm a').format(DateTime.now());
+    _dateSubmitted = ServerValue.timestamp;
 
     var _id = FirebaseAuth.instance.currentUser?.uid;
 
@@ -220,8 +222,8 @@ class AddItemListPageState extends ChangeNotifier {
 
     _itemsAdded.add(RecycleModel(
       type: _itemType!,
-      weight: _itemWeight == null ? null : int.parse(_itemWeight!),
-      datetime: _dateSubmitted,
+      weight: _itemWeight == null ? null : num.parse(_itemWeight!),
+      datetime: _dateSubmitted!,
       images: _images,
       location: currentLocationId,
       username: _username,
@@ -237,7 +239,7 @@ class AddItemListPageState extends ChangeNotifier {
     _itemsAdded[index] = RecycleModel(
       type: _itemType!,
       weight: _itemWeight == null ? null : int.parse(_itemWeight!),
-      datetime: _dateSubmitted,
+      datetime: _itemsAdded[index].datetime,
       images: imagePath,
       location: currentLocationId,
       username: _username,

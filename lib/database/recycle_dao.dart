@@ -6,7 +6,8 @@ import 'package:kitaro/kitaro.dart';
 class RecycleDao {
   final Api _api;
 
-  RecycleDao({String? id}) : _api = id == null ? Api(kRecycle) : Api("$kRecycle/$id");
+  RecycleDao({String? id})
+      : _api = id == null ? Api(kRecycle) : Api("$kRecycle/$id");
 
   Future<Map<String, RecycleModel>> get recycle async {
     return _api.getDataCollection().then((event) => _converter(_data(event)));
@@ -34,8 +35,11 @@ class RecycleDao {
 
   Future<String?> add(RecycleModel value) => _api.addDocument(value.toJson());
 
-  Future<Map<String, RecycleModel>> getRecycles({required String key, required String value}) async{
-    var _recycles = await _api.getDataCollectionBy(key, value).then((event) => _converter(_data(event)));
+  Future<Map<String, RecycleModel>> getRecycles(
+      {required String key, required String value}) async {
+    var _recycles = await _api
+        .getDataCollectionBy(key, value)
+        .then((event) => _converter(_data(event)));
     return _recycles;
   }
 

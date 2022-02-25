@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../kitaro.dart';
 
@@ -38,7 +39,9 @@ class ItemTile extends StatelessWidget {
                 child: _ItemDetail(
                   materialType: item.type!,
                   weight: item.weight,
-                  dateSubmitted: item.datetime,
+                  dateSubmitted: DateFormat('dd MMM yyyy  hh:mm a').format(
+                      DateTime.fromMillisecondsSinceEpoch(
+                          int.parse(item.datetime.toString()))),
                 ),
               ),
               Padding(
@@ -95,7 +98,7 @@ class _ItemDetail extends StatelessWidget {
 
   // ---------------------------------- FIELDS ---------------------------------
   final String materialType;
-  final int? weight;
+  final num? weight;
   final String? dateSubmitted;
 
   // ------------------------------- METHODS ------------------------------
