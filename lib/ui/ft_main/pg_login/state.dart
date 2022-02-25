@@ -192,6 +192,8 @@ class LoginPageState extends ChangeNotifier {
   Future<ErrorMessage?> signInWithFacebook() async {
     try {
       final fb = FacebookLogin();
+      FirebaseAuth auth = FirebaseAuth.instance;
+      User? user;
 
       final res = await fb.logIn(permissions: [
         FacebookPermission.publicProfile,
@@ -226,6 +228,29 @@ class LoginPageState extends ChangeNotifier {
           return ErrorMessage(
               title: 'Error', message: 'Error while log in: ${res.error}');
       }
+
+      final AuthCredential credential = FacebookAuthProvider.credential(
+        res.accessToken!.token,
+      );
+
+      try {
+        userCredential = await auth.signInWithCredential(credential);
+
+        user = userCredential!.user;
+        await _checkFirstTimeUser(userCredential!);
+        if (_isFirstTime) {
+          return null;
+        }
+
+        final _token = await FirebaseAuth.instance.currentUser?.getIdToken();
+
+        return _updateToken(_token, user?.uid);
+      } on FirebaseAuthException catch (e) {
+        return ErrorMessage(title: e.code, message: e.message!);
+      } catch (e) {
+        return ErrorMessage(title: e.toString(), message: '');
+      }
+
     } on FirebaseAuthException catch (e) {
       throw e;
     }

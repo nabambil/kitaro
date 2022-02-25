@@ -527,6 +527,26 @@ class _SignInWithFacebook extends StatelessWidget {
       await showWarningDialog(context, err1);
       return;
     }
+
+    if (state.isFirstTime) {
+      await context.router.push(
+        RegisterPageRoute(
+          isFirstTimeWithGoogleSignIn: true,
+          userCredential: state.userCredential,
+        ),
+      );
+    }
+
+    if (state.isLocator) {
+      await context.router.push(
+        LocatorMapPageRoute(),
+      );
+    }
+    if (state.isAdmin) {
+      await context.router.push(
+        LocatorMapPageRoute(),
+      );
+    }
     await context.router.replace(const RecycleLocationPageRoute());
   }
 }
