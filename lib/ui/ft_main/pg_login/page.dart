@@ -79,7 +79,7 @@ class _ContentState extends State<_Content> {
             20.0,
             40.0,
             20.0,
-            16.0,
+            0.0,
           ),
           children: const [
             _Logo(),
@@ -432,6 +432,16 @@ class _SignInWithGoogle extends StatelessWidget {
       await showWarningDialog(context, err1);
       return;
     }
+
+    if (state.isFirstTime) {
+      await context.router.push(
+        RegisterPageRoute(
+          isFirstTimeWithGoogleSignIn: true,
+          userCredential: state.userCredential,
+        ),
+      );
+    }
+
     if (state.isLocator) {
       await context.router.push(
         LocatorMapPageRoute(),
@@ -440,14 +450,6 @@ class _SignInWithGoogle extends StatelessWidget {
     if (state.isAdmin) {
       await context.router.push(
         LocatorMapPageRoute(),
-      );
-    }
-    if (state.isFirstTime) {
-      await context.router.push(
-        RegisterPageRoute(
-          isFirstTimeWithGoogleSignIn: true,
-          userCredential: state.userCredential,
-        ),
       );
     }
     await context.router.replace(const RecycleLocationPageRoute());

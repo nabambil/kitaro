@@ -219,6 +219,9 @@ class _ImageBox extends StatelessWidget {
       child: Center(
         child: Image.file(
           File(imagePath),
+          errorBuilder: (_,__,___) {
+            return Image(image: Assets.logos.logo);
+          },
         ),
       ),
     );

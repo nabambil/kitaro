@@ -49,6 +49,9 @@ class HistoryItemListPageState extends ChangeNotifier {
         _itemsAdded.add(value);
         notifyListeners();
       });
+      _itemsAdded.sort((a, b) {
+        return int.parse(b.datetime.toString()).compareTo(int.parse(a.datetime.toString()));
+      });
     } on FirebaseAuthException catch (e) {
       return ErrorMessage(title: e.code, message: e.message!);
     } catch (e) {

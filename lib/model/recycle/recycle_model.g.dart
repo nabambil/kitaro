@@ -12,13 +12,13 @@ _$_RecycleModel _$$_RecycleModelFromJson(Map<String, dynamic> json) =>
       json,
       ($checkedConvert) {
         final val = _$_RecycleModel(
-          datetime: $checkedConvert('datetime', (v) => v as String?),
+          datetime: $checkedConvert('datetime', (v) => v as Object),
           images: $checkedConvert('images',
               (v) => (v as List<dynamic>?)?.map((e) => e as String).toList()),
           location: $checkedConvert('location', (v) => v as String?),
           type: $checkedConvert('type', (v) => v as String?),
           username: $checkedConvert('username', (v) => v as String?),
-          weight: $checkedConvert('weight', (v) => v as int?),
+          weight: $checkedConvert('weight', (v) => v as num?),
         );
         return val;
       },

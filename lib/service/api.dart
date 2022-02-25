@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 
 class Api {
   final FirebaseDatabase _db = FirebaseDatabase.instance;
@@ -15,6 +16,14 @@ class Api {
 
   Future<DatabaseEvent> getDataCollectionBy(String key, String value) {
     return ref.orderByChild(key).equalTo(value).once();
+  }
+
+  Future<DatabaseEvent> getDataCollectionByTest(String key, String value) {
+    String currentDateandTime = DateFormat('dd MMM yyyy  hh:mm a').format(DateTime.now());
+    var t = ref.orderByChild(key).equalTo(value);
+    var u = t.orderByChild('datetime');
+    var i = u.once();
+    return i;
   }
 
   Stream<DatabaseEvent> streamDataCollection() {

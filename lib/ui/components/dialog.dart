@@ -57,7 +57,7 @@ Future<void> showWarningDialog(BuildContext context, ErrorMessage message) {
     barrierDismissible: false,
     dialog: AlertDialog(
       title: message.title.toUpperCase(),
-      message: message.message!,
+      message: message.message,
       buttonText: 'RETURN',
       titleTextColor: Colors.red,
       icon: Assets.icons.warning,
@@ -87,7 +87,7 @@ Future<void> showSuccessfulDialog({
 
 class AlertDialog extends StatelessWidget {
   final String title;
-  final String message;
+  final String? message;
   final String buttonText;
   final Color titleTextColor;
   final Color? iconColor;
@@ -95,7 +95,7 @@ class AlertDialog extends StatelessWidget {
 
   const AlertDialog({
     required this.title,
-    required this.message,
+    this.message,
     required this.buttonText,
     required this.titleTextColor,
     required this.icon,
@@ -129,8 +129,9 @@ class AlertDialog extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
+            if(message != null)
             Text(
-              message,
+              message!,
               style: const TextStyle(
                 color: Color(0xff47525E),
                 fontSize: 16,
