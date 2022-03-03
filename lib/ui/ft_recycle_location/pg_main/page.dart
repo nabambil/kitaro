@@ -176,39 +176,37 @@ class _BottomNavigatorState extends State<_BottomNavigator> {
     });
   }
 
-  void onTabTapped(int index) {
-    setState(() async {
-      _currentIndex = index;
-      if (index == 1) {
-        context.router.push(const HistoryItemListPageRoute());
-        _currentIndex = 0;
+  void onTabTapped(int index) async {
+    _currentIndex = index;
+    if (index == 1) {
+      context.router.push(const HistoryItemListPageRoute());
+      setState(() => _currentIndex = 0);
+    }
+    if (index == 2) {
+      final state =
+          Provider.of<RecycleLocationPageState>(context, listen: false);
+      var result = await BarcodeScanner.scan();
+      setState(() => _currentIndex = 0);
+      if (result.type == ResultType.Cancelled ||
+          result.type == ResultType.Error) {
+        return;
       }
-      if (index == 2) {
-        final state =
-            Provider.of<RecycleLocationPageState>(context, listen: false);
-        var result = await BarcodeScanner.scan();
-        _currentIndex = 0;
-        if (result.type == ResultType.Cancelled ||
-            result.type == ResultType.Error) {
-          return;
-        }
-        final _err = await showBusyIndicator<ErrorMessage?>(
-            initialStatus: 'Loading...',
-            action: () async {
-              await state.checkLocation(locationKey: result.rawContent);
-            });
-        if (_err != null) {
-          await showWarningDialog(context, _err);
-          return;
-        }
-        context.router
-            .push(AddItemListPageRoute(locationId: state.currentLocationId));
+      final _err = await showBusyIndicator<ErrorMessage?>(
+          initialStatus: 'Loading...',
+          action: () async {
+            await state.checkLocation(locationKey: result.rawContent);
+          });
+      if (_err != null) {
+        await showWarningDialog(context, _err);
+        return;
       }
-      if (index == 3) {
-        context.router.push(const AboutPageRoute());
-        _currentIndex = 0;
-      }
-    });
+      context.router
+          .push(AddItemListPageRoute(locationId: state.currentLocationId));
+    }
+    if (index == 3) {
+      context.router.push(const AboutPageRoute());
+      setState(() => _currentIndex = 0);
+    }
   }
 }
 

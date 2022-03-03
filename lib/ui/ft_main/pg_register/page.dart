@@ -68,8 +68,8 @@ class _ContentState extends State<_Content> {
         DeviceOrientation.portraitUp,
       ]);
 
-      final state = Provider.of<RegisterPageState>(context, listen: false);
-      await Authentication.initializeFirebase();
+      // final state = Provider.of<RegisterPageState>(context, listen: false);
+      // await Authentication.initializeFirebase();
     });
   }
 

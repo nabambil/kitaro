@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class KitaroAppState extends ChangeNotifier {
@@ -9,17 +9,17 @@ class KitaroAppState extends ChangeNotifier {
 
   Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
+
     FirebaseAuth.instance.userChanges().listen((user) {
       notifyListeners();
     });
   }
 
   void signInWithEmailAndPassword(
-      String email,
-      String password,
-      void Function(FirebaseAuthException e) errorCallback,
-      ) async {
+    String email,
+    String password,
+    void Function(FirebaseAuthException e) errorCallback,
+  ) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,

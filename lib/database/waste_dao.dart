@@ -51,7 +51,13 @@ class WasteDao {
     return WasteModel.fromJson(Map<String, dynamic>.from(value));
   }
 
-  Map _data(DatabaseEvent event) => event.snapshot.value as Map;
+  Map _data(DatabaseEvent event) {
+    if (event.snapshot.exists) {
+      return event.snapshot.value as Map;
+    }
+
+    return {};
+  }
 
   Future<void> add(WasteModel value) => _api.addDocument(value.toJson());
 

@@ -31,7 +31,13 @@ class RecycleDao {
     return _map;
   }
 
-  Map _data(DatabaseEvent event) => event.snapshot.value as Map;
+  Map _data(DatabaseEvent event) {
+    if (event.snapshot.exists) {
+      return event.snapshot.value as Map;
+    }
+
+    return {};
+  }
 
   Future<String?> add(RecycleModel value) => _api.addDocument(value.toJson());
 

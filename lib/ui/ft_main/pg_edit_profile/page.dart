@@ -73,7 +73,7 @@ class _ContentState extends State<_Content> {
 
       final state = Provider.of<EditProfilePageState>(context, listen: false);
       await state.initialiseEditItem();
-      await Authentication.initializeFirebase();
+      // await Authentication.initializeFirebase();
     });
   }
 

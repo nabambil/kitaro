@@ -9,13 +9,13 @@ import 'package:firebase_core/firebase_core.dart';
 import '../kitaro.dart';
 
 class Authentication {
-  static Future<FirebaseApp> initializeFirebase() async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
+  // static Future<FirebaseApp> initializeFirebase() async {
+  // FirebaseApp firebaseApp = await Firebase.initializeApp();
 
-    // TODO: Add auto login logic
+  // TODO: Add auto login logic
 
-    return firebaseApp;
-  }
+  // return firebaseApp;
+  // }
 
   static bool handleAuthState() {
     var user = FirebaseAuth.instance.currentUser;

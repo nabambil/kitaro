@@ -6,7 +6,8 @@ import 'package:kitaro/kitaro.dart';
 class AddressDao {
   final Api _api;
 
-  AddressDao({String? id}) : _api = id == null ? Api(kAddresses) : Api("$kAddresses/$id");
+  AddressDao({String? id})
+      : _api = id == null ? Api(kAddresses) : Api("$kAddresses/$id");
 
   Future<AddressModel> get address async {
     return _api.getDataCollection().then((event) => _converter(_data(event)));
@@ -26,7 +27,13 @@ class AddressDao {
     return AddressModel.fromJson(Map<String, dynamic>.from(value));
   }
 
-  Map _data(DatabaseEvent event) => event.snapshot.value as Map;
+  Map _data(DatabaseEvent event) {
+    if (event.snapshot.exists) {
+      return event.snapshot.value as Map;
+    }
+
+    return {};
+  }
 
   Future<String?> add(AddressModel value) => _api.addDocument(value.toJson());
 

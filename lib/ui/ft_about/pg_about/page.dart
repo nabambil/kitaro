@@ -47,7 +47,7 @@ class _ContentState extends State<_Content> {
         DeviceOrientation.portraitUp,
       ]);
 
-      await Authentication.initializeFirebase();
+      // await Authentication.initializeFirebase();
     });
   }
 

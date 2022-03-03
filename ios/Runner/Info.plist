@@ -18,28 +18,37 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.260321087125-2j484bo61o4us60dhq0sin1s2nmuogs8</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<string>NO</string>
 	<key>GoogleMapsApiKey</key>
-    <string>$(GOOGLE_MAPS_API_KEY)</string>
+	<string>$(GOOGLE_MAPS_API_KEY)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera permission is required for barcode scanning.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Location permission is required to get your current location.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Location permission is required to get your current location.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location permission is required to get your current location.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>test</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>test</string>
-    <key>NSCameraUsageDescription</key>
-    <string>Camera permission is required for barcode scanning.</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Location permission is required to get your current location.</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>Location permission is required to get your current location.</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Location permission is required to get your current location.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

@@ -28,7 +28,13 @@ class UserDao {
     return KitaroAccount.fromJson(Map<String, dynamic>.from(value));
   }
 
-  Map _data(DatabaseEvent event) => event.snapshot.value as Map;
+  Map _data(DatabaseEvent event) {
+    if (event.snapshot.exists) {
+      return event.snapshot.value as Map;
+    }
+
+    return {};
+  }
 
   Future<void> add({required KitaroAccount value, required String id}) =>
       _api.add(id, value.toJson());
