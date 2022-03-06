@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class KitaroTextField extends StatelessWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
@@ -10,6 +11,8 @@ class KitaroTextField extends StatelessWidget {
     this.errorText,
     this.onSubmitted,
     this.focusNode,
+    this.keyboardType = TextInputType.text,
+    this.inputFormatters,
   }) : super(key: key);
 
   // ------------------------------- FIELDS -------------------------------
@@ -18,6 +21,8 @@ class KitaroTextField extends StatelessWidget {
   final String? labelText;
   final String? errorText;
   final FocusNode? focusNode;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
 
   // ------------------------------- METHODS ------------------------------
   @override
@@ -41,7 +46,7 @@ class KitaroTextField extends StatelessWidget {
           ),
           errorText: errorText,
         ),
-        keyboardType: TextInputType.text,
+        keyboardType: keyboardType,
         textInputAction: TextInputAction.next,
         style: const TextStyle(
           color: Color(0xff343F4B),
@@ -50,6 +55,7 @@ class KitaroTextField extends StatelessWidget {
         ),
         onChanged: onChanged,
         onSubmitted: onSubmitted,
+        inputFormatters: inputFormatters,
       ),
     );
   }

@@ -20,9 +20,11 @@ enum InvalidField {
 class RegisterPageState extends ChangeNotifier {
   RegisterPageState(
       {required this.isFirstTimeWithGoogleSignIn,
+      required this.isFirstTimeWithFacebookSignIn,
       required this.userCredential});
 
   final bool isFirstTimeWithGoogleSignIn;
+  final bool isFirstTimeWithFacebookSignIn;
   final UserCredential? userCredential;
 
   bool _isBusy = false;
@@ -98,7 +100,7 @@ class RegisterPageState extends ChangeNotifier {
 
   set idNumber(String? value) {
     _idNumber = value;
-    validateIdNumber();
+    // validateIdNumber();
   }
 
   // ID NUMBER ERROR ////////////////////////////
@@ -160,6 +162,7 @@ class RegisterPageState extends ChangeNotifier {
 
   set email(String? value) {
     _email = value;
+    _email?.trim();
     validateEmail();
   }
 
@@ -179,6 +182,7 @@ class RegisterPageState extends ChangeNotifier {
       if (isFirstTimeWithGoogleSignIn) {
         return;
       }
+
       if (_email == null || _email!.trim().isEmpty) {
         _emailError = 'email required';
       } else if (!EmailValidator.validate(_email!)) {
@@ -364,7 +368,7 @@ class RegisterPageState extends ChangeNotifier {
     try {
       _passwordError = null;
 
-      if (isFirstTimeWithGoogleSignIn) {
+      if (isFirstTimeWithGoogleSignIn || isFirstTimeWithFacebookSignIn) {
         return;
       }
 
@@ -403,7 +407,7 @@ class RegisterPageState extends ChangeNotifier {
     try {
       _passwordRecheckError = null;
 
-      if (isFirstTimeWithGoogleSignIn) {
+      if (isFirstTimeWithGoogleSignIn || isFirstTimeWithFacebookSignIn) {
         return;
       }
 
@@ -422,7 +426,7 @@ class RegisterPageState extends ChangeNotifier {
     // ALWAYS: Validate the fields that can be focused first!
     validateFirstName();
     validateLastName();
-    validateIdNumber();
+    // validateIdNumber();
     validatePhoneNumber();
     validateEmail();
     validateAddress1();
@@ -438,9 +442,9 @@ class RegisterPageState extends ChangeNotifier {
     if (lastNameHasError) {
       return InvalidField.lastName;
     }
-    if (idNumberHasError) {
-      return InvalidField.idNumber;
-    }
+    // if (idNumberHasError) {
+    //   return InvalidField.idNumber;
+    // }
     if (phoneNumberHasError) {
       return InvalidField.phoneNumber;
     }
@@ -484,9 +488,9 @@ class RegisterPageState extends ChangeNotifier {
       );
 
       UserCredential _acc;
-      if (isFirstTimeWithGoogleSignIn) {
+      if (isFirstTimeWithGoogleSignIn || isFirstTimeWithFacebookSignIn) {
         _acc = userCredential!;
-        _email = _acc.user?.email;
+        _email = isFirstTimeWithFacebookSignIn ? _email : _acc.user?.email;
       } else {
         _acc = await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: _email!, password: _password!);
@@ -496,7 +500,7 @@ class RegisterPageState extends ChangeNotifier {
       final _userValue = KitaroAccount(
         firstName: _firstName!,
         lastName: _lastName!,
-        username: _email,
+        username: _email!.trim(),
         address: _addressId,
         token: _acc.user?.uid,
         role: "user",

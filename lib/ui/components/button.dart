@@ -7,11 +7,13 @@ class PageBackButton extends StatelessWidget {
   // ------------------------------- CONSTRUCTORS ------------------------------
   const PageBackButton({
     this.colorOverride,
+    this.showBackText = true,
     Key? key,
   }) : super(key: key);
 
   // ---------------------------------- FIELDS ---------------------------------
   final Color? colorOverride;
+  final bool showBackText;
 
   // --------------------------------- METHODS ---------------------------------
   @override
@@ -30,6 +32,7 @@ class PageBackButton extends StatelessWidget {
                 color: colorOverride ?? Colors.white,
                 size: 28.0,
               ),
+              if(showBackText)
               Text(
                 'Back',
                 style: TextStyle(

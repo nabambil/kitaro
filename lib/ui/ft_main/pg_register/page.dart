@@ -25,12 +25,14 @@ late FocusNode _passwordRecheckNode;
 // ------------------------------- CLASSES ------------------------------
 class RegisterPage extends StatelessWidget {
   const RegisterPage(
-      {required this.isFirstTimeWithGoogleSignIn,
+      {required this.isFirstTimeWithFacebookSignIn,
+      required this.isFirstTimeWithGoogleSignIn,
       this.userCredential,
       Key? key})
       : super(key: key);
 
   final bool isFirstTimeWithGoogleSignIn;
+  final bool isFirstTimeWithFacebookSignIn;
   final UserCredential? userCredential;
 
   @override
@@ -39,6 +41,7 @@ class RegisterPage extends StatelessWidget {
       body: ChangeNotifierProvider<RegisterPageState>(
         create: (_) => RegisterPageState(
           isFirstTimeWithGoogleSignIn: isFirstTimeWithGoogleSignIn,
+          isFirstTimeWithFacebookSignIn: isFirstTimeWithFacebookSignIn,
           userCredential: userCredential,
         ),
         child: const _Content(),
@@ -104,7 +107,8 @@ class _ContentState extends State<_Content> {
                 const _IdNumberField(),
                 const _PhoneNumberField(),
                 Visibility(
-                  visible: !state.isFirstTimeWithGoogleSignIn,
+                  visible: !state.isFirstTimeWithGoogleSignIn ||
+                      state.isFirstTimeWithFacebookSignIn,
                   child: const _EmailField(),
                 ),
                 const _AddressLine1Field(),
@@ -114,10 +118,12 @@ class _ContentState extends State<_Content> {
                 const _StateField(),
                 const _PostcodeField(),
                 Visibility(
-                    visible: !state.isFirstTimeWithGoogleSignIn,
+                    visible: !state.isFirstTimeWithGoogleSignIn &&
+                        !state.isFirstTimeWithFacebookSignIn,
                     child: const _PasswordField()),
                 Visibility(
-                  visible: !state.isFirstTimeWithGoogleSignIn,
+                  visible: !state.isFirstTimeWithGoogleSignIn &&
+                      !state.isFirstTimeWithFacebookSignIn,
                   child: const _PasswordRecheckField(),
                 ),
                 const SizedBox(height: 52),
@@ -185,7 +191,12 @@ class _FirstNameField extends StatefulWidget {
   State<_FirstNameField> createState() => _FirstNameFieldState();
 }
 
-class _FirstNameFieldState extends State<_FirstNameField> {
+class _FirstNameFieldState extends State<_FirstNameField>
+    with AutomaticKeepAliveClientMixin {
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
   // ------------------------------- METHODS ------------------------------
   @override
   void initState() {
@@ -201,6 +212,7 @@ class _FirstNameFieldState extends State<_FirstNameField> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroTextField(
@@ -229,7 +241,12 @@ class _LastNameField extends StatefulWidget {
   State<_LastNameField> createState() => _LastNameFieldState();
 }
 
-class _LastNameFieldState extends State<_LastNameField> {
+class _LastNameFieldState extends State<_LastNameField>
+    with AutomaticKeepAliveClientMixin {
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
   // ------------------------------- METHODS ------------------------------
   @override
   void initState() {
@@ -273,7 +290,12 @@ class _IdNumberField extends StatefulWidget {
   State<_IdNumberField> createState() => _IdNumberFieldState();
 }
 
-class _IdNumberFieldState extends State<_IdNumberField> {
+class _IdNumberFieldState extends State<_IdNumberField>
+    with AutomaticKeepAliveClientMixin {
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
   // ------------------------------- METHODS ------------------------------
   @override
   void initState() {
@@ -292,14 +314,14 @@ class _IdNumberFieldState extends State<_IdNumberField> {
     return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroTextField(
-          labelText: 'ID number *',
-          errorText: state.idNumberError,
+          labelText: 'IC number (optional)',
           focusNode: _idNumberNode,
           onChanged: (v) => state.idNumber = v,
           onSubmitted: (v) {
             state.idNumber = v;
             _phoneNode.requestFocus();
           },
+          keyboardType: TextInputType.number,
         );
       },
     );
@@ -317,7 +339,12 @@ class _PhoneNumberField extends StatefulWidget {
   State<_PhoneNumberField> createState() => _PhoneNumberFieldState();
 }
 
-class _PhoneNumberFieldState extends State<_PhoneNumberField> {
+class _PhoneNumberFieldState extends State<_PhoneNumberField>
+    with AutomaticKeepAliveClientMixin {
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
   // ------------------------------- METHODS ------------------------------
   @override
   void initState() {
@@ -344,6 +371,7 @@ class _PhoneNumberFieldState extends State<_PhoneNumberField> {
             state.phoneNumber = v;
             _emailNode.requestFocus();
           },
+          keyboardType: TextInputType.phone,
         );
       },
     );
@@ -361,7 +389,12 @@ class _EmailField extends StatefulWidget {
   State<_EmailField> createState() => _EmailFieldState();
 }
 
-class _EmailFieldState extends State<_EmailField> {
+class _EmailFieldState extends State<_EmailField>
+    with AutomaticKeepAliveClientMixin {
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
   // ------------------------------- METHODS ------------------------------
   @override
   void initState() {
@@ -388,6 +421,10 @@ class _EmailFieldState extends State<_EmailField> {
             state.email = v;
             _address1Node.requestFocus();
           },
+          keyboardType: TextInputType.emailAddress,
+          inputFormatters: [
+            FilteringTextInputFormatter.deny(RegExp(r'\s')),
+          ],
         );
       },
     );
@@ -405,7 +442,12 @@ class _AddressLine1Field extends StatefulWidget {
   State<_AddressLine1Field> createState() => _AddressLine1FieldState();
 }
 
-class _AddressLine1FieldState extends State<_AddressLine1Field> {
+class _AddressLine1FieldState extends State<_AddressLine1Field>
+    with AutomaticKeepAliveClientMixin {
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
   // ------------------------------- METHODS ------------------------------
   @override
   void initState() {
@@ -449,7 +491,12 @@ class _AddressLine2Field extends StatefulWidget {
   State<_AddressLine2Field> createState() => _AddressLine2FieldState();
 }
 
-class _AddressLine2FieldState extends State<_AddressLine2Field> {
+class _AddressLine2FieldState extends State<_AddressLine2Field>
+    with AutomaticKeepAliveClientMixin {
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
   // ------------------------------- METHODS ------------------------------
   @override
   void initState() {
@@ -492,7 +539,12 @@ class _AddressLine3Field extends StatefulWidget {
   State<_AddressLine3Field> createState() => _AddressLine3FieldState();
 }
 
-class _AddressLine3FieldState extends State<_AddressLine3Field> {
+class _AddressLine3FieldState extends State<_AddressLine3Field>
+    with AutomaticKeepAliveClientMixin {
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
   // ------------------------------- METHODS ------------------------------
   @override
   void initState() {
@@ -535,7 +587,12 @@ class _CityField extends StatefulWidget {
   State<_CityField> createState() => _CityFieldState();
 }
 
-class _CityFieldState extends State<_CityField> {
+class _CityFieldState extends State<_CityField>
+    with AutomaticKeepAliveClientMixin {
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
   // ------------------------------- METHODS ------------------------------
   @override
   void initState() {
@@ -579,7 +636,12 @@ class _StateField extends StatefulWidget {
   State<_StateField> createState() => _StateFieldState();
 }
 
-class _StateFieldState extends State<_StateField> {
+class _StateFieldState extends State<_StateField>
+    with AutomaticKeepAliveClientMixin {
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
   // ------------------------------- METHODS ------------------------------
   @override
   void initState() {
@@ -623,7 +685,12 @@ class _PostcodeField extends StatefulWidget {
   State<_PostcodeField> createState() => _PostcodeFieldState();
 }
 
-class _PostcodeFieldState extends State<_PostcodeField> {
+class _PostcodeFieldState extends State<_PostcodeField>
+    with AutomaticKeepAliveClientMixin {
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
   // ------------------------------- METHODS ------------------------------
   @override
   void initState() {
@@ -650,6 +717,7 @@ class _PostcodeFieldState extends State<_PostcodeField> {
             state.postcode = v;
             _passwordNode.requestFocus();
           },
+          keyboardType: TextInputType.number,
         );
       },
     );
@@ -667,7 +735,12 @@ class _PasswordField extends StatefulWidget {
   State<_PasswordField> createState() => _PasswordFieldState();
 }
 
-class _PasswordFieldState extends State<_PasswordField> {
+class _PasswordFieldState extends State<_PasswordField>
+    with AutomaticKeepAliveClientMixin {
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
   // ------------------------------- METHODS ------------------------------
   @override
   void initState() {
@@ -711,7 +784,12 @@ class _PasswordRecheckField extends StatefulWidget {
   State<_PasswordRecheckField> createState() => _PasswordRecheckFieldState();
 }
 
-class _PasswordRecheckFieldState extends State<_PasswordRecheckField> {
+class _PasswordRecheckFieldState extends State<_PasswordRecheckField>
+    with AutomaticKeepAliveClientMixin {
+  // -------------------------------- PROPERTIES -------------------------------
+  @override
+  bool get wantKeepAlive => true;
+
   // ------------------------------- METHODS ------------------------------
   @override
   void initState() {

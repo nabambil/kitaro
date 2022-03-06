@@ -295,8 +295,12 @@ class _SignUp extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () async {
-                      await context.router.push(RegisterPageRoute(
-                          isFirstTimeWithGoogleSignIn: false));
+                      await context.router.push(
+                        RegisterPageRoute(
+                          isFirstTimeWithGoogleSignIn: false,
+                          isFirstTimeWithFacebookSignIn: false,
+                        ),
+                      );
                     },
                 ),
               ],
@@ -437,20 +441,24 @@ class _SignInWithGoogle extends StatelessWidget {
       await context.router.push(
         RegisterPageRoute(
           isFirstTimeWithGoogleSignIn: true,
+          isFirstTimeWithFacebookSignIn: false,
           userCredential: state.userCredential,
         ),
       );
+      return;
     }
 
     if (state.isLocator) {
       await context.router.push(
         LocatorMapPageRoute(),
       );
+      return;
     }
     if (state.isAdmin) {
       await context.router.push(
         LocatorMapPageRoute(),
       );
+      return;
     }
     await context.router.replace(const RecycleLocationPageRoute());
   }
@@ -531,7 +539,8 @@ class _SignInWithFacebook extends StatelessWidget {
     if (state.isFirstTime) {
       await context.router.push(
         RegisterPageRoute(
-          isFirstTimeWithGoogleSignIn: true,
+          isFirstTimeWithGoogleSignIn: false,
+          isFirstTimeWithFacebookSignIn: true,
           userCredential: state.userCredential,
         ),
       );

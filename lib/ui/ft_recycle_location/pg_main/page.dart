@@ -194,7 +194,7 @@ class _BottomNavigatorState extends State<_BottomNavigator> {
       final _err = await showBusyIndicator<ErrorMessage?>(
           initialStatus: 'Loading...',
           action: () async {
-            await state.checkLocation(locationKey: result.rawContent);
+            return await state.checkLocation(locationKey: result.rawContent);
           });
       if (_err != null) {
         await showWarningDialog(context, _err);

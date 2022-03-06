@@ -330,7 +330,7 @@ class _IdNumberFieldState extends State<_IdNumberField>
         }
         return KitaroTextBox(
           controller: _controller,
-          labelText: 'ID number *',
+          labelText: 'ID number',
           errorText: state.idNumberError,
           focusNode: _idNumberNode,
           onChanged: (v) => state.idNumber = v,
@@ -972,11 +972,11 @@ class _SubmitButton extends StatelessWidget {
         _passwordRecheckNode.requestFocus();
         return;
       case InvalidField.idNumber:
-        // TODO: Handle this case.
-        break;
+        _idNumberNode.requestFocus();
+        return;
       case InvalidField.phoneNumber:
-        // TODO: Handle this case.
-        break;
+        _phoneNumberNode.requestFocus();
+        return;
     }
 
     final err1 = await showBusyIndicator<ErrorMessage?>(

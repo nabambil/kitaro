@@ -153,14 +153,23 @@ class _Logo extends StatelessWidget {
           ),
           clipper: CustomClipPath(),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20.0, top: 50),
-          child: Image(
-            image: Assets.logos.kitaroLogoMain,
-            height: 120,
-            width: 120,
-            alignment: Alignment.topLeft,
-          ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only( top: 50),
+              child: PageBackButton(colorOverride: Colors.white,showBackText: false),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, top: 50),
+              child: Image(
+                image: Assets.logos.kitaroLogoMain,
+                height: 120,
+                width: 120,
+                alignment: Alignment.topLeft,
+              ),
+            ),
+          ],
         ),
       ],
     );

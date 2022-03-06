@@ -101,7 +101,8 @@ class EditProfilePageState extends ChangeNotifier
 
   set idNumber(String? value) {
     _idNumber = value;
-    validateIdNumber();
+    notifyListeners();
+    // validateIdNumber();
   }
 
   // ID NUMBER ERROR ////////////////////////////
@@ -294,7 +295,7 @@ class EditProfilePageState extends ChangeNotifier
     // ALWAYS: Validate the fields that can be focused first!
     validateFirstName();
     validateLastName();
-    validateIdNumber();
+    // validateIdNumber();
     validatePhoneNumber();
     validateEmail();
     validateAddress1();
@@ -310,9 +311,9 @@ class EditProfilePageState extends ChangeNotifier
     if (lastNameHasError) {
       return InvalidField.lastName;
     }
-    if (idNumberHasError) {
-      return InvalidField.idNumber;
-    }
+    // if (idNumberHasError) {
+    //   return InvalidField.idNumber;
+    // }
     if (phoneNumberHasError) {
       return InvalidField.phoneNumber;
     }

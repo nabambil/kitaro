@@ -43,6 +43,7 @@ class AppRouter extends _i2.RootStackRouter {
       return _i2.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i1.RegisterPage(
+              isFirstTimeWithFacebookSignIn: args.isFirstTimeWithFacebookSignIn,
               isFirstTimeWithGoogleSignIn: args.isFirstTimeWithGoogleSignIn,
               userCredential: args.userCredential,
               key: args.key));
@@ -134,12 +135,14 @@ class OnBoardingPageRoute extends _i2.PageRouteInfo<void> {
 /// [_i1.RegisterPage]
 class RegisterPageRoute extends _i2.PageRouteInfo<RegisterPageRouteArgs> {
   RegisterPageRoute(
-      {required bool isFirstTimeWithGoogleSignIn,
+      {required bool isFirstTimeWithFacebookSignIn,
+      required bool isFirstTimeWithGoogleSignIn,
       _i4.UserCredential? userCredential,
       _i3.Key? key})
       : super(RegisterPageRoute.name,
             path: '/register-page',
             args: RegisterPageRouteArgs(
+                isFirstTimeWithFacebookSignIn: isFirstTimeWithFacebookSignIn,
                 isFirstTimeWithGoogleSignIn: isFirstTimeWithGoogleSignIn,
                 userCredential: userCredential,
                 key: key));
@@ -149,9 +152,12 @@ class RegisterPageRoute extends _i2.PageRouteInfo<RegisterPageRouteArgs> {
 
 class RegisterPageRouteArgs {
   const RegisterPageRouteArgs(
-      {required this.isFirstTimeWithGoogleSignIn,
+      {required this.isFirstTimeWithFacebookSignIn,
+      required this.isFirstTimeWithGoogleSignIn,
       this.userCredential,
       this.key});
+
+  final bool isFirstTimeWithFacebookSignIn;
 
   final bool isFirstTimeWithGoogleSignIn;
 
@@ -161,7 +167,7 @@ class RegisterPageRouteArgs {
 
   @override
   String toString() {
-    return 'RegisterPageRouteArgs{isFirstTimeWithGoogleSignIn: $isFirstTimeWithGoogleSignIn, userCredential: $userCredential, key: $key}';
+    return 'RegisterPageRouteArgs{isFirstTimeWithFacebookSignIn: $isFirstTimeWithFacebookSignIn, isFirstTimeWithGoogleSignIn: $isFirstTimeWithGoogleSignIn, userCredential: $userCredential, key: $key}';
   }
 }
 

@@ -27,7 +27,7 @@ class AddItemListPageState extends ChangeNotifier {
   String currentLocationId = '';
   LocationModel? location;
   String _username = '';
-  Map<String,String>? _dateSubmitted;
+  int? _dateSubmitted;
   List<String> imagePath = [];
 
   // ITEM TYPE -----------------------------------------------------------------
@@ -207,7 +207,7 @@ class AddItemListPageState extends ChangeNotifier {
   }
 
   Future<void> addItem() async {
-    _dateSubmitted = ServerValue.timestamp;
+    _dateSubmitted = DateTime.now().millisecondsSinceEpoch;
 
     var _id = FirebaseAuth.instance.currentUser?.uid;
 
