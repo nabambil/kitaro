@@ -19,7 +19,9 @@ enum InvalidField {
 
 class EditProfilePageState extends ChangeNotifier
     with TextControllerMixin, AddressStateMixin {
-  EditProfilePageState({required this.user, required this.userAddress});
+  EditProfilePageState({required this.user, required this.userAddress}) {
+    initialiseEditItem();
+  }
 
   final KitaroAccount user;
   final AddressModel userAddress;

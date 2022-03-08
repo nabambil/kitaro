@@ -61,7 +61,7 @@ class DefaultFirebaseOptions {
     projectId: 'kitaro-4ffe4',
     databaseURL: 'https://kitaro-4ffe4-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'kitaro-4ffe4.appspot.com',
-    androidClientId: '260321087125-tl8p7l9c7ikvs4ru174qui9t131lid57.apps.googleusercontent.com',
+    androidClientId: '260321087125-c0aea0gkr3dvie21e74jk0dk0uf0ns6a.apps.googleusercontent.com',
     iosClientId: '260321087125-2j484bo61o4us60dhq0sin1s2nmuogs8.apps.googleusercontent.com',
     iosBundleId: 'com.example.kitaro',
   );
@@ -73,7 +73,7 @@ class DefaultFirebaseOptions {
     projectId: 'kitaro-4ffe4',
     databaseURL: 'https://kitaro-4ffe4-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'kitaro-4ffe4.appspot.com',
-    androidClientId: '260321087125-tl8p7l9c7ikvs4ru174qui9t131lid57.apps.googleusercontent.com',
+    androidClientId: '260321087125-c0aea0gkr3dvie21e74jk0dk0uf0ns6a.apps.googleusercontent.com',
     iosClientId: '260321087125-2j484bo61o4us60dhq0sin1s2nmuogs8.apps.googleusercontent.com',
     iosBundleId: 'com.example.kitaro',
   );

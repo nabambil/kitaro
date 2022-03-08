@@ -41,8 +41,10 @@ class EditProfilePage extends StatelessWidget {
             user: user,
             userAddress: userAddress,
           ),
-          child: Column(
-            children: const [_Logo(), Expanded(child: _Content())],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [const _Logo(), _Content()],
+            ),
           ),
         ),
       ),
@@ -50,37 +52,13 @@ class EditProfilePage extends StatelessWidget {
   }
 }
 
-class _Content extends StatefulWidget {
+class _Content extends StatelessWidget {
   // ------------------------------- CONSTRUCTORS ------------------------------
-  const _Content({
-    Key? key,
-  }) : super(key: key);
-
-  // ------------------------------- METHODS ------------------------------
-  @override
-  State<_Content> createState() => _ContentState();
-}
-
-class _ContentState extends State<_Content> {
-  // ------------------------------- METHODS ------------------------------
-  @override
-  void initState() {
-    super.initState();
-    SchedulerBinding.instance!.addPostFrameCallback((_) async {
-      await SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-      ]);
-
-      final state = Provider.of<EditProfilePageState>(context, listen: false);
-      await state.initialiseEditItem();
-      // await Authentication.initializeFirebase();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return ListView(
-      physics: const BouncingScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       padding: const EdgeInsets.fromLTRB(
         20.0,

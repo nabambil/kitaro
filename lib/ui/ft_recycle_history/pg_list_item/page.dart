@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as dialog;
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
@@ -172,6 +174,16 @@ class _AppBar extends StatelessWidget {
                     fontSize: 15,
                   ),
                 ),
+              ),
+              const PopupMenuItem(
+                value: 3,
+                child: Text(
+                  'Delete Account',
+                  style: TextStyle(
+                    color: Color(0xff8594A8),
+                    fontSize: 15,
+                  ),
+                ),
               )
             ];
           },
@@ -197,6 +209,41 @@ class _AppBar extends StatelessWidget {
         return;
       }
       await context.router.replaceAll([const LoginPageRoute()]);
+    }
+    if (index == 3) {
+      showDialog(
+          context: context,
+          builder: (_) {
+            return dialog.AlertDialog(
+              title: const Text("Delete Account"),
+              content: const Text(
+                  "After you delete, all your information will be delete and no data will keep on our side"),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    final auth = FirebaseAuth.instance.currentUser;
+                    if (auth != null) {
+                      auth.delete();
+                      await context.router.replaceAll([const LoginPageRoute()]);
+                    }
+                  },
+                  child: const Text(
+                    "Confirm",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    "Cancel",
+                    style: TextStyle(color: Colors.black45),
+                  ),
+                )
+              ],
+            );
+          });
     }
   }
 }
