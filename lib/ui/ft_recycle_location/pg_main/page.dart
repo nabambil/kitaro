@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:io';
 
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -8,12 +8,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../../kitaro.dart';
 import '../st_centre_detail/sheet.dart';
 import 'state.dart';
 
-late GoogleMapController _mapController;
 final CarouselController _carouselController = CarouselController();
 
 class RecycleLocationPage extends StatefulWidget {
@@ -24,6 +25,7 @@ class RecycleLocationPage extends StatefulWidget {
 }
 
 class _RecycleLocationPageState extends State<RecycleLocationPage> {
+  // late GoogleMapController _mapController;
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<RecycleLocationPageState>(
@@ -42,6 +44,9 @@ class _Content extends StatefulWidget {
 }
 
 class _ContentState extends State<_Content> {
+  GoogleMapController? _mapController;
+  double? latitude;
+  double? longitude;
   // --------------------------------- METHODS ---------------------------------
   @override
   void initState() {
@@ -54,7 +59,11 @@ class _ContentState extends State<_Content> {
         action: state.initialise,
       );
       if (err1 != null) {
-        return await showWarningDialog(context, err1);
+        await showWarningDialog(context, err1);
+
+        openAppSettings();
+
+        return;
       }
       state.addListener(() {
         var _locationList =
@@ -62,6 +71,7 @@ class _ContentState extends State<_Content> {
         enlargeMarker(
           context: context,
           markerId: MarkerId(state.locations.entries.first.key),
+          mapController: _mapController,
         );
         if (state.onSelectMarker != null) {
           var _index = _locationList.indexWhere((element) {
@@ -72,6 +82,7 @@ class _ContentState extends State<_Content> {
             markerId: MarkerId(state.onSelectMarker!),
             location: state.locations[state.onSelectMarker]!,
             index: _index,
+            mapController: _mapController,
           );
         }
       });
@@ -85,7 +96,11 @@ class _ContentState extends State<_Content> {
         children: [
           SizedBox(
             height: MediaQuery.of(context).size.height,
-            child: state.latitude == null ? Container() : _Maps(),
+            child: state.latitude == null
+                ? Container()
+                : _Maps(
+                    onBuildController: (value) => _mapController = value,
+                  ),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
@@ -106,9 +121,10 @@ class _ContentState extends State<_Content> {
                         onPageChanged: (index, reason) async {
                           setState(() {
                             enlargeMarker(
-                              context: context,
-                              markerId: state.mapMarkers.keys.elementAt(index),
-                            );
+                                context: context,
+                                markerId:
+                                    state.mapMarkers.keys.elementAt(index),
+                                mapController: _mapController);
                           });
                         },
                       ),
@@ -116,10 +132,10 @@ class _ContentState extends State<_Content> {
                       itemBuilder: (context, itemIndex, pageViewIndex) {
                         final _key = state.mapMarkers.keys.elementAt(itemIndex);
                         return _CentreTile(
-                          index: itemIndex,
-                          markerId: _key,
-                          location: state.locations[_key.value]!,
-                        );
+                            index: itemIndex,
+                            markerId: _key,
+                            location: state.locations[_key.value]!,
+                            mapController: _mapController);
                       },
                     );
                   },
@@ -151,25 +167,27 @@ class _BottomNavigatorState extends State<_BottomNavigator> {
       return BottomNavigationBar(
         onTap: onTabTapped,
         currentIndex: _currentIndex,
-        selectedItemColor: Colors.green,
-        unselectedItemColor: Colors.black26,
-        unselectedLabelStyle: const TextStyle(color: Colors.black26),
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.black,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home, color: kThemeColor),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person, color: kThemeColor),
             label: 'Profile',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.qr_code),
+            icon: Icon(Icons.qr_code, color: kThemeColor),
             label: 'Recycle',
           ),
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.globe),
-            label: 'About',
+            icon: Icon(CupertinoIcons.globe, color: kThemeColor),
+            label: 'Contact Us',
           ),
         ],
       );
@@ -185,23 +203,58 @@ class _BottomNavigatorState extends State<_BottomNavigator> {
     if (index == 2) {
       final state =
           Provider.of<RecycleLocationPageState>(context, listen: false);
-      var result = await BarcodeScanner.scan();
-      setState(() => _currentIndex = 0);
-      if (result.type == ResultType.Cancelled ||
-          result.type == ResultType.Error) {
-        return;
+      if (Platform.isAndroid) {
+        final resultPermission = await Permission.camera.request();
+        if (resultPermission.isGranted) {
+          var result = await BarcodeScanner.scan();
+          setState(() => _currentIndex = 0);
+          if (result.type == ResultType.Cancelled ||
+              result.type == ResultType.Error) {
+            return;
+          }
+          final _err = await showBusyIndicator<ErrorMessage?>(
+              initialStatus: 'Loading...',
+              action: () async {
+                return await state.checkLocation(
+                    locationKey: result.rawContent);
+              });
+          if (_err != null) {
+            await showWarningDialog(context, _err);
+            return;
+          }
+          context.router
+              .push(AddItemListPageRoute(locationId: state.currentLocationId));
+        } else {
+          await showWarningDialog(
+            context,
+            ErrorMessage(
+                title: "Permission denied",
+                message:
+                    "Camera permission is denied, please enable in app setting "),
+          );
+
+          openAppSettings();
+        }
+      } else {
+        var result = await BarcodeScanner.scan();
+
+        setState(() => _currentIndex = 0);
+        if (result.type == ResultType.Cancelled ||
+            result.type == ResultType.Error) {
+          return;
+        }
+        final _err = await showBusyIndicator<ErrorMessage?>(
+            initialStatus: 'Loading...',
+            action: () async {
+              return await state.checkLocation(locationKey: result.rawContent);
+            });
+        if (_err != null) {
+          await showWarningDialog(context, _err);
+          return;
+        }
+        context.router
+            .push(AddItemListPageRoute(locationId: state.currentLocationId));
       }
-      final _err = await showBusyIndicator<ErrorMessage?>(
-          initialStatus: 'Loading...',
-          action: () async {
-            return await state.checkLocation(locationKey: result.rawContent);
-          });
-      if (_err != null) {
-        await showWarningDialog(context, _err);
-        return;
-      }
-      context.router
-          .push(AddItemListPageRoute(locationId: state.currentLocationId));
     }
     if (index == 3) {
       context.router.push(const AboutPageRoute());
@@ -211,6 +264,9 @@ class _BottomNavigatorState extends State<_BottomNavigator> {
 }
 
 class _Maps extends StatefulWidget {
+  final Function(GoogleMapController) onBuildController;
+
+  const _Maps({Key? key, required this.onBuildController}) : super(key: key);
   // ------------------------------- FIELDS -------------------------------
   @override
   _MapsState createState() => _MapsState();
@@ -218,14 +274,9 @@ class _Maps extends StatefulWidget {
 
 class _MapsState extends State<_Maps> {
   // ------------------------------- FIELDS -------------------------------
-  Completer<GoogleMapController> controllerCompleter = Completer();
-  RecycleLocationPageState? state;
+  // Completer<GoogleMapController> controllerCompleter = Completer();
 
-  @override
-  void dispose() {
-    _mapController.dispose();
-    super.dispose();
-  }
+  RecycleLocationPageState? state;
 
   // ------------------------------- METHODS ------------------------------
   @override
@@ -233,17 +284,15 @@ class _MapsState extends State<_Maps> {
     return Consumer<RecycleLocationPageState>(
       builder: (_, state, __) {
         return GoogleMap(
-          markers: Set.of(state.mapMarkers.values),
-          initialCameraPosition: CameraPosition(
-            target: LatLng(state.latitude!, state.longitude!),
-            zoom: 12,
-          ),
-          myLocationEnabled: true,
-          onMapCreated: (controller) async {
-            _mapController = controller;
-          },
-          // onMapCreated: controllerCompleter.complete,
-        );
+            markers: Set.of(state.mapMarkers.values),
+            initialCameraPosition: CameraPosition(
+              target: LatLng(state.latitude!, state.longitude!),
+              zoom: 10,
+            ),
+            myLocationEnabled: true,
+            onMapCreated: widget.onBuildController
+            // onMapCreated: controllerCompleter.complete,
+            );
       },
     );
   }
@@ -374,11 +423,13 @@ class _CentreTile extends StatelessWidget {
     required this.index,
     required this.markerId,
     required this.location,
+    required this.mapController,
   }) : super(key: key);
 
   final int index;
   final MarkerId markerId;
   final LocationModel location;
+  final GoogleMapController? mapController;
 
   @override
   Widget build(BuildContext context) {
@@ -405,7 +456,7 @@ class _CentreTile extends StatelessWidget {
             _CentreName(
               name: location.name!,
             ),
-            const _OperationHour(),
+            _OperationHour(model: location),
             Expanded(
               child: Container(),
             ),
@@ -422,7 +473,8 @@ class _CentreTile extends StatelessWidget {
   }
 
   Future<void> _onTap(BuildContext context) async {
-    await enlargeMarker(context: context, markerId: markerId);
+    await enlargeMarker(
+        context: context, markerId: markerId, mapController: mapController);
     _carouselController.animateToPage(index);
     await showModalBottomSheet(
       isScrollControlled: true,
@@ -448,23 +500,28 @@ class _CentreName extends StatelessWidget {
     return Text(
       name,
       textAlign: TextAlign.center,
-      style: TextStyle(
+      style: const TextStyle(
           color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
     );
   }
 }
 
 class _OperationHour extends StatelessWidget {
-  const _OperationHour({Key? key}) : super(key: key);
+  final LocationModel model;
+  const _OperationHour({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      '10 am - 5 pm',
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: 16,
-      ),
+    return FutureBuilder<AddressModel>(
+      future: AddressDao(id: model.address).address,
+      builder: (context, snapshot) {
+        if (snapshot.data == null) return Container();
+        final String openingTime = snapshot.data!.todayOpening;
+        return Text(
+          openingTime,
+          style: const TextStyle(color: Colors.white, fontSize: 16),
+        );
+      },
     );
   }
 }
@@ -529,8 +586,10 @@ Future<void> markerOnTap({
   required int index,
   required MarkerId markerId,
   required LocationModel location,
+  required GoogleMapController? mapController,
 }) async {
-  await enlargeMarker(context: context, markerId: markerId);
+  await enlargeMarker(
+      context: context, markerId: markerId, mapController: mapController);
   // await enlargeMarker(context: context, markerId: markerId);
 
   _carouselController.animateToPage(index);
@@ -548,8 +607,11 @@ Future<void> markerOnTap({
   );
 }
 
-Future<void> enlargeMarker(
-    {required BuildContext context, required MarkerId markerId}) async {
+Future<void> enlargeMarker({
+  required BuildContext context,
+  required MarkerId markerId,
+  required GoogleMapController? mapController,
+}) async {
   final state = Provider.of<RecycleLocationPageState>(context, listen: false);
   state.mapMarkers.forEach((key, value) async {
     if (markerId == value.markerId) {
@@ -561,7 +623,7 @@ Future<void> enlargeMarker(
           .copyWith(iconParam: BitmapDescriptor.fromBytes(state.markerIcon!));
     }
   });
-  _mapController.animateCamera(
-    CameraUpdate.newLatLngZoom(state.mapMarkers[markerId]!.position, 16.0),
+  mapController?.animateCamera(
+    CameraUpdate.newLatLngZoom(state.mapMarkers[markerId]!.position, 10.0),
   );
 }

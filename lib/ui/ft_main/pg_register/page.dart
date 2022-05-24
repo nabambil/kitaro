@@ -216,7 +216,7 @@ class _FirstNameFieldState extends State<_FirstNameField>
     return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroTextField(
-          labelText: 'first name *',
+          labelText: 'First name *',
           errorText: state.firstNameError,
           focusNode: _firstNameNode,
           onChanged: (v) => state.firstName = v,
@@ -265,7 +265,7 @@ class _LastNameFieldState extends State<_LastNameField>
     return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroTextField(
-          labelText: 'last name *',
+          labelText: 'Last name *',
           errorText: state.lastNameError,
           focusNode: _lastNameNode,
           onChanged: (v) => state.lastName = v,
@@ -363,7 +363,7 @@ class _PhoneNumberFieldState extends State<_PhoneNumberField>
     return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroTextField(
-          labelText: 'phone number *',
+          labelText: 'Phone number *',
           errorText: state.phoneNumberError,
           focusNode: _phoneNode,
           onChanged: (v) => state.phoneNumber = v,
@@ -413,7 +413,7 @@ class _EmailFieldState extends State<_EmailField>
     return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroTextField(
-          labelText: 'email *',
+          labelText: 'Email *',
           errorText: state.emailError,
           focusNode: _emailNode,
           onChanged: (v) => state.email = v,
@@ -466,7 +466,7 @@ class _AddressLine1FieldState extends State<_AddressLine1Field>
     return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroTextField(
-          labelText: 'address *',
+          labelText: 'Address *',
           errorText: state.address1Error,
           focusNode: _address1Node,
           onChanged: (v) => state.address1 = v,
@@ -515,7 +515,7 @@ class _AddressLine2FieldState extends State<_AddressLine2Field>
     return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroTextField(
-          labelText: 'address 2',
+          labelText: 'Address 2',
           focusNode: _address2Node,
           onChanged: (v) => state.address2 = v,
           onSubmitted: (v) {
@@ -563,7 +563,7 @@ class _AddressLine3FieldState extends State<_AddressLine3Field>
     return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroTextField(
-          labelText: 'address 3',
+          labelText: 'Address 3',
           focusNode: _address3Node,
           onChanged: (v) => state.address3 = v,
           onSubmitted: (v) {
@@ -611,7 +611,7 @@ class _CityFieldState extends State<_CityField>
     return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroTextField(
-          labelText: 'city *',
+          labelText: 'City *',
           errorText: state.cityError,
           focusNode: _cityNode,
           onChanged: (v) => state.city = v,
@@ -660,7 +660,7 @@ class _StateFieldState extends State<_StateField>
     return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroTextField(
-          labelText: 'state *',
+          labelText: 'State *',
           errorText: state.stateError,
           focusNode: _stateNode,
           onChanged: (v) => state.state = v,
@@ -709,7 +709,7 @@ class _PostcodeFieldState extends State<_PostcodeField>
     return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroTextField(
-          labelText: 'postcode*',
+          labelText: 'Postcode*',
           errorText: state.postcodeError,
           focusNode: _postcodeNode,
           onChanged: (v) => state.postcode = v,
@@ -759,7 +759,7 @@ class _PasswordFieldState extends State<_PasswordField>
     return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroPasswordTextField(
-          labelText: 'password *',
+          labelText: 'Password *',
           errorText: state.passwordError,
           focusNode: _passwordNode,
           onChanged: (v) => state.password = v,
@@ -808,7 +808,7 @@ class _PasswordRecheckFieldState extends State<_PasswordRecheckField>
     return Consumer<RegisterPageState>(
       builder: (_, state, __) {
         return KitaroPasswordTextField(
-          labelText: 're-type password *',
+          labelText: 'Re-type password *',
           errorText: state.passwordRecheckError,
           focusNode: _passwordRecheckNode,
           onChanged: (v) => state.passwordRecheck = v,

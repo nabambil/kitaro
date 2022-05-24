@@ -33,11 +33,14 @@ class _Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ViewItemDialogState>(builder: (_, state, __) {
+      final locationId = state.item.location;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _Title(),
           const SizedBox(height: 18.0),
+          if (locationId != null) _LocationPlace(id: locationId),
+          const SizedBox(height: 12.0),
           const _ItemType(),
           const SizedBox(height: 18.0),
           Visibility(
@@ -219,11 +222,34 @@ class _ImageBox extends StatelessWidget {
       child: Center(
         child: Image.file(
           File(imagePath),
-          errorBuilder: (_,__,___) {
+          errorBuilder: (_, __, ___) {
             return Image(image: Assets.logos.logo);
           },
         ),
       ),
     );
+  }
+}
+
+class _LocationPlace extends StatelessWidget {
+  final String id;
+  const _LocationPlace({Key? key, required this.id}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<LocationModel>(
+        future: LocationDao(id: id).location,
+        builder: (ctx, snapshot) {
+          if (snapshot.hasData == false) {
+            return Container();
+          } else {
+            final LocationModel? data = snapshot.data;
+            if (data != null) {
+              return Text(data.name ?? "");
+            }
+          }
+
+          return Container();
+        });
   }
 }

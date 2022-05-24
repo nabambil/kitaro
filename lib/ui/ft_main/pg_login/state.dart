@@ -176,9 +176,22 @@ class LoginPageState extends ChangeNotifier {
           return null;
         }
 
-        final _token = await FirebaseAuth.instance.currentUser?.getIdToken();
+        if (user != null) {
+          final KitaroAccount _userProfile =
+              await UserDao(id: user.uid).profile;
+          if (_userProfile.firstName == null) {
+            _isFirstTime = true;
+            return null;
+          }
+        }
 
-        return _updateToken(_token, user?.uid);
+        final _token = await FirebaseAuth.instance.currentUser?.getIdToken();
+        if (user != null) {
+          return _updateToken(_token, user.uid);
+        }
+
+        _isFirstTime = true;
+        return null;
       } on FirebaseAuthException catch (e) {
         return ErrorMessage(title: e.code, message: e.message!);
       } catch (e) {
@@ -242,17 +255,29 @@ class LoginPageState extends ChangeNotifier {
           return null;
         }
 
-        final _token = await FirebaseAuth.instance.currentUser?.getIdToken();
+        if (user != null) {
+          final KitaroAccount _userProfile =
+              await UserDao(id: user.uid).profile;
+          if (_userProfile.firstName == null) {
+            _isFirstTime = true;
+            return null;
+          }
+        }
 
-        return _updateToken(_token, user?.uid);
+        final _token = await FirebaseAuth.instance.currentUser?.getIdToken();
+        if (user != null) {
+          return _updateToken(_token, user.uid);
+        }
+
+        _isFirstTime = true;
+        return null;
       } on FirebaseAuthException catch (e) {
         return ErrorMessage(title: e.code, message: e.message!);
       } catch (e) {
         return ErrorMessage(title: e.toString(), message: '');
       }
-
     } on FirebaseAuthException catch (e) {
-      throw e;
+      return ErrorMessage(title: e.toString(), message: '');
     }
   }
 
@@ -293,7 +318,10 @@ class LoginPageState extends ChangeNotifier {
     try {
       validateUserName();
       if (userNameHasError) {
-        return ErrorMessage(title: 'Email required');
+        return ErrorMessage(
+          title: 'Email required',
+          message: "Field Username Field",
+        );
       }
       var _instance = FirebaseAuth.instance;
       await _instance.sendPasswordResetEmail(email: _userName!);

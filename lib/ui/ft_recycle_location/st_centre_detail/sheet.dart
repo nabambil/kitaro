@@ -140,7 +140,9 @@ class _CentreWasteTypeState extends State<_CentreWasteType> {
       WasteDao(id: element).waste.then((value) {
         final _value = value.name;
         setState(() {
-          _types.add(_value!);
+          if (_value != null) {
+            _types.add(_value);
+          }
         });
       });
     }
@@ -233,7 +235,7 @@ class _CentreAddressState extends State<_CentreAddress> {
   }
 }
 
-class _OperationHoursInfo extends StatelessWidget {
+class _OperationHoursInfo extends StatefulWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const _OperationHoursInfo({
     required this.locationDetail,
@@ -243,39 +245,60 @@ class _OperationHoursInfo extends StatelessWidget {
   final LocationModel locationDetail;
 
   @override
+  State<_OperationHoursInfo> createState() =>
+      // ignore: no_logic_in_create_state
+      _OperationHoursInfoState(locationDetail.address);
+}
+
+class _OperationHoursInfoState extends State<_OperationHoursInfo> {
+  AddressModel? addressDetail;
+
+  _OperationHoursInfoState(String? address) {
+    AddressDao(id: address)
+        .address
+        .then((value) => setState(() => addressDetail = value));
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (addressDetail == null) {
+      return Container();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _OperationHoursTitle(),
         const SizedBox(height: 15),
-        // kiosk
-        Visibility(
-          visible:
-              locationDetail.type == "5b48ec8b-0b8b-4d18-967e-19bd22e3fd57",
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              _Text(text: 'Monday - Friday : 8 am - 6 pm'),
-              _Text(text: 'Saturday - Sunday : 8 am - 4 pm'),
-              _Text(text: 'Public Holiday : 8 am - 4 pm'),
-            ],
-          ),
-        ),
-
         // recycle center
-        Visibility(
-          visible:
-              locationDetail.type == "ed6f506a-91ad-4c16-a87c-36ab5cf885b1",
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              _Text(text: 'Monday - Friday : 7 am - 7 pm'),
-              _Text(text: 'Saturday : 8 am - 4 pm'),
-              _Text(text: 'Sunday : 7 am - 7 pm'),
-              _Text(text: 'Public Holiday : 8 am - 4 pm'),
-            ],
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Text(
+                addressDetail!.openingAvailability,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              ),
+            ),
+            _Text(
+              text:
+                  'Monday - Friday : ${addressDetail!.mondayFriday ?? "7 am - 7 pm"}',
+            ),
+            _Text(
+              text:
+                  'Saturday :  ${addressDetail!.mondayFriday ?? "8 am - 4 pm"}',
+            ),
+            _Text(
+              text: 'Sunday :  ${addressDetail!.mondayFriday ?? "7 am - 7 pm"}',
+            ),
+            _Text(
+              text:
+                  'Public Holiday :  ${addressDetail!.mondayFriday ?? "8 am - 4 pm"}',
+            ),
+          ],
         ),
       ],
     );

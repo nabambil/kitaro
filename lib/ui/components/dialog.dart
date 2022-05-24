@@ -135,7 +135,7 @@ class AlertDialog extends StatelessWidget {
             const SizedBox(height: 20),
             if (carbon != null)
               Text(
-                "Carbon Emission Save : ${carbon ?? ''} KG CO²",
+                "Carbon Emission Saving : ${carbon ?? ''} KG CO²",
                 style: const TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
               ),

@@ -18,7 +18,6 @@ class LocatorMapPage extends StatelessWidget {
 
   // ------------------------------- FIELDS -------------------------------
 
-
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,8 @@ class LocatorMapPage extends StatelessWidget {
       create: (_) => LocatorMapPageState(),
       child: Scaffold(
         body: const _Content(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterDocked,
         floatingActionButton: FloatingActionButton(
           // isExtended: true,
           child: const Icon(Icons.add),
@@ -60,45 +60,48 @@ class _ContentState extends State<_Content> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LocatorMapPageState>(
-      builder: (_, state, __) {
-        return SafeArea(
-          child: Stack(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: state.latitude == null ? Container() : _Maps(),
-              ),
-              Positioned(
-                top: 0,
-                child: PopupMenuButton(
-                  icon: const Icon(Icons.menu, color: Colors.black, size: 40,),
-                  offset: const Offset(0, 45),
-                  shape:
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  onSelected: (int u) => onSelected(u, context),
-                  itemBuilder: (BuildContext context) {
-                    return [
-                      const PopupMenuItem(
-                        value: 1,
-                        child: Text(
-                          'Logout',
-                          style: TextStyle(
-                            color: Color(0xff8594A8),
-                            fontSize: 15,
-                          ),
-                        ),
-                      )
-                    ];
-                  },
+    return Consumer<LocatorMapPageState>(builder: (_, state, __) {
+      return SafeArea(
+        child: Stack(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: state.latitude == null ? Container() : _Maps(),
+            ),
+            Positioned(
+              top: 0,
+              child: PopupMenuButton(
+                icon: const Icon(
+                  Icons.menu,
+                  color: Colors.black,
+                  size: 40,
                 ),
-              )
-            ],
-          ),
-        );
-      }
-    );
+                offset: const Offset(0, 45),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                onSelected: (int u) => onSelected(u, context),
+                itemBuilder: (BuildContext context) {
+                  return [
+                    const PopupMenuItem(
+                      value: 1,
+                      child: Text(
+                        'Logout',
+                        style: TextStyle(
+                          color: Color(0xff8594A8),
+                          fontSize: 15,
+                        ),
+                      ),
+                    )
+                  ];
+                },
+              ),
+            )
+          ],
+        ),
+      );
+    });
   }
+
   Future<void> onSelected(int index, BuildContext context) async {
     if (index == 1) {
       final err = await Authentication.signOutWithGoogle();
@@ -130,21 +133,19 @@ class _MapsState extends State<_Maps> {
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
-    return Consumer<LocatorMapPageState>(
-      builder: (_, state, __) {
-        return GoogleMap(
-          markers: Set.of(state.mapMarkers.values),
-          initialCameraPosition: CameraPosition(
-            target: LatLng(state.latitude!, state.longitude!),
-            zoom: 12,
-          ),
-          myLocationEnabled: true,
-          onMapCreated: (controller) async {
-            _mapController = controller;
-          },
-          // onMapCreated: controllerCompleter.complete,
-        );
-      }
-    );
+    return Consumer<LocatorMapPageState>(builder: (_, state, __) {
+      return GoogleMap(
+        markers: Set.of(state.mapMarkers.values),
+        initialCameraPosition: CameraPosition(
+          target: LatLng(state.latitude!, state.longitude!),
+          zoom: 10,
+        ),
+        myLocationEnabled: true,
+        onMapCreated: (controller) async {
+          _mapController = controller;
+        },
+        // onMapCreated: controllerCompleter.complete,
+      );
+    });
   }
 }

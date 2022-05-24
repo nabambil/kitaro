@@ -29,7 +29,7 @@ class _Content extends StatelessWidget {
     PageModel(
       widget: _PageModel(
         image: Assets.gifs.scanQr,
-        title: 'Scan QR to Recycle',
+        title: 'Scan QR to Start Recycling',
       ),
     ),
     PageModel(
@@ -61,7 +61,7 @@ class _Content extends StatelessWidget {
           return context.router.replace(const LoginPageRoute());
         },
       ),
-      isSkippable: true,
+      isSkippable: false,
       pages: onboardingPagesList,
       indicator: Indicator(
         indicatorDesign: IndicatorDesign.polygon(

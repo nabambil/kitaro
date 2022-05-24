@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:kitaro/kitaro.dart';
 import 'package:provider/provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'state.dart';
 
@@ -112,9 +113,30 @@ class _ContentState extends State<_Content> {
             _SignInWithFacebook(),
             SizedBox(height: 30),
             _SignUp(),
+            _version(),
           ],
         ),
       ],
+    );
+  }
+}
+
+class _version extends StatelessWidget {
+  const _version({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<PackageInfo>(
+      future: PackageInfo.fromPlatform(),
+      builder: (_, snapshot) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 32),
+        width: double.infinity,
+        alignment: Alignment.center,
+        child: Text(
+          "version " + (snapshot.data?.version ?? "x.x.x"),
+          style: const TextStyle(color: Colors.black),
+        ),
+      ),
     );
   }
 }
@@ -544,6 +566,8 @@ class _SignInWithFacebook extends StatelessWidget {
           userCredential: state.userCredential,
         ),
       );
+
+      return;
     }
 
     if (state.isLocator) {

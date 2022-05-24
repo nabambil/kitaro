@@ -1,7 +1,7 @@
 name: kitaro
 description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.0.1+9
+version: 1.0.14+21
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
@@ -27,9 +27,6 @@ dependencies:
   freezed_annotation: ^0.15.0
   google_maps_flutter: ^2.1.0
   google_sign_in: ^5.2.1
-  get_it: ^7.2.0
-  hive: ^2.0.5
-  hive_flutter: ^1.1.0
   image_cropper: ^1.4.1
   image_picker: ^0.8.4+2
   location: ^4.2.0
@@ -38,6 +35,11 @@ dependencies:
   provider: ^5.0.0
   shared_preferences: ^2.0.11
   url_launcher: ^6.0.17
+  flutter_facebook_auth: ^4.1.1
+  package_info_plus: ^1.4.0
+  permission_handler: ^9.2.0
+  geolocator: ^7.0.0-nullsafety.0
+
 
 dev_dependencies:
   auto_route_generator: ^3.0.1
@@ -94,6 +96,43 @@ flutter:
     - family: norwester
       fonts:
         - asset: fonts/norwester.ttf
+    
+    # - family: norwester
+    #   fonts:
+    #     - asset: fonts/norwester.ttf
+    
+    - family: montserrat
+      fonts:
+        - asset: fonts/Montserrat-Black.ttf
+          style: normal
+          weight: 900
+        - asset: fonts/Montserrat-BlackItalic.ttf
+          style: italic
+          weight: 900
+        - asset: fonts/Montserrat-Bold.ttf
+          style: normal
+          weight: 700
+        - asset: fonts/Montserrat-BoldItalic.ttf
+          style: italic
+          weight: 700
+        - asset: fonts/Montserrat-Regular.ttf
+          style: normal
+          weight: 400
+        - asset: fonts/Montserrat-Italic.ttf
+          style: italic
+          weight: 400
+        - asset: fonts/Montserrat-Light.ttf
+          style: normal
+          weight: 300
+        - asset: fonts/Montserrat-LightItalic.ttf
+          style: italic
+          weight: 300
+        - asset: fonts/Montserrat-Thin.ttf
+          style: normal
+          weight: 100
+        - asset: fonts/Montserrat-ThinItalic.ttf
+          style: italic
+          weight: 100
 
 flutter_gen:
   output: lib/constants

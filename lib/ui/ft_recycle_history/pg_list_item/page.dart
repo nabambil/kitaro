@@ -335,6 +335,7 @@ class _Body extends StatelessWidget {
 
 class _BodyTitle extends StatelessWidget {
   // ---------------------------- CONSTRUCTORS ----------------------------
+
   const _BodyTitle({
     Key? key,
   }) : super(key: key);
@@ -342,29 +343,47 @@ class _BodyTitle extends StatelessWidget {
   // ------------------------------- METHODS ------------------------------
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
+    return Consumer<HistoryItemListPageState>(
+      builder: (_, state, __) {
+        double totalSaving = 0.0;
+        for (var e in state.itemsAdded) {
+          final waste =
+              state.listWaste.where((element) => e.type == element.name);
+
+          if (waste.isNotEmpty) {
+            totalSaving +=
+                (e.weight?.toDouble() ?? 0.0) * (waste.first.emission ?? 0.0);
+          }
+        }
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              'Previous Recycle Item',
-              style: TextStyle(
-                fontSize: 18,
-                color: Color(0xff4D627B),
-                fontWeight: FontWeight.w600,
-              ),
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Previous Recycle Item',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Color(0xff4D627B),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Total CO² Saving : $totalSaving kg',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color(0xff4D627B),
+                  ),
+                ),
+              ],
             ),
-            // Container(
-            //   height: 1.0,
-            //   width: 30,
-            //   color: const Color(0xff4D627B),
-            // )
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 }

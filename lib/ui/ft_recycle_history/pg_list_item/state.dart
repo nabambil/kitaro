@@ -10,6 +10,10 @@ class HistoryItemListPageState extends ChangeNotifier {
 
   List<RecycleModel> get itemsAdded => _itemsAdded;
 
+  List<WasteModel> _wastes = [];
+
+  List<WasteModel> get listWaste => _wastes;
+
   set itemsAdded(List<RecycleModel> value) {
     _itemsAdded = value;
     notifyListeners();
@@ -42,6 +46,13 @@ class HistoryItemListPageState extends ChangeNotifier {
   }
 
   Future<ErrorMessage?> initialise() async {
+    try {
+      final wastes = await WasteDao().wastes;
+      _wastes.addAll(wastes.values.toList());
+    } catch (e) {
+      print(e);
+    }
+
     try {
       var _recycles = await RecycleDao()
           .getRecycles(key: 'username', value: _userProfile!.username!);

@@ -111,11 +111,27 @@
           }
         },
         {
+          "client_id": "260321087125-lok76lr5r3n0fpto8i80qgule5mbtjks.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.worldwide.kitaro",
+            "certificate_hash": "4084bcab596d7cbc232bffdd79432ed16e1a3ace"
+          }
+        },
+        {
           "client_id": "260321087125-s0tsu1p8s611sltgh27ksleo1a657nbs.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.worldwide.kitaro",
             "certificate_hash": "d5a14fb75a67a9f99908211ae6493202885aa973"
+          }
+        },
+        {
+          "client_id": "260321087125-urlgrp2q4cidhoq1sp4r78j95nbc28rr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.worldwide.kitaro",
+            "certificate_hash": "58570df5a4e600a0dfb14d9918f96be1b138446f"
           }
         },
         {

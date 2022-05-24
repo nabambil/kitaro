@@ -89,7 +89,7 @@ class _ContentState extends State<_Content> {
                   _wsTile(),
                   Spacer(),
                   // _SubmitButton(),
-                  SizedBox(height: 30),
+                  WorldwideImage(),
                   Center(
                     child: Text(
                       'kitaro @2022',
@@ -101,6 +101,23 @@ class _ContentState extends State<_Content> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class WorldwideImage extends StatelessWidget {
+  const WorldwideImage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Image.asset(
+          "assets/logos/worldwide.png",
+          width: 200,
+        ),
       ),
     );
   }
@@ -157,8 +174,9 @@ class _Logo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.only( top: 50),
-              child: PageBackButton(colorOverride: Colors.white,showBackText: false),
+              padding: EdgeInsets.only(top: 50),
+              child: PageBackButton(
+                  colorOverride: Colors.white, showBackText: false),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 20.0, top: 50),
@@ -185,6 +203,7 @@ class _ListTile extends StatelessWidget {
       leading: const Icon(Icons.phone),
       title: const Text("Hotline Number"),
       expandedAlignment: Alignment.topLeft,
+      initiallyExpanded: true,
       childrenPadding: const EdgeInsets.symmetric(horizontal: 12),
       children: [
         TextButton(
@@ -199,8 +218,15 @@ class _ListTile extends StatelessWidget {
     );
   }
 
-  void _call(String text) {
-    launch("tel://" + text);
+  void _call(String text) async {
+    final url = "tel://" + text;
+    final uri = Uri.parse(url);
+
+    if (await canLaunch(uri.toString())) {
+      await launch(uri.toString());
+    } else {
+      print('Could not launch $url');
+    }
   }
 }
 
@@ -238,16 +264,22 @@ class _wsTile extends StatelessWidget {
         image: Assets.icons.whatsapp,
         height: 26,
         width: 26,
-        color: Colors.grey,
+        color: kThemeColor,
       ),
       title: const Text("012-6903526"),
       onTap: () => ws("+60126903526"),
     );
   }
 
-  void ws(String value) {
+  void ws(String value) async {
     var url = "https://wa.me/$value?text=Kitaro App Feedback";
-    launch(url);
+    final uri = Uri.parse(url);
+
+    if (await canLaunch(uri.toString())) {
+      await launch(uri.toString());
+    } else {
+      print('Could not launch $url');
+    }
   }
 }
 

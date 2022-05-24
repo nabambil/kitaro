@@ -155,8 +155,10 @@ class AddItemListPageState extends ChangeNotifier {
       itemTypeList.clear();
       for (var element in value.wastes!) {
         WasteDao(id: element).waste.then((value) {
-          itemTypeList.add(value);
-          notifyListeners();
+          if (value.name != null) {
+            itemTypeList.add(value);
+            notifyListeners();
+          }
         });
         notifyListeners();
       }

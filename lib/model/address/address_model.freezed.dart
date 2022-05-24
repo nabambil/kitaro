@@ -27,7 +27,12 @@ class _$AddressModelTearOff {
       @JsonKey(name: 'address3') String? address3,
       @JsonKey(name: 'city') String? city,
       @JsonKey(name: 'state') String? state,
-      @JsonKey(name: 'postcode') int? postcode}) {
+      @JsonKey(name: 'postcode') int? postcode,
+      @JsonKey(name: 'mondayFridayHour') String? mondayFriday,
+      @JsonKey(name: 'saturdayHour') String? saturday,
+      @JsonKey(name: 'sundayHour') String? sunday,
+      @JsonKey(name: 'publicHour') String? public,
+      @JsonKey(name: 'opening') String? opening}) {
     return _AddressModel(
       address1: address1,
       address2: address2,
@@ -35,6 +40,11 @@ class _$AddressModelTearOff {
       city: city,
       state: state,
       postcode: postcode,
+      mondayFriday: mondayFriday,
+      saturday: saturday,
+      sunday: sunday,
+      public: public,
+      opening: opening,
     );
   }
 
@@ -60,6 +70,16 @@ mixin _$AddressModel {
   String? get state => throw _privateConstructorUsedError;
   @JsonKey(name: 'postcode')
   int? get postcode => throw _privateConstructorUsedError;
+  @JsonKey(name: 'mondayFridayHour')
+  String? get mondayFriday => throw _privateConstructorUsedError;
+  @JsonKey(name: 'saturdayHour')
+  String? get saturday => throw _privateConstructorUsedError;
+  @JsonKey(name: 'sundayHour')
+  String? get sunday => throw _privateConstructorUsedError;
+  @JsonKey(name: 'publicHour')
+  String? get public => throw _privateConstructorUsedError;
+  @JsonKey(name: 'opening')
+  String? get opening => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -78,7 +98,12 @@ abstract class $AddressModelCopyWith<$Res> {
       @JsonKey(name: 'address3') String? address3,
       @JsonKey(name: 'city') String? city,
       @JsonKey(name: 'state') String? state,
-      @JsonKey(name: 'postcode') int? postcode});
+      @JsonKey(name: 'postcode') int? postcode,
+      @JsonKey(name: 'mondayFridayHour') String? mondayFriday,
+      @JsonKey(name: 'saturdayHour') String? saturday,
+      @JsonKey(name: 'sundayHour') String? sunday,
+      @JsonKey(name: 'publicHour') String? public,
+      @JsonKey(name: 'opening') String? opening});
 }
 
 /// @nodoc
@@ -97,6 +122,11 @@ class _$AddressModelCopyWithImpl<$Res> implements $AddressModelCopyWith<$Res> {
     Object? city = freezed,
     Object? state = freezed,
     Object? postcode = freezed,
+    Object? mondayFriday = freezed,
+    Object? saturday = freezed,
+    Object? sunday = freezed,
+    Object? public = freezed,
+    Object? opening = freezed,
   }) {
     return _then(_value.copyWith(
       address1: address1 == freezed
@@ -123,6 +153,26 @@ class _$AddressModelCopyWithImpl<$Res> implements $AddressModelCopyWith<$Res> {
           ? _value.postcode
           : postcode // ignore: cast_nullable_to_non_nullable
               as int?,
+      mondayFriday: mondayFriday == freezed
+          ? _value.mondayFriday
+          : mondayFriday // ignore: cast_nullable_to_non_nullable
+              as String?,
+      saturday: saturday == freezed
+          ? _value.saturday
+          : saturday // ignore: cast_nullable_to_non_nullable
+              as String?,
+      sunday: sunday == freezed
+          ? _value.sunday
+          : sunday // ignore: cast_nullable_to_non_nullable
+              as String?,
+      public: public == freezed
+          ? _value.public
+          : public // ignore: cast_nullable_to_non_nullable
+              as String?,
+      opening: opening == freezed
+          ? _value.opening
+          : opening // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -140,7 +190,12 @@ abstract class _$AddressModelCopyWith<$Res>
       @JsonKey(name: 'address3') String? address3,
       @JsonKey(name: 'city') String? city,
       @JsonKey(name: 'state') String? state,
-      @JsonKey(name: 'postcode') int? postcode});
+      @JsonKey(name: 'postcode') int? postcode,
+      @JsonKey(name: 'mondayFridayHour') String? mondayFriday,
+      @JsonKey(name: 'saturdayHour') String? saturday,
+      @JsonKey(name: 'sundayHour') String? sunday,
+      @JsonKey(name: 'publicHour') String? public,
+      @JsonKey(name: 'opening') String? opening});
 }
 
 /// @nodoc
@@ -161,6 +216,11 @@ class __$AddressModelCopyWithImpl<$Res> extends _$AddressModelCopyWithImpl<$Res>
     Object? city = freezed,
     Object? state = freezed,
     Object? postcode = freezed,
+    Object? mondayFriday = freezed,
+    Object? saturday = freezed,
+    Object? sunday = freezed,
+    Object? public = freezed,
+    Object? opening = freezed,
   }) {
     return _then(_AddressModel(
       address1: address1 == freezed
@@ -187,6 +247,26 @@ class __$AddressModelCopyWithImpl<$Res> extends _$AddressModelCopyWithImpl<$Res>
           ? _value.postcode
           : postcode // ignore: cast_nullable_to_non_nullable
               as int?,
+      mondayFriday: mondayFriday == freezed
+          ? _value.mondayFriday
+          : mondayFriday // ignore: cast_nullable_to_non_nullable
+              as String?,
+      saturday: saturday == freezed
+          ? _value.saturday
+          : saturday // ignore: cast_nullable_to_non_nullable
+              as String?,
+      sunday: sunday == freezed
+          ? _value.sunday
+          : sunday // ignore: cast_nullable_to_non_nullable
+              as String?,
+      public: public == freezed
+          ? _value.public
+          : public // ignore: cast_nullable_to_non_nullable
+              as String?,
+      opening: opening == freezed
+          ? _value.opening
+          : opening // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -194,14 +274,20 @@ class __$AddressModelCopyWithImpl<$Res> extends _$AddressModelCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(checked: true)
-class _$_AddressModel implements _AddressModel {
+class _$_AddressModel extends _AddressModel {
   const _$_AddressModel(
       {@JsonKey(name: 'address1') this.address1,
       @JsonKey(name: 'address2') this.address2,
       @JsonKey(name: 'address3') this.address3,
       @JsonKey(name: 'city') this.city,
       @JsonKey(name: 'state') this.state,
-      @JsonKey(name: 'postcode') this.postcode});
+      @JsonKey(name: 'postcode') this.postcode,
+      @JsonKey(name: 'mondayFridayHour') this.mondayFriday,
+      @JsonKey(name: 'saturdayHour') this.saturday,
+      @JsonKey(name: 'sundayHour') this.sunday,
+      @JsonKey(name: 'publicHour') this.public,
+      @JsonKey(name: 'opening') this.opening})
+      : super._();
 
   factory _$_AddressModel.fromJson(Map<String, dynamic> json) =>
       _$$_AddressModelFromJson(json);
@@ -224,10 +310,25 @@ class _$_AddressModel implements _AddressModel {
   @override
   @JsonKey(name: 'postcode')
   final int? postcode;
+  @override
+  @JsonKey(name: 'mondayFridayHour')
+  final String? mondayFriday;
+  @override
+  @JsonKey(name: 'saturdayHour')
+  final String? saturday;
+  @override
+  @JsonKey(name: 'sundayHour')
+  final String? sunday;
+  @override
+  @JsonKey(name: 'publicHour')
+  final String? public;
+  @override
+  @JsonKey(name: 'opening')
+  final String? opening;
 
   @override
   String toString() {
-    return 'AddressModel(address1: $address1, address2: $address2, address3: $address3, city: $city, state: $state, postcode: $postcode)';
+    return 'AddressModel(address1: $address1, address2: $address2, address3: $address3, city: $city, state: $state, postcode: $postcode, mondayFriday: $mondayFriday, saturday: $saturday, sunday: $sunday, public: $public, opening: $opening)';
   }
 
   @override
@@ -244,12 +345,19 @@ class _$_AddressModel implements _AddressModel {
             (identical(other.city, city) || other.city == city) &&
             (identical(other.state, state) || other.state == state) &&
             (identical(other.postcode, postcode) ||
-                other.postcode == postcode));
+                other.postcode == postcode) &&
+            (identical(other.mondayFriday, mondayFriday) ||
+                other.mondayFriday == mondayFriday) &&
+            (identical(other.saturday, saturday) ||
+                other.saturday == saturday) &&
+            (identical(other.sunday, sunday) || other.sunday == sunday) &&
+            (identical(other.public, public) || other.public == public) &&
+            (identical(other.opening, opening) || other.opening == opening));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, address1, address2, address3, city, state, postcode);
+  int get hashCode => Object.hash(runtimeType, address1, address2, address3,
+      city, state, postcode, mondayFriday, saturday, sunday, public, opening);
 
   @JsonKey(ignore: true)
   @override
@@ -262,14 +370,20 @@ class _$_AddressModel implements _AddressModel {
   }
 }
 
-abstract class _AddressModel implements AddressModel {
+abstract class _AddressModel extends AddressModel {
   const factory _AddressModel(
       {@JsonKey(name: 'address1') String? address1,
       @JsonKey(name: 'address2') String? address2,
       @JsonKey(name: 'address3') String? address3,
       @JsonKey(name: 'city') String? city,
       @JsonKey(name: 'state') String? state,
-      @JsonKey(name: 'postcode') int? postcode}) = _$_AddressModel;
+      @JsonKey(name: 'postcode') int? postcode,
+      @JsonKey(name: 'mondayFridayHour') String? mondayFriday,
+      @JsonKey(name: 'saturdayHour') String? saturday,
+      @JsonKey(name: 'sundayHour') String? sunday,
+      @JsonKey(name: 'publicHour') String? public,
+      @JsonKey(name: 'opening') String? opening}) = _$_AddressModel;
+  const _AddressModel._() : super._();
 
   factory _AddressModel.fromJson(Map<String, dynamic> json) =
       _$_AddressModel.fromJson;
@@ -292,6 +406,21 @@ abstract class _AddressModel implements AddressModel {
   @override
   @JsonKey(name: 'postcode')
   int? get postcode;
+  @override
+  @JsonKey(name: 'mondayFridayHour')
+  String? get mondayFriday;
+  @override
+  @JsonKey(name: 'saturdayHour')
+  String? get saturday;
+  @override
+  @JsonKey(name: 'sundayHour')
+  String? get sunday;
+  @override
+  @JsonKey(name: 'publicHour')
+  String? get public;
+  @override
+  @JsonKey(name: 'opening')
+  String? get opening;
   @override
   @JsonKey(ignore: true)
   _$AddressModelCopyWith<_AddressModel> get copyWith =>

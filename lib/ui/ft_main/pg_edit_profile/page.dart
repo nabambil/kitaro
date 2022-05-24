@@ -1,7 +1,5 @@
 // ------------------------------ VARIABLES -----------------------------
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:kitaro/kitaro.dart';
@@ -35,16 +33,14 @@ class EditProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: ChangeNotifierProvider<EditProfilePageState>(
-          create: (_) => EditProfilePageState(
-            user: user,
-            userAddress: userAddress,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [const _Logo(), _Content()],
-            ),
+      body: ChangeNotifierProvider<EditProfilePageState>(
+        create: (_) => EditProfilePageState(
+          user: user,
+          userAddress: userAddress,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [const _Logo(), _Content()],
           ),
         ),
       ),
@@ -122,7 +118,7 @@ class _Logo extends StatelessWidget {
         ClipPath(
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 130,
+            height: 160,
             // color: kThemeColor,
             decoration: const BoxDecoration(
                 gradient: LinearGradient(
@@ -137,8 +133,36 @@ class _Logo extends StatelessWidget {
           ),
           clipper: CustomClipPath(),
         ),
+        Container(
+          padding: const EdgeInsets.only(top: 24, left: 16),
+          width: double.infinity,
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: const [
+                Text(
+                  "Cancel",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                  ),
+                ),
+                SizedBox(width: 6),
+                Icon(
+                  Icons.cancel,
+                  color: Colors.white,
+                ),
+              ],
+            ),
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
         Padding(
-          padding: const EdgeInsets.only(left: 20.0, top: 32),
+          padding: const EdgeInsets.only(left: 20.0, top: 72),
           child: Image(
             image: Assets.logos.kitaroLogoMain,
             height: 120,
@@ -908,7 +932,7 @@ class _SubmitButton extends StatelessWidget {
     return Consumer<EditProfilePageState>(
       builder: (_, state, __) {
         return LoginButton(
-          caption: 'Edit',
+          caption: 'Update',
           isBusy: state.isBusy,
           enabled: !state.isBusy,
           onPressed: () => _onSubmitted(context),

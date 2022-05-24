@@ -32,12 +32,12 @@ class PageBackButton extends StatelessWidget {
                 color: colorOverride ?? Colors.white,
                 size: 28.0,
               ),
-              if(showBackText)
-              Text(
-                'Back',
-                style: TextStyle(
-                    color: colorOverride ?? Colors.white, fontSize: 16),
-              )
+              if (showBackText)
+                Text(
+                  'Back',
+                  style: TextStyle(
+                      color: colorOverride ?? Colors.white, fontSize: 16),
+                )
             ],
           ),
         ),
@@ -169,7 +169,7 @@ class SubmitButton extends StatelessWidget {
           caption,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 20,
+            fontSize: 16,
           ),
         ),
       ),

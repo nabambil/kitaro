@@ -1,9 +1,11 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kitaro/kitaro.dart';
@@ -34,7 +36,18 @@ class RecycleLocationPageState extends ChangeNotifier {
       width: 120,
       height: 200,
     );
-    return await getLocation();
+    final LocationPermission geolocator = await Geolocator.requestPermission();
+    if (geolocator == LocationPermission.always ||
+        geolocator == LocationPermission.whileInUse) {
+      final location = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      return await getLocation(location.latitude, location.longitude);
+    } else {
+      return ErrorMessage(
+          title: "No permission",
+          message:
+              "Please enable location, to find best nearest location to your current location.");
+    }
   }
 
   Future<Uint8List> getBytesFromAsset(
@@ -62,7 +75,7 @@ class RecycleLocationPageState extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<ErrorMessage?> getLocation() async {
+  Future<ErrorMessage?> getLocation(double lat, double long) async {
     try {
       LocationDao().location$.listen((event) {
         _mapMarkers.clear();
@@ -70,16 +83,38 @@ class RecycleLocationPageState extends ChangeNotifier {
         latitude = locations.entries.elementAt(0).value.lat;
         longitude = locations.entries.elementAt(0).value.long;
         notifyListeners();
-        event.forEach((key, data) {
-          _mapMarkers[MarkerId(key)] = Marker(
+
+        final sortedLocation = event.keys.toList()
+          ..sort((a, b) {
+            final aData = event[a];
+            final bData = event[b];
+            if (aData != null && bData != null) {
+              final double? alat = aData.lat;
+              final double? alng = aData.long;
+              final double? blat = bData.lat;
+              final double? blng = bData.long;
+
+              final aDistande = calculateDistance(alat, alng, lat, long);
+              final bDistance = calculateDistance(blat, blng, lat, long);
+
+              return aDistande.compareTo(bDistance);
+            }
+            return 1;
+          });
+        for (String key in sortedLocation) {
+          final data = event[key];
+          if (data != null) {
+            _mapMarkers[MarkerId(key)] = Marker(
               markerId: MarkerId(key),
               position: LatLng(data.lat!, data.long!),
               onTap: () {
                 onSelectMarker = key;
                 notifyListeners();
               },
-              icon: BitmapDescriptor.fromBytes(markerIcon!));
-        });
+              icon: BitmapDescriptor.fromBytes(markerIcon!),
+            );
+          }
+        }
       });
     } on FirebaseAuthException catch (e) {
       return ErrorMessage(title: e.code, message: e.message!);
@@ -89,6 +124,15 @@ class RecycleLocationPageState extends ChangeNotifier {
       notifyListeners();
     }
     return null;
+  }
+
+  double calculateDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((lat2 - lat1) * p) / 2 +
+        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
   }
 
   Future<ErrorMessage?> checkLocation({required String locationKey}) async {

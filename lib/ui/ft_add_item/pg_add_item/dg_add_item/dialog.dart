@@ -132,7 +132,11 @@ class _ItemTypeDropdown extends StatelessWidget {
     return Consumer<AddItemListPageState>(builder: (_, state, __) {
       return CustomDropdown(
         labelText: 'Select Type',
-        value: state.itemType,
+        value: state.itemType != null
+            ? state.itemType!.isEmpty
+                ? null
+                : state.itemType
+            : null,
         errorText: state.itemTypeError,
         items: state.itemTypeList.map<String>((e) => e.name ?? "").toList(),
         onSelected: (t) => state.itemType = t,
@@ -376,7 +380,7 @@ class _SubmitButton extends StatelessWidget {
     return Consumer<AddItemListPageState>(
       builder: (_, state, __) {
         return SubmitButton(
-          caption: isEdit ? 'Edit' : 'Add',
+          caption: isEdit ? 'Update' : 'Recycle',
           onPressed: () => _onSubmitted(context),
         );
       },

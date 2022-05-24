@@ -23,13 +23,13 @@ class KitaroApp extends StatelessWidget {
         themeMode: ThemeMode.light,
         theme: ThemeData(
           brightness: Brightness.light,
-          fontFamily: FontFamily.lato,
+          fontFamily: "montserrat",
           splashColor: Colors.white.withOpacity(0.5),
         ),
         debugShowCheckedModeBanner: false,
         darkTheme: ThemeData(
           brightness: Brightness.dark,
-          fontFamily: FontFamily.lato,
+          fontFamily: 'montserrat',
           splashColor: Colors.white.withOpacity(0.5),
         ),
         onGenerateTitle: (context) => 'Kitaro',
@@ -42,21 +42,21 @@ class KitaroApp extends StatelessWidget {
             children: [
               Positioned.fill(child: router!),
               const BusyIndicator(position: BusyIndicatorPosition.bottom),
-              Positioned(
-                left: 8.0,
-                bottom: 8.0,
-                child: DefaultTextStyle(
-                  child: Text(
-                    '${media.size.width}×${media.size.height}',
-                  ),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.0,
-                    fontWeight: FontWeight.w300,
-                    fontFamily: FontFamily.lato,
-                  ),
-                ),
-              ),
+              // Positioned(
+              //   left: 8.0,
+              //   bottom: 8.0,
+              //   child: DefaultTextStyle(
+              //     child: Text(
+              //       '${media.size.width}×${media.size.height}',
+              //     ),
+              //     style: const TextStyle(
+              //       color: Colors.white,
+              //       fontSize: 10.0,
+              //       fontWeight: FontWeight.w300,
+              //       fontFamily: FontFamily.lato,
+              //     ),
+              //   ),
+              // ),
             ],
           );
         },
